@@ -82,6 +82,7 @@ class DatasetCases(DatasetBase):
         self.evolution_to_severity()
         self.death_date_to_severity()
         self.months_to_0_age()
+        self.ages_to_age_group()
         self.process_symptoms()
         self.process_diseases()
         
@@ -103,8 +104,29 @@ class DatasetCases(DatasetBase):
     def months_to_0_age(self):
         self.df.loc[self.df['idade'].str.endswith('ES'), 'idade'] = 0
         
-    def set_column_types(self):
+    def ages_to_age_group(self):
         self.df['idade'] = self.df['idade'].astype(int, errors='ignore')
+        self.df.loc[self.df['idade'] < 10, 'idade'] = 0
+        self.df.loc[(self.df['idade'] >= 10) & (self.df['idade'] < 20), 'idade'] = 10
+        self.df.loc[(self.df['idade'] >= 20) & (self.df['idade'] < 30), 'idade'] = 20
+        self.df.loc[(self.df['idade'] >= 30) & (self.df['idade'] < 40), 'idade'] = 30
+        self.df.loc[(self.df['idade'] >= 40) & (self.df['idade'] < 50), 'idade'] = 40
+        self.df.loc[(self.df['idade'] >= 50) & (self.df['idade'] < 60), 'idade'] = 50
+        self.df.loc[(self.df['idade'] >= 60) & (self.df['idade'] < 70), 'idade'] = 60
+        self.df.loc[(self.df['idade'] >= 70) & (self.df['idade'] < 80), 'idade'] = 70
+        self.df.loc[self.df['idade'] >= 80, 'idade'] = 80
+        self.df.loc[self.df['idade'] == 0, 'idade'] = "0-9"
+        self.df.loc[self.df['idade'] == 10, 'idade'] = "10-19"
+        self.df.loc[self.df['idade'] == 20, 'idade'] = "20-29"
+        self.df.loc[self.df['idade'] == 30, 'idade'] = "30-39"
+        self.df.loc[self.df['idade'] == 40, 'idade'] = "40-49"
+        self.df.loc[self.df['idade'] == 50, 'idade'] = "50-59"
+        self.df.loc[self.df['idade'] == 60, 'idade'] = "60-69"
+        self.df.loc[self.df['idade'] == 70, 'idade'] = "70-79"
+        self.df.loc[self.df['idade'] == 80, 'idade'] = "80+"        
+        
+    def set_column_types(self):
+        pass
 
     def process_symptoms(self):
         symptoms = self.df[['sintomas', 'outros_sintomas']]
