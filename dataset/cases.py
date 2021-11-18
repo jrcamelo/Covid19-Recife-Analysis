@@ -51,6 +51,7 @@ class DatasetCases(DatasetBase):
         self.csv_to_df()
         self.manage_columns()
         self.manage_rows()
+        print("Processing data...")
         self.process_data()
         self.set_column_types()
         self.df = self.df.infer_objects()
@@ -134,7 +135,9 @@ class DatasetCases(DatasetBase):
         clean_symptoms = normalizer.get_normalized_columns()
         self.df.drop(columns=['sintomas', 'outros_sintomas'], inplace=True)
         self.df = pd.concat([self.df, clean_symptoms], axis=1)
-        
+        # TODO: Should have assintomaticos?
+        # self.df.loc[self.df['assintomatico'] == True, 'severidade'] = 'ASSINTOMATICO'
+        # self.df.drop(columns=['assintomatico'], inplace=True)
     
     def process_diseases(self):
         diseases = self.df[['doencas_preexistentes']]

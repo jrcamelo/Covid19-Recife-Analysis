@@ -7,9 +7,10 @@ class DatasetBase:
         self.csv = pd.DataFrame()
         self.df = pd.DataFrame()
         self.run_on_objects = []
+        self.delimiter = ";"
             
     def read_csv(self, file):
-        for chunk in pd.read_csv(file, chunksize=self.CHUNK_SIZE, delimiter=";", low_memory=False):
+        for chunk in pd.read_csv(file, chunksize=self.CHUNK_SIZE, delimiter=self.delimiter, low_memory=False):
             self.csv = pd.concat([self.csv, chunk])
     
     def csv_to_df(self):

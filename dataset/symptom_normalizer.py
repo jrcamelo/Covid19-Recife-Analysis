@@ -124,10 +124,10 @@ class SymptomNormalizer:
         self.df[column] = self.df[column].apply(lambda x: sorted(x))
         
     def add_symptom_columns(self):
+        self.df[self.COL_NO_SYMPTOMS] = True
         for column in MAIN_SYMPTOMS:
             self.df[column] = False
         self.df[self.COL_SYMPTOM_OTHER] = False
-        self.df[self.COL_NO_SYMPTOMS] = True
         
     def fill_symptom_columns(self):
         for index, row in self.df.iterrows():
