@@ -39,7 +39,7 @@ class DatasetCases(DatasetBase):
         'ds',
         'em_tratamento_domiciliar',
         'classificacao_final',
-        'categoria_profissional'
+        'categoria_profissional',
     ]
         
         
@@ -58,7 +58,15 @@ class DatasetCases(DatasetBase):
     def manage_columns(self):
         self.create_blank_columns_if_not_exist(self.RAW_COLUMN_NAMES, self.BLANK_COLUMN_DATA)
         self.rename_columns(self.RAW_COLUMN_NAMES, self.MERGED_COLUMN_NAMES)
+        self.merge_disease_columns_if_present()
         self.delete_columns(self.COLUMNS_TO_DELETE_WITHOUT_PROCESSING)
+        
+    def merge_disease_columns_if_present(self):
+        if ('outras_doencas_preexistentes' in self.df.columns):
+            self.df['doencas_preexistentes'].fillna("NENHUMA", inplace=True)
+            self.df['outras_doencas_preexistentes'].fillna("NENHUMA", inplace=True)
+            self.df['doencas_preexistentes'] = self.df['doencas_preexistentes'] + ',' + self.df['outras_doencas_preexistentes']
+            self.df.drop(columns=['outras_doencas_preexistentes'], inplace=True)
         
     def manage_rows(self):
         self.run_on_objects.append(self.normalize_strings)
@@ -79,7 +87,7 @@ class DatasetCases(DatasetBase):
         
     def health_professional_to_boolean(self):
         self.df.loc[self.df['profissional_saude'] == 'SIM', 'profissional_saude'] = True
-        self.df.loc[self.df['profissional_saude'] != 'SIM', 'profissional_saude'] = False
+        self.df.loc[(self.df['profissional_saude'] != True), 'profissional_saude'] = False
         
     def evolution_to_severity(self):
         self.df.loc[(self.df['evolucao'].notna()) & (self.df['evolucao'].str.startswith('INTERNADO')), 'severidade'] = 'INTERNADO'
@@ -104,10 +112,13 @@ class DatasetCases(DatasetBase):
         clean_symptoms = normalizer.get_normalized_columns()
         self.df.drop(columns=['sintomas', 'outros_sintomas'], inplace=True)
         self.df = pd.concat([self.df, clean_symptoms], axis=1)
-
         
     
     def process_diseases(self):
-        # TODO
-        pass
+        diseases = self.df[['doencas_preexistentes']]
+        diseases.to_csv('./dataset/misc/diseasesoriginal_' + self.filename + '.csv', index=False)
+        normalizer = DiseaseNormalizer(diseases, self.filename)
+        clean_diseases = normalizer.get_normalized_columns()
+        self.df.drop(columns=['doencas_preexistentes'], inplace=True)
+        self.df = pd.concat([self.df, clean_diseases], axis=1)
         

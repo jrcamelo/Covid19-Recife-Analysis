@@ -3,25 +3,26 @@ from collections import Iterable
 
 # Built using unique count for every symptom
 MAIN_SYMPTOMS = {
-    "sintoma_tosse": ["TOSSE"],
-    "sintoma_dispneia": ["DISPNEIA", "FALTA DE AR"],
+    "sintoma_tosse": ["TOSSE", "HEMOPTISE", "TOSSE PRODUTIVA"],
+    "sintoma_dispneia": ["DISPNEIA", "FALTA DE AR", "TAQUIPNEIA", "TAQUIDISPNEIA", "INSUFICIENCIA RESPIRATORIA"],
     "sintoma_febre": ["FEBRE"],
     "sintoma_baixa_saturacao_o2": ["SATURACAO O2 < 95"],
-    "sintoma_desconforto_respiratorio": ["DESCONFORTO RESPIRATORIO"],
+    "sintoma_desconforto_respiratorio": ["DESCONFORTO RESPIRATORIO", "BATIMENTO ASA DE NARIZ", "TIRAGEM INTERCOSTAL", "DESCONFORTO TORACICO"],
     "sintoma_aperto_toracico": ["APERTO TORACICO"],
-    "sintoma_dor_garganta": ["DOR DE GARGANTA"],
+    "sintoma_dor_garganta": ["DOR DE GARGANTA", "ODINOFAGIA"],
     "sintoma_cefaleia": ["CEFALEIA", "DOR DE CABECA"],
-    "sintoma_mialgia": ["MIALGIA", "DOR NO CORPO", "ALGIA"],
+    "sintoma_mialgia": ["MIALGIA", "DOR MUSCULAR", "DOR NO CORPO", "DORES NO CORPO", "ALGIA", "DOR LOMBAR", "DOR NA REGIAO LOMBAR", "DOR NAS COSTAS", "QUEDA DO ESTADO GERAL", "QUEDA DO ESTADO EM GERAL", "QUEDA DE ESTADO GERAL", "DORSALGIA", "LOMBALGIA", "DOR EM MMII", "DORES EM MMII", "DOR", "DOR TORAXICA", "DOR DORACICA"],
     "sintoma_diarreia": ["DIARREIA"],
-    "sintoma_coriza": ["CORIZA"],
+    "sintoma_coriza": ["CORIZA", "RINORREIA"],
     "sintoma_congestao_nasal": ["CONGESTAO NASAL", "OBSTRUCAO NASAL"],
     "sintoma_fadiga": ["CANSACO/FADIGA", "FADIGA", "CANSACO", "FADIGA/CANSACO", "ADINAMIA", "MOLEZA", "MOLEZA NO CORPO", "CORPO MOLE"],
-    "sintoma_anosmia_ou_hiposmia": ["ALTERACAO/PERDA DE OLFATO E/OU PALADAR", "DISTURBIOS GUSTATIVOS", "DISTURBIOS OLFATIVOS", "PERDA DO OLFATO", "PERDA DE OLFATO", "OLFATO", "PERDA OLFATO", "PERDA DO OLFATO/ MIALGIA", "PERDA DO PALADAR", "PERDA DE PALADAR", "DO PALADAR", "PALADAR", "PERDA D PALADAR", "SEM PALADAR", "ERDA DO PALADAR", ],
+    "sintoma_anosmia_ou_hiposmia": ["ALTERACAO/PERDA DE OLFATO E/OU PALADAR", "DISTURBIOS GUSTATIVOS", "DISTURBIOS OLFATIVOS", "PERDA DO OLFATO", "PERDA DE OLFATO", "OLFATO", "PERDA OLFATO", "PERDA DO OLFATO/ MIALGIA", "PERDA DO PALADAR", "PERDA DE PALADAR", "DO PALADAR", "PALADAR", "PERDA D PALADAR", "SEM PALADAR", "ERDA DO PALADAR", "AGEUSIA", "AUGESIA", "AGUESIA", "DISGEUSIA"],
     "sintoma_vomito": ["VOMITO", "VOMITOS"],
     "sintoma_astenia": ["ASTENIA", "FRAQUEZA"],
     "sintoma_nausea": ["NAUSEA", "NAUSEAS", "ENJOO"],
-    "sintoma_inaptencia": ["INAPTENCIA", "FALTA DE APETITE", "ANOREXIA", "HIPOREXIA"],
-    "sintoma_dor_abdominal": ["DOR ABDOMINAL"],
+    "sintoma_inaptencia": ["INAPTENCIA", "FALTA DE APETITE", "ANOREXIA", "HIPOREXIA", "DIMINUICAO DO APETITE"],
+    "sintoma_dor_abdominal": ["DOR ABDOMINAL", "DOR EPIGASTRICA"],
+    "sintoma_rebaixamento_consciencia": ["RNC", "SONOLENCIA", "DESORIENTACAO", "PROSTRACAO", "PROSTACAO", "REBAIXAMENTO DO NIVEL DE CONSCIENCIA", "SINCOPE", "DESORIENTADO", "CONFUSAO", "AFASIA", "CONFUSAO MENTAL", "REBAIXAMENTO DO NIVEL DE CONCIENCIA", "PERDA PONDERAL", "PERDA DA CONSCIENCIA", "REBAIXAMENTO NIVEL DE CONSCIENCIA"],
 }
 
 # Those will be ignored
@@ -78,6 +79,12 @@ NOT_SYMPTOMS = [
 ]
 
 class SymptomNormalizer:
+    COL_SYMPTOMS = "sintomas"
+    COL_OTHER_SYMPTOMS = "outros_sintomas"
+    
+    COL_SYMPTOM_OTHER = "sintoma_outros"
+    COL_NO_SYMPTOMS = "assintomatico"
+    
     def __init__(self, original, filename):
         self.original = original
         self.df = original.copy()
@@ -101,12 +108,12 @@ class SymptomNormalizer:
     
     # TODO: Confirm if the 13000 random symptoms should be ignored or added to "outros"
     def get_symptom_column(self, symptom):
-        return self.symptom_column_hash.get(symptom, "sintoma_outros")
+        return self.symptom_column_hash.get(symptom, self.COL_SYMPTOM_OTHER)
     
     def split_symbols(self):
         symbols = ", |,| / | \+ |\+| E |;"
-        self.split_and_trim('sintomas', symbols)
-        self.split_and_trim('outros_sintomas', symbols)
+        self.split_and_trim(self.COL_SYMPTOMS, symbols)
+        self.split_and_trim(self.COL_OTHER_SYMPTOMS, symbols)
     
     def split_and_trim(self, column, separator):
         self.df[column] = self.df[column].fillna("")
@@ -119,16 +126,16 @@ class SymptomNormalizer:
     def add_symptom_columns(self):
         for column in MAIN_SYMPTOMS:
             self.df[column] = False
-        self.df['sintoma_outros'] = False
-        self.df['assintomatico'] = True
+        self.df[self.COL_SYMPTOM_OTHER] = False
+        self.df[self.COL_NO_SYMPTOMS] = True
         
     def fill_symptom_columns(self):
         for index, row in self.df.iterrows():
-            for symptom in row["sintomas"]:
+            for symptom in row[self.COL_SYMPTOMS]:
                 if symptom in NO_SYMPTOMS:
                     break
                 self.set_symptom_column_to_true(index, symptom)
-            for symptom in row["outros_sintomas"]:
+            for symptom in row[self.COL_OTHER_SYMPTOMS]:
                 if symptom in NO_SYMPTOMS:
                     break
                 self.set_symptom_column_to_true(index, symptom)
@@ -138,10 +145,10 @@ class SymptomNormalizer:
         if (symptom in NOT_SYMPTOMS):
             return
         self.df.at[index, self.get_symptom_column(symptom)] = True
-        self.df.at[index, "assintomatico"] = False
+        self.df.at[index, self.COL_NO_SYMPTOMS] = False
 
     def delete_original_columns(self):
-        self.df.drop(columns=['sintomas', 'outros_sintomas'], inplace=True)
+        self.df.drop(columns=[self.COL_SYMPTOMS, self.COL_OTHER_SYMPTOMS], inplace=True)
     
     def save_all_unique_symptoms_as_txt(self):
         unique_symptoms = {}
