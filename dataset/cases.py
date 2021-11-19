@@ -79,6 +79,7 @@ class DatasetCases(DatasetBase):
         self.replace_value_in_column(column, ["IGN", "IGNORADO"], None)
         
     def process_data(self):
+        self.blank_gender_to_undefined()
         self.health_professional_to_boolean()
         self.evolution_to_severity()
         self.death_date_to_severity()
@@ -87,12 +88,17 @@ class DatasetCases(DatasetBase):
         self.process_symptoms()
         self.process_diseases()
         
+    def blank_gender_to_undefined(self):
+        self.df.loc[self.df['sexo'].isna(), 'sexo'] = 'INDEFINIDO'
+
+        
     def health_professional_to_boolean(self):
         self.df.loc[self.df['profissional_saude'] == 'SIM', 'profissional_saude'] = True
         self.df.loc[(self.df['profissional_saude'] != True), 'profissional_saude'] = False
         
     def evolution_to_severity(self):
-        self.df.loc[(self.df['evolucao'].notna()) & (self.df['evolucao'].str.startswith('INTERNADO')), 'severidade'] = 'INTERNADO'
+        # TODO: Should this be kept? It confuses the model sometimes
+        # self.df.loc[(self.df['evolucao'].notna()) & (self.df['evolucao'].str.startswith('INTERNADO')), 'severidade'] = 'INTERNADO'
         self.df.drop(columns=['evolucao'], inplace=True)
 
     def death_date_to_severity(self):
@@ -100,6 +106,7 @@ class DatasetCases(DatasetBase):
         self.df.drop(columns=['data_obito'], inplace=True)
         
     def delete_empty_ages(self):
+        print("Deleting empty ages: " + str(self.df['idade'].isna().sum()))
         self.df = self.df.dropna(subset=['idade'])
                 
     def months_to_0_age(self):
@@ -107,24 +114,25 @@ class DatasetCases(DatasetBase):
         
     def ages_to_age_group(self):
         self.df['idade'] = self.df['idade'].astype(int, errors='ignore')
-        self.df.loc[self.df['idade'] < 10, 'idade'] = 0
-        self.df.loc[(self.df['idade'] >= 10) & (self.df['idade'] < 20), 'idade'] = 10
-        self.df.loc[(self.df['idade'] >= 20) & (self.df['idade'] < 30), 'idade'] = 20
-        self.df.loc[(self.df['idade'] >= 30) & (self.df['idade'] < 40), 'idade'] = 30
-        self.df.loc[(self.df['idade'] >= 40) & (self.df['idade'] < 50), 'idade'] = 40
-        self.df.loc[(self.df['idade'] >= 50) & (self.df['idade'] < 60), 'idade'] = 50
-        self.df.loc[(self.df['idade'] >= 60) & (self.df['idade'] < 70), 'idade'] = 60
-        self.df.loc[(self.df['idade'] >= 70) & (self.df['idade'] < 80), 'idade'] = 70
-        self.df.loc[self.df['idade'] >= 80, 'idade'] = 80
-        self.df.loc[self.df['idade'] == 0, 'idade'] = "0-9"
-        self.df.loc[self.df['idade'] == 10, 'idade'] = "10-19"
-        self.df.loc[self.df['idade'] == 20, 'idade'] = "20-29"
-        self.df.loc[self.df['idade'] == 30, 'idade'] = "30-39"
-        self.df.loc[self.df['idade'] == 40, 'idade'] = "40-49"
-        self.df.loc[self.df['idade'] == 50, 'idade'] = "50-59"
-        self.df.loc[self.df['idade'] == 60, 'idade'] = "60-69"
-        self.df.loc[self.df['idade'] == 70, 'idade'] = "70-79"
-        self.df.loc[self.df['idade'] == 80, 'idade'] = "80+"        
+        self.df['grupo_idade'] = 0
+        self.df.loc[self.df['idade'] < 10, 'grupo_idade'] = 0
+        self.df.loc[(self.df['idade'] >= 10) & (self.df['idade'] < 20), 'grupo_idade'] = 10
+        self.df.loc[(self.df['idade'] >= 20) & (self.df['idade'] < 30), 'grupo_idade'] = 20
+        self.df.loc[(self.df['idade'] >= 30) & (self.df['idade'] < 40), 'grupo_idade'] = 30
+        self.df.loc[(self.df['idade'] >= 40) & (self.df['idade'] < 50), 'grupo_idade'] = 40
+        self.df.loc[(self.df['idade'] >= 50) & (self.df['idade'] < 60), 'grupo_idade'] = 50
+        self.df.loc[(self.df['idade'] >= 60) & (self.df['idade'] < 70), 'grupo_idade'] = 60
+        self.df.loc[(self.df['idade'] >= 70) & (self.df['idade'] < 80), 'grupo_idade'] = 70
+        self.df.loc[self.df['idade'] >= 80, 'grupo_idade'] = 80
+        self.df.loc[self.df['idade'] == 0, 'grupo_idade'] = "0-9"
+        self.df.loc[self.df['idade'] == 10, 'grupo_idade'] = "10-19"
+        self.df.loc[self.df['idade'] == 20, 'grupo_idade'] = "20-29"
+        self.df.loc[self.df['idade'] == 30, 'grupo_idade'] = "30-39"
+        self.df.loc[self.df['idade'] == 40, 'grupo_idade'] = "40-49"
+        self.df.loc[self.df['idade'] == 50, 'grupo_idade'] = "50-59"
+        self.df.loc[self.df['idade'] == 60, 'grupo_idade'] = "60-69"
+        self.df.loc[self.df['idade'] == 70, 'grupo_idade'] = "70-79"
+        self.df.loc[self.df['idade'] == 80, 'grupo_idade'] = "80+"        
         
     def set_column_types(self):
         pass

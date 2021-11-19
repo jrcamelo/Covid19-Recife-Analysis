@@ -124,7 +124,8 @@ class SymptomNormalizer:
         self.df[column] = self.df[column].apply(lambda x: sorted(x))
         
     def add_symptom_columns(self):
-        self.df[self.COL_NO_SYMPTOMS] = True
+        # TODO: Should have assintomaticos?
+        # self.df[self.COL_NO_SYMPTOMS] = True
         for column in MAIN_SYMPTOMS:
             self.df[column] = False
         self.df[self.COL_SYMPTOM_OTHER] = False
@@ -145,7 +146,8 @@ class SymptomNormalizer:
         if (symptom in NOT_SYMPTOMS):
             return
         self.df.at[index, self.get_symptom_column(symptom)] = True
-        self.df.at[index, self.COL_NO_SYMPTOMS] = False
+        # TODO: Should have assintomaticos?
+        # self.df.at[index, self.COL_NO_SYMPTOMS] = False
 
     def delete_original_columns(self):
         self.df.drop(columns=[self.COL_SYMPTOMS, self.COL_OTHER_SYMPTOMS], inplace=True)
