@@ -1,5 +1,6 @@
 import pandas as pd
 from collections import Iterable
+from column_names import RAW_SYMPTOMS, RAW_OTHER_SYMPTOMS, SYMPTOM_OTHER, NO_SYMPTOMS
 
 # Built using unique count for every symptom
 MAIN_SYMPTOMS = {
@@ -79,11 +80,6 @@ NOT_SYMPTOMS = [
 ]
 
 class SymptomNormalizer:
-    COL_SYMPTOMS = "sintomas"
-    COL_OTHER_SYMPTOMS = "outros_sintomas"
-    
-    COL_SYMPTOM_OTHER = "sintoma_outros"
-    COL_NO_SYMPTOMS = "assintomatico"
     
     def __init__(self, original, filename):
         self.original = original
@@ -108,12 +104,12 @@ class SymptomNormalizer:
     
     # TODO: Confirm if the 13000 random symptoms should be ignored or added to "outros"
     def get_symptom_column(self, symptom):
-        return self.symptom_column_hash.get(symptom, self.COL_SYMPTOM_OTHER)
+        return self.symptom_column_hash.get(symptom, SYMPTOM_OTHER)
     
     def split_symbols(self):
         symbols = ", |,| / | \+ |\+| E |;"
-        self.split_and_trim(self.COL_SYMPTOMS, symbols)
-        self.split_and_trim(self.COL_OTHER_SYMPTOMS, symbols)
+        self.split_and_trim(RAW_SYMPTOMS, symbols)
+        self.split_and_trim(RAW_OTHER_SYMPTOMS, symbols)
     
     def split_and_trim(self, column, separator):
         self.df[column] = self.df[column].fillna("")
@@ -125,18 +121,18 @@ class SymptomNormalizer:
         
     def add_symptom_columns(self):
         # TODO: Should have assintomaticos?
-        # self.df[self.COL_NO_SYMPTOMS] = True
+        # self.df[NO_SYMPTOMS] = True
         for column in MAIN_SYMPTOMS:
             self.df[column] = False
-        self.df[self.COL_SYMPTOM_OTHER] = False
+        self.df[SYMPTOM_OTHER] = False
         
     def fill_symptom_columns(self):
         for index, row in self.df.iterrows():
-            for symptom in row[self.COL_SYMPTOMS]:
+            for symptom in row[RAW_SYMPTOMS]:
                 if symptom in NO_SYMPTOMS:
                     break
                 self.set_symptom_column_to_true(index, symptom)
-            for symptom in row[self.COL_OTHER_SYMPTOMS]:
+            for symptom in row[RAW_OTHER_SYMPTOMS]:
                 if symptom in NO_SYMPTOMS:
                     break
                 self.set_symptom_column_to_true(index, symptom)
@@ -147,10 +143,10 @@ class SymptomNormalizer:
             return
         self.df.at[index, self.get_symptom_column(symptom)] = True
         # TODO: Should have assintomaticos?
-        # self.df.at[index, self.COL_NO_SYMPTOMS] = False
+        # self.df.at[index, NO_SYMPTOMS] = False
 
     def delete_original_columns(self):
-        self.df.drop(columns=[self.COL_SYMPTOMS, self.COL_OTHER_SYMPTOMS], inplace=True)
+        self.df.drop(columns=[RAW_SYMPTOMS, RAW_OTHER_SYMPTOMS], inplace=True)
     
     def save_all_unique_symptoms_as_txt(self):
         unique_symptoms = {}

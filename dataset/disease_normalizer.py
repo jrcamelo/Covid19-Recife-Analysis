@@ -1,5 +1,6 @@
 import pandas as pd
 from collections import Iterable
+from column_names import RAW_DISEASES, DISEASE_OTHER
 
 MAIN_DISEASES = {
     "doenca_cardiaca_ou_vascular": ["DOENCAS CARDIACAS OU VASCULARES", "DOENCAS CARDIACAS CRONICAS"],
@@ -21,9 +22,6 @@ NOT_DISEASES = [
     
 
 class DiseaseNormalizer:
-    COL_DISEASES = "doencas_preexistentes"
-    
-    COL_DISEASE_OTHER = "doenca_outros"
     
     def __init__(self, original, filename):
         self.original = original
@@ -34,7 +32,7 @@ class DiseaseNormalizer:
         self.save_all_unique_diseases_as_txt()
         self.add_disease_columns()
         self.fill_disease_columns()
-        self.df[self.COL_DISEASES].to_csv('./dataset/misc/diseases_' + self.filename + '.csv', index=False)
+        self.df[RAW_DISEASES].to_csv('./dataset/misc/diseases_' + self.filename + '.csv', index=False)
         self.delete_original_column()
         self.df.to_csv("./dataset/misc/diseases_normalized_" + filename + ".csv", index=False)
     
@@ -48,25 +46,25 @@ class DiseaseNormalizer:
                 self.disease_column_hash[disease] = column
     
     def get_disease_column(self, disease):
-        return self.disease_column_hash.get(disease, self.COL_DISEASE_OTHER)
+        return self.disease_column_hash.get(disease, DISEASE_OTHER)
     
     def split_symbols(self):
         separator = ", |,| / | \+ |\+| E |;|\/"
-        self.df[self.COL_DISEASES] = self.df[self.COL_DISEASES].fillna("")
-        self.df[self.COL_DISEASES] = self.df[self.COL_DISEASES].str.split(separator)
-        self.df[self.COL_DISEASES] = self.df[self.COL_DISEASES].apply(lambda x: [item.strip() for item in x])
-        self.df[self.COL_DISEASES] = self.df[self.COL_DISEASES].apply(lambda x: [item for item in x if item != ""])
-        self.df[self.COL_DISEASES] = self.df[self.COL_DISEASES].apply(lambda x: [item.replace(".", "") for item in x])
-        self.df[self.COL_DISEASES] = self.df[self.COL_DISEASES].apply(lambda x: sorted(x))
+        self.df[RAW_DISEASES] = self.df[RAW_DISEASES].fillna("")
+        self.df[RAW_DISEASES] = self.df[RAW_DISEASES].str.split(separator)
+        self.df[RAW_DISEASES] = self.df[RAW_DISEASES].apply(lambda x: [item.strip() for item in x])
+        self.df[RAW_DISEASES] = self.df[RAW_DISEASES].apply(lambda x: [item for item in x if item != ""])
+        self.df[RAW_DISEASES] = self.df[RAW_DISEASES].apply(lambda x: [item.replace(".", "") for item in x])
+        self.df[RAW_DISEASES] = self.df[RAW_DISEASES].apply(lambda x: sorted(x))
         
     def add_disease_columns(self):
         for column in MAIN_DISEASES:
             self.df[column] = False
-        self.df[self.COL_DISEASE_OTHER] = False
+        self.df[DISEASE_OTHER] = False
         
     def fill_disease_columns(self):
         for index, row in self.df.iterrows():
-            for disease in row[self.COL_DISEASES]:
+            for disease in row[RAW_DISEASES]:
                 self.set_disease_column_to_true(index, disease)
 
                 
@@ -76,11 +74,11 @@ class DiseaseNormalizer:
         self.df.at[index, self.get_disease_column(disease)] = True
 
     def delete_original_column(self):
-        self.df.drop(columns=[self.COL_DISEASES], inplace=True)
+        self.df.drop(columns=[RAW_DISEASES], inplace=True)
     
     def save_all_unique_diseases_as_txt(self):
         unique_diseases = {}
-        for diseases in self.df[self.COL_DISEASES]:
+        for diseases in self.df[RAW_DISEASES]:
             if isinstance(diseases, Iterable):
                 for sympt in diseases:
                     if (unique_diseases.get(sympt) is None):

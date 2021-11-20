@@ -2,8 +2,20 @@ import graphviz
 from IPython.display import SVG,display
 from sklearn import metrics
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from column_names import SEVERITY, AGE_GROUP, DATE
 
 class DecisionTree:
+    CONFIG = {
+        "target": SEVERITY,
+        "should_categorize_age": True,
+        "should_categorize_gender": True,
+        "should_categorize_severity": True,
+        "should_categorize_booleans": True,
+        "drop_diseases": False,
+        "drop_symptoms": False,
+        "drop": [AGE_GROUP, DATE]
+    }
+    
     def __init__(self, train, test, train_labels, test_labels, classes, max_depth=None):
         self.train = train
         self.test = test

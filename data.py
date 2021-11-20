@@ -9,16 +9,11 @@ from dataset.cases_severe import DatasetSevere
 from dataset.vaccination import DatasetVaccination
 from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity
 
-
 DATA_PATH = "./dataset/data/fulldata.csv"
 TRAIN_TO_TEST_RATIO = 0.8
 class Dataset(DatasetBase):
-    COL_AGE = "idade"
-    COL_GENDER = "sexo"
-    COL_SEVERITY = "severidade"
-    COL_DATE = "data_notificacao"
-
     def __init__(self,
+                 config=None,
                  should_update_data=False, 
                  target='severidade',
                  should_categorize_gender=False, 
@@ -29,12 +24,20 @@ class Dataset(DatasetBase):
                  drop_symptoms=False,
                  drop_diseases=False):
         super().__init__()
+        if (config != None):
+            target = config.get("target", target)
+            should_categorize_gender = config.get("should_categorize_gender", should_categorize_gender)   
+            should_categorize_age = config.get("should_categorize_age", should_categorize_age)
+            should_categorize_severity = config.get("should_categorize_severity", should_categorize_severity)
+            drop = config.get("drop", drop)
+            drop_symptoms = config.get("drop_symptoms", drop_symptoms)
+            drop_diseases = config.get("drop_diseases", drop_diseases)
         self.load(should_update_data)
         self.categorize(should_categorize_gender, should_categorize_age, should_categorize_severity, should_categorize_booleans)
         self.set_target(target)
         self.do_drop(drop, drop_symptoms, drop_diseases)
         self.split_data()        
-
+        
     def categorize(self, gender, age, severity, booleans):
         if (gender):
             categorize_gender(self.df)
@@ -52,7 +55,7 @@ class Dataset(DatasetBase):
             
     def do_drop(self, drop, drop_symptoms, drop_diseases):
         if (drop == None):
-            drop = [self.COL_DATE]
+            drop = []
         if (drop_symptoms):
             drop += [col for col in self.df.columns if col.startswith("sintoma_")]
         if (drop_diseases):

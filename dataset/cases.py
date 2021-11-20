@@ -1,7 +1,9 @@
 import pandas as pd
+
 from dataset.base import DatasetBase
 from dataset.symptom_normalizer import SymptomNormalizer
 from dataset.disease_normalizer import DiseaseNormalizer
+from column_names import RAW_DISEASES, RAW_OTHER_DISEASES, AGE, AGE_GROUP, GENDER, HEALTH_PROFESSIONAL, RAW_OTHER_SYMPTOMS, SEVERITY, RAW_EVOLUTION, RAW_DEATH_DATE, RAW_SYMPTOMS
 
 DATA_FOLDER = './dataset/data/'
 TRAIN_TO_TEST_RATIO = 3 / 4
@@ -11,7 +13,7 @@ class DatasetCases(DatasetBase):
     MERGED_COLUMN_NAMES = [
         'data_notificacao',
         'sexo',
-        'idade',
+        AGE,
         'data_inicio_sintomas',
         'raca',
         'etnia',
@@ -63,11 +65,11 @@ class DatasetCases(DatasetBase):
         self.delete_columns(self.COLUMNS_TO_DELETE_WITHOUT_PROCESSING)
         
     def merge_disease_columns_if_present(self):
-        if ('outras_doencas_preexistentes' in self.df.columns):
-            self.df['doencas_preexistentes'].fillna("NENHUMA", inplace=True)
-            self.df['outras_doencas_preexistentes'].fillna("NENHUMA", inplace=True)
-            self.df['doencas_preexistentes'] = self.df['doencas_preexistentes'] + ',' + self.df['outras_doencas_preexistentes']
-            self.df.drop(columns=['outras_doencas_preexistentes'], inplace=True)
+        if (RAW_OTHER_DISEASES in self.df.columns):
+            self.df[RAW_DISEASES].fillna("NENHUMA", inplace=True)
+            self.df[RAW_OTHER_DISEASES].fillna("NENHUMA", inplace=True)
+            self.df[RAW_DISEASES] = self.df[RAW_DISEASES] + ',' + self.df[RAW_OTHER_DISEASES]
+            self.df.drop(columns=[RAW_OTHER_DISEASES], inplace=True)
         
     def manage_rows(self):
         self.run_on_objects.append(self.normalize_strings)
@@ -89,69 +91,69 @@ class DatasetCases(DatasetBase):
         self.process_diseases()
         
     def blank_gender_to_undefined(self):
-        self.df.loc[self.df['sexo'].isna(), 'sexo'] = 'INDEFINIDO'
+        self.df.loc[self.df[GENDER].isna(), GENDER] = 'INDEFINIDO'
 
         
     def health_professional_to_boolean(self):
-        self.df.loc[self.df['profissional_saude'] == 'SIM', 'profissional_saude'] = True
-        self.df.loc[(self.df['profissional_saude'] != True), 'profissional_saude'] = False
+        self.df.loc[self.df[HEALTH_PROFESSIONAL] == 'SIM', HEALTH_PROFESSIONAL] = True
+        self.df.loc[(self.df[HEALTH_PROFESSIONAL] != True), HEALTH_PROFESSIONAL] = False
         
     def evolution_to_severity(self):
         # TODO: Should this be kept? It confuses the model sometimes
-        # self.df.loc[(self.df['evolucao'].notna()) & (self.df['evolucao'].str.startswith('INTERNADO')), 'severidade'] = 'INTERNADO'
-        self.df.drop(columns=['evolucao'], inplace=True)
+        # self.df.loc[(self.df[RAW_EVOLUTION].notna()) & (self.df[RAW_EVOLUTION].str.startswith('INTERNADO')), SEVERITY] = 'INTERNADO'
+        self.df.drop(columns=[RAW_EVOLUTION], inplace=True)
 
     def death_date_to_severity(self):
-        self.df.loc[self.df['data_obito'].notna(), 'severidade'] = 'OBITO'
-        self.df.drop(columns=['data_obito'], inplace=True)
+        self.df.loc[self.df[RAW_DEATH_DATE].notna(), SEVERITY] = 'OBITO'
+        self.df.drop(columns=[RAW_DEATH_DATE], inplace=True)
         
     def delete_empty_ages(self):
-        print("Deleting empty ages: " + str(self.df['idade'].isna().sum()))
-        self.df = self.df.dropna(subset=['idade'])
+        print("Deleting empty ages: " + str(self.df[AGE].isna().sum()))
+        self.df = self.df.dropna(subset=[AGE])
                 
     def months_to_0_age(self):
-        self.df.loc[self.df['idade'].str.endswith('ES'), 'idade'] = 0
+        self.df.loc[self.df[AGE].str.endswith('ES'), AGE] = 0
         
     def ages_to_age_group(self):
-        self.df['idade'] = self.df['idade'].astype(int, errors='ignore')
-        self.df['grupo_idade'] = 0
-        self.df.loc[self.df['idade'] < 10, 'grupo_idade'] = 0
-        self.df.loc[(self.df['idade'] >= 10) & (self.df['idade'] < 20), 'grupo_idade'] = 10
-        self.df.loc[(self.df['idade'] >= 20) & (self.df['idade'] < 30), 'grupo_idade'] = 20
-        self.df.loc[(self.df['idade'] >= 30) & (self.df['idade'] < 40), 'grupo_idade'] = 30
-        self.df.loc[(self.df['idade'] >= 40) & (self.df['idade'] < 50), 'grupo_idade'] = 40
-        self.df.loc[(self.df['idade'] >= 50) & (self.df['idade'] < 60), 'grupo_idade'] = 50
-        self.df.loc[(self.df['idade'] >= 60) & (self.df['idade'] < 70), 'grupo_idade'] = 60
-        self.df.loc[(self.df['idade'] >= 70) & (self.df['idade'] < 80), 'grupo_idade'] = 70
-        self.df.loc[self.df['idade'] >= 80, 'grupo_idade'] = 80
-        self.df.loc[self.df['idade'] == 0, 'grupo_idade'] = "0-9"
-        self.df.loc[self.df['idade'] == 10, 'grupo_idade'] = "10-19"
-        self.df.loc[self.df['idade'] == 20, 'grupo_idade'] = "20-29"
-        self.df.loc[self.df['idade'] == 30, 'grupo_idade'] = "30-39"
-        self.df.loc[self.df['idade'] == 40, 'grupo_idade'] = "40-49"
-        self.df.loc[self.df['idade'] == 50, 'grupo_idade'] = "50-59"
-        self.df.loc[self.df['idade'] == 60, 'grupo_idade'] = "60-69"
-        self.df.loc[self.df['idade'] == 70, 'grupo_idade'] = "70-79"
-        self.df.loc[self.df['idade'] == 80, 'grupo_idade'] = "80+"        
+        self.df[AGE] = self.df[AGE].astype(int, errors='ignore')
+        self.df[AGE_GROUP] = 0
+        self.df.loc[self.df[AGE] < 10, AGE_GROUP] = 0
+        self.df.loc[(self.df[AGE] >= 10) & (self.df[AGE] < 20), AGE_GROUP] = 10
+        self.df.loc[(self.df[AGE] >= 20) & (self.df[AGE] < 30), AGE_GROUP] = 20
+        self.df.loc[(self.df[AGE] >= 30) & (self.df[AGE] < 40), AGE_GROUP] = 30
+        self.df.loc[(self.df[AGE] >= 40) & (self.df[AGE] < 50), AGE_GROUP] = 40
+        self.df.loc[(self.df[AGE] >= 50) & (self.df[AGE] < 60), AGE_GROUP] = 50
+        self.df.loc[(self.df[AGE] >= 60) & (self.df[AGE] < 70), AGE_GROUP] = 60
+        self.df.loc[(self.df[AGE] >= 70) & (self.df[AGE] < 80), AGE_GROUP] = 70
+        self.df.loc[self.df[AGE] >= 80, AGE_GROUP] = 80
+        self.df.loc[self.df[AGE] == 0, AGE_GROUP] = "0-9"
+        self.df.loc[self.df[AGE] == 10, AGE_GROUP] = "10-19"
+        self.df.loc[self.df[AGE] == 20, AGE_GROUP] = "20-29"
+        self.df.loc[self.df[AGE] == 30, AGE_GROUP] = "30-39"
+        self.df.loc[self.df[AGE] == 40, AGE_GROUP] = "40-49"
+        self.df.loc[self.df[AGE] == 50, AGE_GROUP] = "50-59"
+        self.df.loc[self.df[AGE] == 60, AGE_GROUP] = "60-69"
+        self.df.loc[self.df[AGE] == 70, AGE_GROUP] = "70-79"
+        self.df.loc[self.df[AGE] == 80, AGE_GROUP] = "80+"        
         
     def set_column_types(self):
         pass
 
     def process_symptoms(self):
-        symptoms = self.df[['sintomas', 'outros_sintomas']]
+        symptoms = self.df[[RAW_SYMPTOMS, RAW_OTHER_SYMPTOMS]]
         normalizer = SymptomNormalizer(symptoms, self.filename)
         clean_symptoms = normalizer.get_normalized_columns()
-        self.df.drop(columns=['sintomas', 'outros_sintomas'], inplace=True)
+        self.df.drop(columns=[RAW_SYMPTOMS, RAW_OTHER_SYMPTOMS], inplace=True)
         self.df = pd.concat([self.df, clean_symptoms], axis=1)
         # TODO: Should have assintomaticos?
-        # self.df.loc[self.df['assintomatico'] == True, 'severidade'] = 'ASSINTOMATICO'
-        # self.df.drop(columns=['assintomatico'], inplace=True)
+        # self.df.loc[self.df[NO_SYMPTOMS] == True, SEVERITY] = 'ASSINTOMATICO'
+        # self.df.drop(columns=[NO_SYMPTOMS], inplace=True)
     
     def process_diseases(self):
-        diseases = self.df[['doencas_preexistentes']]
+        diseases = self.df[[RAW_DISEASES]]
         diseases.to_csv('./dataset/misc/diseasesoriginal_' + self.filename + '.csv', index=False)
         normalizer = DiseaseNormalizer(diseases, self.filename)
         clean_diseases = normalizer.get_normalized_columns()
-        self.df.drop(columns=['doencas_preexistentes'], inplace=True)
+        self.df.drop(columns=[RAW_DISEASES], inplace=True)
         self.df = pd.concat([self.df, clean_diseases], axis=1)
         
