@@ -3,7 +3,7 @@ import pandas as pd
 from dataset.base import DatasetBase
 from dataset.symptom_normalizer import SymptomNormalizer
 from dataset.disease_normalizer import DiseaseNormalizer
-from column_names import RAW_DISEASES, RAW_OTHER_DISEASES, AGE, AGE_GROUP, GENDER, HEALTH_PROFESSIONAL, RAW_OTHER_SYMPTOMS, SEVERITY, RAW_EVOLUTION, RAW_DEATH_DATE, RAW_SYMPTOMS
+from column_names import RAW_DISEASES, RAW_OTHER_DISEASES, AGE, GENDER, HEALTH_PROFESSIONAL, RAW_OTHER_SYMPTOMS, SEVERITY, RAW_EVOLUTION, RAW_DEATH_DATE, RAW_SYMPTOMS
 
 DATA_FOLDER = './dataset/data/'
 TRAIN_TO_TEST_RATIO = 3 / 4
@@ -81,18 +81,16 @@ class DatasetCases(DatasetBase):
         self.replace_value_in_column(column, ["IGN", "IGNORADO"], None)
         
     def process_data(self):
-        self.blank_gender_to_undefined()
+        self.delete_blank_gender()
         self.health_professional_to_boolean()
         self.evolution_to_severity()
         self.death_date_to_severity()
         self.months_to_0_age()
-        self.ages_to_age_group()
         self.process_symptoms()
         self.process_diseases()
         
-    def blank_gender_to_undefined(self):
-        self.df.loc[self.df[GENDER].isna(), GENDER] = 'INDEFINIDO'
-
+    def delete_blank_gender(self):
+        self.df = self.df.dropna(subset=[GENDER])
         
     def health_professional_to_boolean(self):
         self.df.loc[self.df[HEALTH_PROFESSIONAL] == 'SIM', HEALTH_PROFESSIONAL] = True
@@ -112,32 +110,10 @@ class DatasetCases(DatasetBase):
         self.df = self.df.dropna(subset=[AGE])
                 
     def months_to_0_age(self):
-        self.df.loc[self.df[AGE].str.endswith('ES'), AGE] = 0
-        
-    def ages_to_age_group(self):
-        self.df[AGE] = self.df[AGE].astype(int, errors='ignore')
-        self.df[AGE_GROUP] = 0
-        self.df.loc[self.df[AGE] < 10, AGE_GROUP] = 0
-        self.df.loc[(self.df[AGE] >= 10) & (self.df[AGE] < 20), AGE_GROUP] = 10
-        self.df.loc[(self.df[AGE] >= 20) & (self.df[AGE] < 30), AGE_GROUP] = 20
-        self.df.loc[(self.df[AGE] >= 30) & (self.df[AGE] < 40), AGE_GROUP] = 30
-        self.df.loc[(self.df[AGE] >= 40) & (self.df[AGE] < 50), AGE_GROUP] = 40
-        self.df.loc[(self.df[AGE] >= 50) & (self.df[AGE] < 60), AGE_GROUP] = 50
-        self.df.loc[(self.df[AGE] >= 60) & (self.df[AGE] < 70), AGE_GROUP] = 60
-        self.df.loc[(self.df[AGE] >= 70) & (self.df[AGE] < 80), AGE_GROUP] = 70
-        self.df.loc[self.df[AGE] >= 80, AGE_GROUP] = 80
-        self.df.loc[self.df[AGE] == 0, AGE_GROUP] = "0-9"
-        self.df.loc[self.df[AGE] == 10, AGE_GROUP] = "10-19"
-        self.df.loc[self.df[AGE] == 20, AGE_GROUP] = "20-29"
-        self.df.loc[self.df[AGE] == 30, AGE_GROUP] = "30-39"
-        self.df.loc[self.df[AGE] == 40, AGE_GROUP] = "40-49"
-        self.df.loc[self.df[AGE] == 50, AGE_GROUP] = "50-59"
-        self.df.loc[self.df[AGE] == 60, AGE_GROUP] = "60-69"
-        self.df.loc[self.df[AGE] == 70, AGE_GROUP] = "70-79"
-        self.df.loc[self.df[AGE] == 80, AGE_GROUP] = "80+"        
+        self.df.loc[self.df[AGE].str.endswith('ES'), AGE] = 0      
         
     def set_column_types(self):
-        pass
+        self.df[AGE] = self.df[AGE].astype(int)
 
     def process_symptoms(self):
         symptoms = self.df[[RAW_SYMPTOMS, RAW_OTHER_SYMPTOMS]]

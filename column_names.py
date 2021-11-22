@@ -1,6 +1,5 @@
 
 AGE = "idade"
-AGE_GROUP = "grupo_idade"
 GENDER = "sexo"
 SEVERITY = "severidade"
 DATE = "data_notificacao"
