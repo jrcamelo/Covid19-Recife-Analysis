@@ -70,6 +70,7 @@ def run_decision_tree(data):
     print(tree.confusion_matrix)
     print(tree.classification_report)
     tree.visualize_model("results/decision_tree_" + str(tree.accuracy))
+    return tree
 
 def run_multiple_decision_trees(data):
     trees = []
@@ -93,5 +94,6 @@ def run_multiple_decision_trees(data):
     print(best_tree.classification_report)
     
     best_tree.visualize_model("best_of_100_decision_tree_" + str(best_tree.accuracy))
+    return best_tree
         
         
