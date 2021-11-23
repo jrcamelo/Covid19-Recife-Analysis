@@ -8,14 +8,15 @@ from dataset.cases import TRAIN_TO_TEST_RATIO
 from dataset.cases_mild import DatasetMild
 from dataset.cases_severe import DatasetSevere
 from dataset.vaccination import DatasetVaccination
-from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity, categorize_vaccination
+from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity, categorize_vaccination, remove_severe
 
 DATA_PATH = "./dataset/data/fulldata.csv"
 TRAIN_TO_TEST_RATIO = 0.8
 class Dataset(DatasetBase):
     def __init__(self,
                  config=None,
-                 should_update_data=False, 
+                 should_update_data=False,
+                 should_remove_severe=False,
                  target=None,
                  should_categorize_gender=None, 
                  should_categorize_age=None, 
@@ -49,6 +50,9 @@ class Dataset(DatasetBase):
                 
         self.load(should_update_data)
         self.categorize(should_categorize_gender, should_categorize_age, should_categorize_severity, should_categorize_booleans, should_categorize_vaccination)
+        if (should_remove_severe):
+            remove_severe(self.df)
+            
         self.set_target(target)
         self.do_drop(drop, drop_symptoms, drop_diseases)
         self.split_data()        

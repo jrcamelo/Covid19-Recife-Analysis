@@ -5,6 +5,7 @@ def categorize_booleans(df):
         if df[column].dtype == bool:
             df.loc[df[column] == True, column] = 1
             df.loc[df[column] == False, column] = 0
+            df[column] = df[column].astype(int)
       
     
 def categorize_gender(df):        
@@ -50,3 +51,12 @@ def categorize_severity(df):
     df.loc[df[SEVERITY] == "OBITO", SEVERITY] = 3
     df[SEVERITY] = df[SEVERITY].astype(int)
     return df
+
+def remove_severe(df):
+    df.loc[df[SEVERITY] == "GRAVE", SEVERITY] = "LEVE"
+    df.loc[df[SEVERITY] == 1, SEVERITY] = 0
+    df.loc[df[SEVERITY] == 3, SEVERITY] = 1
+    df[SEVERITY] = df[SEVERITY].astype(int)
+
+    print(df[SEVERITY].value_counts())
+    
