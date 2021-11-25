@@ -79,7 +79,7 @@ NOT_SYMPTOMS = [
     "ELETIVA",
 ]
 
-class SymptomNormalizer:
+class SymptomsToColumns:
     
     def __init__(self, original, filename):
         self.original = original

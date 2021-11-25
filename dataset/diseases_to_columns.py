@@ -21,7 +21,7 @@ NOT_DISEASES = [
 ]
     
 
-class DiseaseNormalizer:
+class DiseasesToColumns:
     
     def __init__(self, original, filename):
         self.original = original

@@ -1,8 +1,8 @@
 import pandas as pd
 
 from dataset.base import DatasetBase
-from dataset.symptom_normalizer import SymptomNormalizer
-from dataset.disease_normalizer import DiseaseNormalizer
+from dataset.symptoms_to_columns import SymptomsToColumns
+from dataset.diseases_to_columns import DiseasesToColumns
 from column_names import RAW_DISEASES, RAW_OTHER_DISEASES, AGE, GENDER, HEALTH_PROFESSIONAL, RAW_OTHER_SYMPTOMS, SEVERITY, RAW_EVOLUTION, RAW_DEATH_DATE, RAW_SYMPTOMS
 
 DATA_FOLDER = './dataset/data/'
@@ -117,7 +117,7 @@ class DatasetCases(DatasetBase):
 
     def process_symptoms(self):
         symptoms = self.df[[RAW_SYMPTOMS, RAW_OTHER_SYMPTOMS]]
-        normalizer = SymptomNormalizer(symptoms, self.filename)
+        normalizer = SymptomsToColumns(symptoms, self.filename)
         clean_symptoms = normalizer.get_normalized_columns()
         self.df.drop(columns=[RAW_SYMPTOMS, RAW_OTHER_SYMPTOMS], inplace=True)
         self.df = pd.concat([self.df, clean_symptoms], axis=1)
@@ -128,7 +128,7 @@ class DatasetCases(DatasetBase):
     def process_diseases(self):
         diseases = self.df[[RAW_DISEASES]]
         diseases.to_csv('./dataset/misc/diseasesoriginal_' + self.filename + '.csv', index=False)
-        normalizer = DiseaseNormalizer(diseases, self.filename)
+        normalizer = DiseasesToColumns(diseases, self.filename)
         clean_diseases = normalizer.get_normalized_columns()
         self.df.drop(columns=[RAW_DISEASES], inplace=True)
         self.df = pd.concat([self.df, clean_diseases], axis=1)
