@@ -11,7 +11,7 @@ from dataset.cases_mild import DatasetMild
 from dataset.cases_severe import DatasetSevere
 from dataset.vaccination import DatasetVaccination
 from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity, make_binary_mild_severe
-from dataset.normalizer import vaccination_thermometer_normalization, normalize_min_max
+from dataset.normalizer import vaccination_thermometer_normalization, normalize_min_max, one_hot_encoding
 
 DATA_PATH = "./dataset/data/fulldata.csv"
 TRAIN_TO_TEST_RATIO = 0.8

@@ -1,4 +1,5 @@
 import shap
+import numpy as np
 import matplotlib.pyplot as plt
 import graphviz
 from IPython.display import SVG,display
@@ -47,6 +48,9 @@ class DecisionTree:
         self.accuracy = metrics.accuracy_score(self.test_labels, self.predictions)
         self.confusion_matrix = metrics.confusion_matrix(self.test_labels, self.predictions)
         self.classification_report = metrics.classification_report(self.test_labels, self.predictions)
+        self.precision = metrics.precision_score(self.test_labels, self.predictions, average='weighted')
+        self.recall = metrics.recall_score(self.test_labels, self.predictions, average='weighted')
+        self.f1 = metrics.f1_score(self.test_labels, self.predictions, average='weighted')
         
     def visualize_model(self, filename):
         print(self.test_labels.unique())
@@ -68,7 +72,7 @@ class DecisionTree:
         shap_values = explainer.shap_values(self.train)
         shap.summary_plot(shap_values, self.train)
         plt.savefig(filename + "-shap-summary-bar.png", format="png")  
-        shap.summary_plot(shap_values, self.model, self.train, plot_type="dot")
+        shap.summary_plot(shap_values[-1], self.train, plot_type="dot")
         return shap_values
 
 def run_decision_tree(data):

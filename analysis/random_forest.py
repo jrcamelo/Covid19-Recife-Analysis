@@ -62,6 +62,9 @@ class RandomForest:
         self.classification_report = metrics.classification_report(self.test_labels, self.predictions)
         self.accuracy = metrics.accuracy_score(self.test_labels, self.predictions)
         self.confusion_matrix = metrics.confusion_matrix(self.test_labels, self.predictions)
+        self.precision = metrics.precision_score(self.test_labels, self.predictions, average='weighted')
+        self.recall = metrics.recall_score(self.test_labels, self.predictions, average='weighted')
+        self.f1 = metrics.f1_score(self.test_labels, self.predictions, average='weighted')
         
     def visualize_model(self, filename):
         feature_imp = pd.Series(self.model.feature_importances_, index=self.test.columns)

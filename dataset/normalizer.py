@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from column_names import *
 from dataset.categorizer import categorize_booleans
@@ -29,6 +30,11 @@ def vaccination_thermometer_normalization(df, should_categorize_booleans):
     df.drop(VACCINATION_PERCENTAGE, inplace=True, axis=1)    
     if (should_categorize_booleans):
         categorize_booleans(df)
+
+
+def one_hot_encoding(df, column):
+    df = pd.get_dummies(df, columns=[column])
+    return df
 
 def normalize_min_max(df, column):
     df[column] = (df[column] - df[column].min()) / (df[column].max() - df[column].min())
