@@ -1,3 +1,5 @@
+import shap
+import matplotlib.pyplot as plt
 import graphviz
 from IPython.display import SVG,display
 from sklearn import metrics
@@ -11,7 +13,7 @@ class DecisionTree:
         "should_categorize_gender": True,
         "should_categorize_severity": True,
         "should_categorize_booleans": True,
-        "should_categorize_vaccination": True,
+        "should_normalize": True,
         "drop_diseases": False,
         "drop_symptoms": True,
         "drop": [DATE]
@@ -60,7 +62,14 @@ class DecisionTree:
                         label='all')
         graph = graphviz.Source.from_file(filename)
         graph.render(filename, view=True, format='svg')
-
+        
+    def make_shap_values(self, filename="decision_tree"):
+        explainer = shap.TreeExplainer(self.model)
+        shap_values = explainer.shap_values(self.train)
+        shap.summary_plot(shap_values, self.train)
+        plt.savefig(filename + "-shap-summary-bar.png", format="png")  
+        shap.summary_plot(shap_values, self.model, self.train, plot_type="dot")
+        return shap_values
 
 def run_decision_tree(data):
     tree = DecisionTree(data.train, data.test, data.train_labels, data.test_labels, ["LEVE", "GRAVE", "OBITO", "ASSINTOMATICO"])

@@ -11,7 +11,6 @@ def categorize_booleans(df):
 def categorize_gender(df):        
     df.loc[df[GENDER] == "MASCULINO", GENDER] = 0
     df.loc[df[GENDER] == "FEMININO", GENDER] = 1
-    df.loc[df[GENDER] == "INDEFINIDO", GENDER] = 2
     df[GENDER] = df[GENDER].astype(int)
     return df
 
@@ -27,21 +26,6 @@ def categorize_age(df):
     df.loc[df[AGE] >= 80, AGE] = 8
     df[AGE] = df[AGE].astype(int)
     return df
-  
-def categorize_vaccination(df):
-    df.loc[df[VACCINATION_PERCENTAGE] == 0, VACCINATION_PERCENTAGE] = 0
-    df.loc[(df[VACCINATION_PERCENTAGE] > 0) & (df[VACCINATION_PERCENTAGE] < 0.1), VACCINATION_PERCENTAGE] = 1
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.1) & (df[VACCINATION_PERCENTAGE] < 0.2), VACCINATION_PERCENTAGE] = 2
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.2) & (df[VACCINATION_PERCENTAGE] < 0.3), VACCINATION_PERCENTAGE] = 3
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.3) & (df[VACCINATION_PERCENTAGE] < 0.4), VACCINATION_PERCENTAGE] = 4
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.4) & (df[VACCINATION_PERCENTAGE] < 0.5), VACCINATION_PERCENTAGE] = 5
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.5) & (df[VACCINATION_PERCENTAGE] < 0.6), VACCINATION_PERCENTAGE] = 6
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.6) & (df[VACCINATION_PERCENTAGE] < 0.7), VACCINATION_PERCENTAGE] = 7
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.7) & (df[VACCINATION_PERCENTAGE] < 0.8), VACCINATION_PERCENTAGE] = 8
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.8) & (df[VACCINATION_PERCENTAGE] < 0.9), VACCINATION_PERCENTAGE] = 9
-    df.loc[(df[VACCINATION_PERCENTAGE] >= 0.9) & (df[VACCINATION_PERCENTAGE] < 0.99999), VACCINATION_PERCENTAGE] = 10
-    df[VACCINATION_PERCENTAGE] = df[VACCINATION_PERCENTAGE].astype(int)
-    return df
 
 def categorize_severity(df):
     df.loc[df[SEVERITY] == "ASSINTOMATICO", SEVERITY] = 5
@@ -52,11 +36,6 @@ def categorize_severity(df):
     df[SEVERITY] = df[SEVERITY].astype(int)
     return df
 
-def remove_severe(df):
-    df.loc[df[SEVERITY] == "GRAVE", SEVERITY] = "LEVE"
-    df.loc[df[SEVERITY] == 1, SEVERITY] = 0
-    df.loc[df[SEVERITY] == 3, SEVERITY] = 1
+def make_binary_mild_severe(df):
+    df.loc[df[SEVERITY] != 0, SEVERITY] = 1
     df[SEVERITY] = df[SEVERITY].astype(int)
-
-    print(df[SEVERITY].value_counts())
-    

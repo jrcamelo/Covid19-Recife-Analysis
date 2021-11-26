@@ -80,6 +80,7 @@ class DatasetCases(DatasetBase):
     def replace_ignored_values_with_none(self, column):
         self.replace_value_in_column(column, ["IGN", "IGNORADO"], None)
         
+        
     def process_data(self):
         self.delete_blank_gender()
         self.health_professional_to_boolean()
@@ -91,6 +92,7 @@ class DatasetCases(DatasetBase):
         
     def delete_blank_gender(self):
         self.df = self.df.dropna(subset=[GENDER])
+        self.df = self.df.drop(self.df[self.df[GENDER] == "INDEFINIDO"].index)
         
     def health_professional_to_boolean(self):
         self.df.loc[self.df[HEALTH_PROFESSIONAL] == 'SIM', HEALTH_PROFESSIONAL] = True

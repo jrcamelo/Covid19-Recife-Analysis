@@ -6,6 +6,14 @@ DATE = "data_notificacao"
 HEALTH_PROFESSIONAL = "profissional_saude"
 VACCINATION_PERCENTAGE = 'populacao_vacinada'
 
+VACCINATION_ABOVE_0 = "vacinacao_acima_0"
+VACCINATION_ABOVE_15 = "vacinacao_acima_15"
+VACCINATION_ABOVE_30 = "vacinacao_acima_30"
+VACCINATION_ABOVE_45 = "vacinacao_acima_45"
+VACCINATION_ABOVE_60 = "vacinacao_acima_60"
+VACCINATION_ABOVE_75 = "vacinacao_acima_75"
+VACCINATION_ABOVE_90 = "vacinacao_acima_90"
+
 # Symptoms
 SYMPTOM_OTHER = "sintoma_outros"
 NO_SYMPTOMS = "assintomatico"

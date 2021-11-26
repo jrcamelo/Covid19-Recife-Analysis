@@ -23,9 +23,9 @@ class RandomForest:
         "should_categorize_gender": True,
         "should_categorize_severity": True,
         "should_categorize_booleans": True,
-        "should_categorize_vaccination": True,
+        "should_normalize": True,
         "drop_diseases": False,
-        "drop_symptoms": False,
+        "drop_symptoms": True,
         "drop": [DATE]
     }
     
@@ -42,10 +42,10 @@ class RandomForest:
                                             max_features='auto', 
                                             min_impurity_decrease=0.0, 
                                             min_impurity_split=None,
-                                            min_samples_leaf=0.0001,  #0.00001, #
-                                            min_samples_split=2,
+                                            min_samples_leaf=0.001,  #0.00001, #
+                                            #min_samples_split=2,
                                             min_weight_fraction_leaf=0.0, 
-                                            n_estimators=100,  #100
+                                            n_estimators=10,  #100
                                             n_jobs=4,
                                             oob_score=True, 
                                             random_state=None, 
@@ -91,7 +91,7 @@ class RandomForest:
         plt.savefig(filename + "-shap-summary.png", format="png")
         shap.summary_plot(shap_values, self.train)
         plt.savefig(filename + "-shap-summary-bar.png", format="png")  
-        shap.summary_plot(shap_values[estimator], self.test, plot_type="dot")
+        shap.summary_plot(shap_values[estimator], self.train, plot_type="dot")
         return shap_values
     
 
