@@ -35,8 +35,9 @@ class AnalysisModel:
         return self
         
     def test_model(self):
-        self.model.score(self.test, self.test_labels)
+        self.run_model_score()
         self.predictions = self.model.predict(self.test)
+        print(self.predictions)
         self.classification_report = metrics.classification_report(self.test_labels, self.predictions)
         self.accuracy = metrics.accuracy_score(self.test_labels, self.predictions)
         self.confusion_matrix = metrics.confusion_matrix(self.test_labels, self.predictions)
@@ -44,6 +45,9 @@ class AnalysisModel:
         self.recall = metrics.recall_score(self.test_labels, self.predictions, average='weighted')
         self.f1 = metrics.f1_score(self.test_labels, self.predictions, average='weighted')
         return self
+
+    def run_model_score(self):
+        self.model.score(self.test, self.test_labels)
     
     def print_results(self, verbose=False):
         print(datetime.datetime.now().strftime("%m-%d-%H:%M:%S") + " - " + self.type)
