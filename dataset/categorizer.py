@@ -28,11 +28,11 @@ def categorize_age(df):
     return df
 
 def categorize_severity(df):
-    df.loc[df[SEVERITY] == "ASSINTOMATICO", SEVERITY] = 5
     df.loc[df[SEVERITY] == "LEVE", SEVERITY] = 0
     df.loc[df[SEVERITY] == "GRAVE", SEVERITY] = 1
-    df.loc[df[SEVERITY] == "INTERNADO", SEVERITY] = 2
-    df.loc[df[SEVERITY] == "OBITO", SEVERITY] = 3
+    df.loc[df[SEVERITY] == "OBITO", SEVERITY] = 2
+    # df.loc[df[SEVERITY] == "INTERNADO", SEVERITY] = 3
+    # df.loc[df[SEVERITY] == "ASSINTOMATICO", SEVERITY] = 5
     df[SEVERITY] = df[SEVERITY].astype(int)
     return df
 

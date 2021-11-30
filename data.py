@@ -5,6 +5,10 @@ from sklearn.model_selection import train_test_split
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import RandomOverSampler
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+from pylab import rcParams
+
 from dataset.base import DatasetBase
 from dataset.cases import TRAIN_TO_TEST_RATIO
 from dataset.cases_mild import DatasetMild
@@ -30,8 +34,22 @@ class Dataset(DatasetBase):
                  should_normalize=None,
                  drop=None,
                  drop_symptoms=None,
-                 drop_diseases=None):
+                 drop_diseases=None,
+                 filter_column=None,
+                 filter_column_value=None,
+                 filename=""):
         super().__init__()
+        self.should_update_data = should_update_data
+        self.should_binary_severe = should_binary_severe
+        self.should_categorize_gender = should_categorize_gender
+        self.should_categorize_age = should_categorize_age
+        self.should_categorize_severity = should_categorize_severity
+        self.should_categorize_booleans = should_categorize_booleans
+        self.should_normalize = should_normalize
+        self.drop_symptoms = drop_symptoms
+        self.drop_diseases = drop_diseases
+        self.filename = filename
+        
         if (config != None):
             if (target == None):
                 target = config.get("target", SEVERITY)
@@ -39,16 +57,16 @@ class Dataset(DatasetBase):
                 undersample_amount = config.get("undersample_amount", 0)
             if (oversample_amount == None):
                 oversample_amount = config.get("oversample_amount", 0)
-            if (should_categorize_gender == None):
-                should_categorize_gender = config.get("should_categorize_gender", True)
-            if (should_categorize_age == None):
-                should_categorize_age = config.get("should_categorize_age", True)
-            if (should_categorize_severity == None):
-                should_categorize_severity = config.get("should_categorize_severity", True)
-            if (should_categorize_booleans == None):
-                should_categorize_booleans = config.get("should_categorize_booleans", True)
-            if (should_normalize == None):
-                should_normalize = config.get("should_normalize", True)
+            if (self.should_categorize_gender == None):
+                self.should_categorize_gender = config.get("should_categorize_gender", True)
+            if (self.should_categorize_age == None):
+                self.should_categorize_age = config.get("should_categorize_age", True)
+            if (self.should_categorize_severity == None):
+                self.should_categorize_severity = config.get("should_categorize_severity", True)
+            if (self.should_categorize_booleans == None):
+                self.should_categorize_booleans = config.get("should_categorize_booleans", True)
+            if (self.should_normalize == None):
+                self.should_normalize = config.get("should_normalize", True)
             if (drop_symptoms == None):
                 drop_symptoms = config.get("drop_symptoms", True)
             if (drop_diseases == None):
@@ -68,6 +86,9 @@ class Dataset(DatasetBase):
         if (should_binary_severe):
             make_binary_mild_severe(self.df)
         
+        # Remove data according to filters
+        self.filter_data(filter_column, filter_column_value)
+        
         # Split into train and test
         self.split_data()
         
@@ -76,6 +97,7 @@ class Dataset(DatasetBase):
         elif (oversample_amount > 0):
             self.oversample(oversample_amount)
         
+        self.df_with_target = self.df.copy()
         self.df.drop(self.target_column, inplace=True, axis=1)
         self.train.drop(self.target_column, inplace=True, axis=1)
         self.test.drop(self.target_column, inplace=True, axis=1)
@@ -98,7 +120,6 @@ class Dataset(DatasetBase):
             elif (column != self.target_column and column != SEVERITY):
                 normalize_min_max(self.df, column)
                 
-                            
     def undersample(self, amount):
         print("Undersampling: " + str(amount))
         count_not_mild = self.train[self.train[SEVERITY] != 0].shape[0]
@@ -131,6 +152,11 @@ class Dataset(DatasetBase):
             drop += [col for col in self.df.columns if col.startswith("doenca_")]
         print("Dropping: " + ','.join(drop))
         self.df.drop(drop, inplace=True, axis=1)
+        
+    def filter_data(self, column, value):
+        # Keep only data where the column has the specified value
+        if (column != None and value != None):
+            self.df = self.df[self.df[column] == value]        
         
     def split_data(self):
         # Split data into train and test while stratifying by severity
@@ -167,5 +193,61 @@ class Dataset(DatasetBase):
         print(str(time.perf_counter()) + ": Appending vaccination percentage...")
         self.df = self.vaccination.append_vaccination_percentage(self.df)
         print(str(time.perf_counter()) + ": Done with " + str(time.perf_counter() - start))
-        self.df.to_csv("./dataset/data/fulldata.csv", sep=";", index=False)
+        self.df.to_csv("./dataset/data/fulldata.csv", sep=";", index=False)        
+        
+    def plot_correlation(self, filename=""):
+        rcParams['figure.figsize'] = 30, 30
+        fig = plt.figure()
+        sns.heatmap(self.df_with_target.corr(), annot=True, fmt=".2f")
+        # plt.show()
+        fig.savefig(self.filename + filename + 'correlation.png')
+        return self
+        
+    def plot_densities(self, filename=""):
+        outcome_0 = self.df[self.df_with_target[SEVERITY] == 0]
+        outcome_1 = self.df[self.df_with_target[SEVERITY] == 1]
+        outcome_2 = self.df[self.df_with_target[SEVERITY] == 2]
+        count = len(self.df.columns)
+        rcParams['figure.figsize'] = 15, count * 2
+        fig, axs = plt.subplots(count, 1)
+        fig.suptitle('Features densities for different severities')
+        plt.subplots_adjust(left = 0.25, right = 0.9, bottom = 0.1, top = 0.95,
+                            wspace = 0.2, hspace = 0.9)
+        for column_name in self.train.columns:
+            print(column_name)
+            try:             
+                ax = axs[self.train.columns.get_loc(column_name) - 1]
+                ax.set_xlabel('Valores de ' + column_name)
+                ax.set_title(column_name)
+                if (outcome_0[column_name].std() != 0):
+                    outcome_0[column_name].plot(kind='density', 
+                                                ax=ax, 
+                                                subplots=True, 
+                                                sharex=False, 
+                                                color="green", 
+                                                legend=True,
+                                                label='Casos LEVES')
+                if (outcome_1[column_name].std() != 0):
+                    outcome_1[column_name].plot(kind='density', 
+                                                ax=ax, 
+                                                subplots=True, 
+                                                sharex=False, 
+                                                color="red", 
+                                                legend=True,
+                                                label='Casos GRAVES')
+                if (outcome_2[column_name].std() != 0):
+                    outcome_2[column_name].plot(kind='density', 
+                                                ax=ax, 
+                                                subplots=True, 
+                                                sharex=False, 
+                                                color="black", 
+                                                legend=True,
+                                                label='ÓBITOS')
+            except Exception as e:
+                print(e)
+
+            ax.grid('on')
+        # plt.show()
+        fig.savefig(self.filename + filename + 'column-densities.png')
+        return self
         
