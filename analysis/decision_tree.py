@@ -3,10 +3,22 @@ import matplotlib.pyplot as plt
 import graphviz
 import shap
 
-
+from column_names import *
 from analysis.base import AnalysisModel
 
 class DecisionTree(AnalysisModel):
+    CONFIG = {
+        "target": SEVERITY,
+        "should_categorize_age": True,
+        "should_categorize_gender": True,
+        "should_categorize_severity": True,
+        "should_categorize_booleans": True,
+        "should_normalize": True,
+        "drop_diseases": False,
+        "drop_symptoms": True,
+        "drop": [DATE],
+    }
+        
     def __init__(self, train, test, train_labels, test_labels, classes=None, filename=""):
         super().__init__(train, test, train_labels, test_labels, classes, filename)
         self.model = DecisionTreeClassifier(max_depth=10000,
@@ -24,7 +36,7 @@ class DecisionTree(AnalysisModel):
         
     def visualize_model(self, filename=None):
         if filename == None:
-            filename = self.make_filename(str(self.accuracy) + "acc")
+            filename = self.make_filename(str(self.accuracy) + "acc-tree")
         export_graphviz(self.model, 
                         out_file=filename,
                         feature_names=self.test.columns,
@@ -36,12 +48,15 @@ class DecisionTree(AnalysisModel):
                         rotate=False,
                         label='all')
         graph = graphviz.Source.from_file(filename)
-        graph.render(filename, view=True, format='svg')
+        graph.render(filename + ".svg", view=False, format='svg')
         return self
     
-    def make_shap_values(self):
+    def make_shap_values(self, show=True):
         explainer = shap.TreeExplainer(self.model)
+        plt.rcParams.update({'figure.figsize': (100, 60)})
         shap_values = explainer.shap_values(self.train)
-        shap.summary_plot(shap_values, self.train)
-        shap.summary_plot(shap_values[-1], self.train, plot_type="dot")
+        shap.summary_plot(shap_values, self.train, show=show)
+        plt.savefig(self.make_filename("shap_values_bar") + ".png", format='png')
+        shap.summary_plot(shap_values[-1], self.train, plot_type="dot", show=show)
+        plt.savefig(self.make_filename("shap_values_dot") + ".png", format='png')
         return shap_values

@@ -28,7 +28,7 @@ class AnalysisModel:
         self.model = None
         self.type = "model"
         self.filename = filename
-        self.current_time = datetime.datetime.now().strftime("%m-%d-%H-%M-%S")
+        self.current_time = datetime.datetime.now().strftime("%m-%d-%H-%M")
         
     def train_model(self):
         self.model.fit(self.train, self.train_labels)
@@ -84,19 +84,22 @@ class AnalysisModel:
     def visualize_model(self, filename=None):
         if filename == None:
             filename = self.make_filename(str(self.accuracy) + "acc")
-        dot_data = dtreeviz(self.get_visualized_model(), 
-                            self.classes, 
-                            self.train.columns,
-                            feature_names=self.train.columns,
-                            class_names=self.classes)
+        dot_data = self.make_dtreeviz()
         graph = graphviz.Source(dot_data)
-        graph.render(filename)
+        graph.render(str(filename))
         display(SVG(graph.pipe(format='svg')))
         return self
     
+    def make_dtreeviz(self):
+        return dtreeviz(self.model, 
+                        self.classes, 
+                        self.train.columns,
+                        feature_names=self.train.columns,
+                        class_names=self.classes)
+    
     def visualize_feature_importance(self, filename=None):
         if filename == None:
-            filename = self.make_filename(str(self.accuracy) + "acc_Feature-Importance")
+            filename = self.make_filename(str(round(self.accuracy)) + "acc_Feature-Importance")
         feature_imp = pd.Series(self.model.feature_importances_, index=self.test.columns)
         matplotlib.rc('figure', figsize=(30, 10))
         sns.barplot(x=feature_imp, y=feature_imp.index)
@@ -105,17 +108,13 @@ class AnalysisModel:
         plt.title("Visualizing Important Features")
         plt.legend()
         plt.savefig(filename, format="png")
-        
-    def get_visualized_model(self):
-        return self.model        
       
     def make_filename(self, filename):
-        return "results/" + self.current_time + " " + self.type + " - " + filename + "-" + self.filename
+        return "results/" + self.current_time + " " + self.type + filename + "-" + self.filename
               
-        
     @staticmethod
-    def run_classificator(clazz, data, visualize=True):
-        classificator = clazz(data.train, data.test, data.train_labels, data.test_labels)
+    def run_classificator(clazz, data, name="", visualize=True):
+        classificator = clazz(data.train, data.test, data.train_labels, data.test_labels, None, filename=name)
         classificator.train_model()
         classificator.test_model()
         classificator.print_results()

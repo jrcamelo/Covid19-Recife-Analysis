@@ -9,8 +9,8 @@ def categorize_booleans(df):
       
     
 def categorize_gender(df):        
+    df.loc[df[GENDER] != "MASCULINO", GENDER] = 1
     df.loc[df[GENDER] == "MASCULINO", GENDER] = 0
-    df.loc[df[GENDER] == "FEMININO", GENDER] = 1
     df[GENDER] = df[GENDER].astype(int)
     return df
 

@@ -3,7 +3,7 @@ import time
 from column_names import AGE, SEVERITY, VACCINATION_PERCENTAGE
 from sklearn.model_selection import train_test_split
 from imblearn.under_sampling import RandomUnderSampler
-from imblearn.over_sampling import RandomOverSampler
+from imblearn.over_sampling import SMOTE
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -22,7 +22,7 @@ TRAIN_TO_TEST_RATIO = 0.8
 class Dataset(DatasetBase):
     def __init__(self,
                  config=None,
-                 should_update_data=False,
+                 should_update_data=True,
                  should_binary_severe=False,
                  target=None,
                  oversample_amount=None,
@@ -80,10 +80,10 @@ class Dataset(DatasetBase):
         # Drops requested columns
         self.do_drop(drop, drop_symptoms, drop_diseases)
         
-        self.categorize(should_categorize_gender, should_categorize_age, should_categorize_severity, should_categorize_booleans)
-        if (should_normalize):
+        self.categorize(self.should_categorize_gender, self.should_categorize_age, self.should_categorize_severity, self.should_categorize_booleans)
+        if (self.should_normalize):
             self.normalize_columns(should_categorize_booleans)
-        if (should_binary_severe):
+        if (self.should_binary_severe):
             make_binary_mild_severe(self.df)
         
         # Remove data according to filters
@@ -129,13 +129,12 @@ class Dataset(DatasetBase):
     
     def oversample(self, amount):
         print("Oversampling: " + str(amount))
-        count_mild = self.train[self.train[SEVERITY] == 0].shape[0]
-        oversample_amount = amount * count_mild
-        uniques = self.train_labels.unique()
-        oversample_hash = {x: oversample_amount for x in uniques}
-        ros = RandomOverSampler(sampling_strategy=oversample_hash)
-        self.train, self.train_labels = ros.fit_resample(self.train, self.train_labels)
         print(self.train_labels.value_counts())
+        oversample = SMOTE()
+        self.train, self.train_labels = oversample.fit_resample(self.train, self.train_labels)
+        print(self.train_labels.value_counts())
+        
+        
             
     def set_target(self, target):
         self.target_column = target

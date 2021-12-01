@@ -1,3 +1,4 @@
+from dtreeviz.trees import dtreeviz
 import shap
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV 
@@ -37,15 +38,28 @@ class RandomForest(AnalysisModel):
                                             random_state=None, 
                                             verbose=0,
                                             warm_start=False)
-        
-    def get_visualized_model(self):
-        return self.model.estimators_[0]
     
-    def make_shap_values(self):
+    def visualize_model(self, filename=None): 
+        if filename == None:
+            filename = self.make_filename(str(self.accuracy) + "acc")
+        viz = dtreeviz(self.model.estimators_[-1], 
+                       self.test, 
+                       self.test_labels,
+                       target_name="target",
+                       feature_names=self.test.columns,
+                       class_names=self.classes)
+        viz.save(filename + ".svg")
+    
+    def make_shap_values(self, show=True):
         explainer = shap.TreeExplainer(self.model)
         shap_values = explainer.shap_values(self.train)
-        shap.summary_plot(shap_values, self.train)
-        shap.summary_plot(shap_values[-1], self.train, plot_type="dot")
+        plt.rcParams.update({'figure.figsize': (100, 60)})
+        plt.close()
+        shap.summary_plot(shap_values, self.train, show=show)
+        plt.savefig(self.make_filename("shap_values_bar"), format='png')
+        plt.close()
+        shap.summary_plot(shap_values[-1], self.train, plot_type="dot", show=show)
+        plt.savefig(self.make_filename("shap_values_dot"), format='png')
         return shap_values
     
 def get_best_params(data):

@@ -120,7 +120,7 @@ class NeuralNetworkConfig:
     optimizer = "adam"
     optimizer_metrics = ["accuracy", "mse", "mae"]
     batch_size = 32
-    epochs = 1 # 100
+    epochs = 5 # 100
     
     # Dynamic values
     input_columns = 1
