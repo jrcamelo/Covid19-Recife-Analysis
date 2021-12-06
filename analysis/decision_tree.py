@@ -21,10 +21,10 @@ class DecisionTree(AnalysisModel):
         
     def __init__(self, train, test, train_labels, test_labels, classes=None, filename=""):
         super().__init__(train, test, train_labels, test_labels, classes, filename)
-        self.model = DecisionTreeClassifier(max_depth=10000,
+        self.model = DecisionTreeClassifier(max_depth=5000,
                                             class_weight=None,
                                             criterion='gini',
-                                            max_features=None,
+                                            max_features='auto', 
                                             max_leaf_nodes=None,
                                             min_impurity_decrease=0.0,
                                             min_impurity_split=None,
@@ -33,14 +33,15 @@ class DecisionTree(AnalysisModel):
                                             min_weight_fraction_leaf=0.0,
                                             random_state=None,
                                             splitter='best')
+        self.type = "DecisionTree"
         
     def visualize_model(self, filename=None):
         if filename == None:
             filename = self.make_filename(str(self.accuracy) + "acc-tree")
         export_graphviz(self.model, 
                         out_file=filename,
-                        feature_names=self.test.columns,
-                        class_names=self.classes, 
+                        feature_names=self.get_beautified_column_names(),
+                        class_names=self.get_beautified_classes(), 
                         filled=True, 
                         rounded=True,
                         proportion=True,
@@ -50,13 +51,3 @@ class DecisionTree(AnalysisModel):
         graph = graphviz.Source.from_file(filename)
         graph.render(filename + ".svg", view=False, format='svg')
         return self
-    
-    def make_shap_values(self, show=True):
-        explainer = shap.TreeExplainer(self.model)
-        plt.rcParams.update({'figure.figsize': (100, 60)})
-        shap_values = explainer.shap_values(self.train)
-        shap.summary_plot(shap_values, self.train, show=show)
-        plt.savefig(self.make_filename("shap_values_bar") + ".png", format='png')
-        shap.summary_plot(shap_values[-1], self.train, plot_type="dot", show=show)
-        plt.savefig(self.make_filename("shap_values_dot") + ".png", format='png')
-        return shap_values

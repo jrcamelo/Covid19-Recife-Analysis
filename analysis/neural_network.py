@@ -1,10 +1,13 @@
 from dataclasses import dataclass
-from keras.models import Sequential
+from keras.models import Sequential, model_from_json
+from sklearn.model_selection import cross_val_score, KFold
+from keras.wrappers.scikit_learn import KerasClassifier
 from keras.layers import Dense
 from sklearn import metrics
 
 from analysis.base import AnalysisModel
 from column_names import *
+from printer import Printer
 
 class NeuralNetwork(AnalysisModel):
     CONFIG = {
@@ -36,11 +39,12 @@ class NeuralNetwork(AnalysisModel):
     def __init__(self, train, test, train_labels, test_labels, classes=None, filename="", model_config=None):
         super().__init__(train, test, train_labels, test_labels, classes, filename)
         self.cfg = model_config if model_config is not None else NeuralNetworkConfig(self.train, self.train_labels)
+        self.type = "NeuralNetwork"
         self.model = Sequential()
         self.add_input_layer()
         self.add_second_layer()
-        self.add_output_layer()
         self.compile_model()
+        # self.model = KerasClassifier(build_fn=self.model, epochs=self.cfg.epochs, batch_size=self.cfg.batch_size, verbose=0)
 
     def add_input_layer(self):
         dense = Dense(self.cfg.input_layer_output_dim,
@@ -72,40 +76,84 @@ class NeuralNetwork(AnalysisModel):
                        batch_size=self.cfg.batch_size,
                        epochs=self.cfg.epochs,
                        verbose=1)
-        
-    def test_model(self):
-        self.run_model_score()
-        self.predictions = self.model.predict(self.test)
-        self.predictions = self.predictions > 0.5
-        print(self.predictions)
-        self.classification_report = metrics.classification_report(self.test_labels, self.predictions)
-        self.accuracy = metrics.accuracy_score(self.test_labels, self.predictions)
-        self.confusion_matrix = metrics.confusion_matrix(self.test_labels, self.predictions)
-        self.precision = metrics.precision_score(self.test_labels, self.predictions, average='weighted')
-        self.recall = metrics.recall_score(self.test_labels, self.predictions, average='weighted')
-        self.f1 = metrics.f1_score(self.test_labels, self.predictions, average='weighted')
-        return self
-
-    def run_model_score(self):
-        self.model.score(self.test, self.test_labels)
     
-    def print_results(self, verbose=False):
-        print("Accuracy: " + str(self.accuracy))
-        print("Confusion Matrix:" + str(self.confusion_matrix))
-        print("Classification Report: " + str(self.classification_report))
-        if (verbose):
-            print("Precision: " + self.precision)
-            print("Recall: " + self.recall)
-            print("F1: " + self.f1)
-        print("")
-        return self
-        
     def run_model_score(self):
         self.model.evaluate(self.test, 
                             self.test_labels, 
                             verbose=0)
+        # kfold = KFold(n_splits=10, shuffle=True)
+        # self.results = cross_val_score(self.model, self.test, self.test_labels, cv=kfold, scoring="accuracy")
+        
+    def test_model(self):
+        self.run_model_score()
+        self.predictions = self.model.predict(self.test)
+        if (self.cfg.optimizer_loss == "binary_crossentropy"):
+            self.predictions = self.predictions > 0.5
+        Printer.print(self.predictions)
+        self.save()
+        
+        # print("Baseline: %.2f%% (%.2f%%)" % (self.results.mean()*100, self.results.std()*100))
+        try:
+            self.classification_report = metrics.classification_report(self.test_labels, self.predictions)
+        except ValueError:
+            self.classification_report = "No data"
+            print("Could not generate classification report")
+        try:
+            self.confusion_matrix = metrics.confusion_matrix(self.test_labels, self.predictions)
+        except ValueError:
+            self.confusion_matrix = "No data"
+            print("Could not generate confusion matrix")
+        try:
+            self.accuracy = metrics.accuracy_score(self.test_labels, self.predictions)
+        except ValueError:
+            self.accuracy = 0
+            print("Could not generate accuracy score")
+        try:
+            self.precision = metrics.precision_score(self.test_labels, self.predictions)
+        except ValueError:
+            self.precision = 0
+            print("Could not generate precision score")
+        try:
+            self.recall = metrics.recall_score(self.test_labels, self.predictions)
+        except ValueError:
+            self.recall = 0
+            print("Could not generate recall score")
+        try:
+            self.f1 = metrics.f1_score(self.test_labels, self.predictions)
+        except ValueError:
+            self.f1 = 0
+            print("Could not generate f1 score")            
+        return self
+    
+    def print_results(self, verbose=False):
+        Printer.print("Accuracy: " + str(self.accuracy))
+        Printer.print("Confusion Matrix:" + str(self.confusion_matrix))
+        Printer.print("Classification Report: " + str(self.classification_report))
+        if (verbose):
+            Printer.print("Precision: " + self.precision)
+            Printer.print("Recall: " + self.recall)
+            Printer.print("F1: " + self.f1)
+        Printer.print("")
+        return self
+        
 
+        
+    def save(self):
+        json = self.model.to_json()
+        with open("NN-" + self.filename + ".json", "w") as json_file:
+            json_file.write(json)
+        self.model.save_weights("NN-" + self.filename + ".h5")
+    
+    def load(self, filename = None):
+        if not filename:
+            filename = "NN-" + self.filename
+        json_file = open(filename + ".json", 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        self.model = model_from_json(loaded_model_json)
+        self.model.load_weights(filename + ".h5")
 
+        
 
 @dataclass
 class NeuralNetworkConfig:
@@ -113,14 +161,14 @@ class NeuralNetworkConfig:
     
     input_layer_output_dim: int = 64
     second_layer_output_dim: int = 64
-    output_layer_output_dim: int = 1
+    output_layer_output_dim: int = 3
     kernel_initializer = "uniform"
     activation = "relu"
-    output_activation = "sigmoid"
+    output_activation = "softmax"
     optimizer = "adam"
     optimizer_metrics = ["accuracy", "mse", "mae"]
     batch_size = 32
-    epochs = 5 # 100
+    epochs = 1 # 100
     
     # Dynamic values
     input_columns = 1
@@ -128,7 +176,7 @@ class NeuralNetworkConfig:
     
     def __init__(self, data, target) -> None:
         self.input_columns = len(data.columns)
-        print(target.value_counts())
+        Printer.print(target.value_counts())
         if (len(target.value_counts()) > 2):
-            self.optimizer_loss = "categorical_crossentropy"
+            self.optimizer_loss = "sparse_categorical_crossentropy"
             self.output_layer_output_dim = len(target.value_counts()) - 1

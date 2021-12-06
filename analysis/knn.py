@@ -4,6 +4,7 @@ from mlxtend.plotting import plot_decision_regions
 
 from analysis.base import AnalysisModel
 from column_names import *
+from printer import Printer
 
 class KNN(AnalysisModel):
     CONFIG = {
@@ -28,11 +29,12 @@ class KNN(AnalysisModel):
                                           p=2,
                                           metric_params=None,
                                           n_jobs=-1)
+        self.type = "KNN"
         
     def visualize_model(self, filename=None):
         if filename is None:
             filename = self.make_filename(str(self.accuracy) + "acc")
-        print("Can't plot KNN yet")
+        Printer.print("Can't plot KNN yet")
         # plot_decision_regions(X=self.train.values,
         #                       y=self.train_labels.values,
         #                       clf=self.model,

@@ -5,6 +5,8 @@ from dataset.symptoms_to_columns import SymptomsToColumns
 from dataset.diseases_to_columns import DiseasesToColumns
 from column_names import RAW_DISEASES, RAW_OTHER_DISEASES, AGE, GENDER, HEALTH_PROFESSIONAL, RAW_OTHER_SYMPTOMS, SEVERITY, RAW_EVOLUTION, RAW_DEATH_DATE, RAW_SYMPTOMS
 
+from printer import Printer
+
 DATA_FOLDER = './dataset/data/'
 TRAIN_TO_TEST_RATIO = 3 / 4
 
@@ -53,7 +55,7 @@ class DatasetCases(DatasetBase):
         self.csv_to_df()
         self.manage_columns()
         self.manage_rows()
-        print("Processing data...")
+        Printer.print("Processing data...")
         self.process_data()
         self.set_column_types()
         self.df = self.df.infer_objects()
@@ -108,7 +110,7 @@ class DatasetCases(DatasetBase):
         self.df.drop(columns=[RAW_DEATH_DATE], inplace=True)
         
     def delete_empty_ages(self):
-        print("Deleting empty ages: " + str(self.df[AGE].isna().sum()))
+        Printer.print("Deleting empty ages: " + str(self.df[AGE].isna().sum()))
         self.df = self.df.dropna(subset=[AGE])
                 
     def months_to_0_age(self):

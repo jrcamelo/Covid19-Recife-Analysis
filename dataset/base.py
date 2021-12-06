@@ -1,5 +1,7 @@
 import pandas as pd
 
+from printer import Printer
+
 class DatasetBase:
     CHUNK_SIZE = 50000
   
@@ -18,10 +20,10 @@ class DatasetBase:
     
     def rename_columns(self, old, new):      
         if (old == []):
-            print("ERROR: No old column names defined")
+            Printer.print("ERROR: No old column names defined")
             return
         if (len(old) != len(new)):
-            print("ERROR: Old and new column names don't match in length")
+            Printer.print("ERROR: Old and new column names don't match in length")
             return
         column_rename = dict(zip(old, new))
         self.df.rename(columns=column_rename, inplace=True)        
@@ -50,9 +52,10 @@ class DatasetBase:
         self.df.loc[self.df[column].isin(values), column] = new_value
     
     def count_uniques(self):
+        uniques = ""
         for column in self.df.columns:
-            print(self.df[column].value_counts())
-            print("")
+            uniques += str(self.df[column].value_counts()) + "\n"
+        return uniques
         
     def write_to_csv(self, file):
         self.df.to_csv(file, index=False, sep=";", encoding="utf-8")

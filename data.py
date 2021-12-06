@@ -17,6 +17,8 @@ from dataset.vaccination import DatasetVaccination
 from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity, make_binary_mild_severe
 from dataset.normalizer import vaccination_thermometer_normalization, normalize_min_max, one_hot_encoding
 
+from printer import Printer
+
 DATA_PATH = "./dataset/data/fulldata.csv"
 TRAIN_TO_TEST_RATIO = 0.8
 class Dataset(DatasetBase):
@@ -113,7 +115,7 @@ class Dataset(DatasetBase):
             categorize_booleans(self.df)
             
     def normalize_columns(self, should_categorize_booleans):
-        print("Normalizing columns")
+        Printer.print("Normalizing columns")
         for column in self.df.columns:
             if (column == VACCINATION_PERCENTAGE):
                 vaccination_thermometer_normalization(self.df, should_categorize_booleans)                
@@ -121,18 +123,18 @@ class Dataset(DatasetBase):
                 normalize_min_max(self.df, column)
                 
     def undersample(self, amount):
-        print("Undersampling: " + str(amount))
+        Printer.print("Undersampling: " + str(amount))
         count_not_mild = self.train[self.train[SEVERITY] != 0].shape[0]
         rus = RandomUnderSampler(sampling_strategy={0: amount * count_not_mild})
         self.train, self.train_labels = rus.fit_resample(self.train, self.train_labels)
-        print(self.train_labels.value_counts())
+        Printer.print(self.train_labels.value_counts())
     
     def oversample(self, amount):
-        print("Oversampling: " + str(amount))
-        print(self.train_labels.value_counts())
+        Printer.print("Oversampling: " + str(amount))
+        Printer.print(self.train_labels.value_counts())
         oversample = SMOTE()
         self.train, self.train_labels = oversample.fit_resample(self.train, self.train_labels)
-        print(self.train_labels.value_counts())
+        Printer.print(self.train_labels.value_counts())
         
         
             
@@ -149,7 +151,7 @@ class Dataset(DatasetBase):
             drop += [col for col in self.df.columns if col.startswith("sintoma_")]
         if (drop_diseases):
             drop += [col for col in self.df.columns if col.startswith("doenca_")]
-        print("Dropping: " + ','.join(drop))
+        Printer.print("Dropping: " + ','.join(drop))
         self.df.drop(drop, inplace=True, axis=1)
         
     def filter_data(self, column, value):
@@ -171,27 +173,27 @@ class Dataset(DatasetBase):
         if (not should_update_data):
             try:
                 self.df = pd.read_csv(DATA_PATH, sep=";")
-                print(DATA_PATH + " loaded")
+                Printer.print(DATA_PATH + " loaded")
             except FileNotFoundError as e:
-                print("No pre-processed data found")
+                Printer.print("No pre-processed data found")
                 self.df = pd.DataFrame()   
         if (self.df.empty):
-            print("Loading from cases and vaccination data...")
+            Printer.print("Loading from cases and vaccination data...")
             self.new_data()
         
     def new_data(self):
         start = time.perf_counter()
         self.df = pd.DataFrame()
-        print(str(time.perf_counter()) + ": Reading mild cases...")
+        Printer.print(str(time.perf_counter()) + ": Reading mild cases...")
         self.mild = DatasetMild()
-        print(str(time.perf_counter()) + ": Reading severe cases...")
+        Printer.print(str(time.perf_counter()) + ": Reading severe cases...")
         self.severe = DatasetSevere()
         self.df = pd.concat([self.mild.df, self.severe.df])
-        print(str(time.perf_counter()) + ": Reading vaccination data...")
+        Printer.print(str(time.perf_counter()) + ": Reading vaccination data...")
         self.vaccination = DatasetVaccination()
-        print(str(time.perf_counter()) + ": Appending vaccination percentage...")
+        Printer.print(str(time.perf_counter()) + ": Appending vaccination percentage...")
         self.df = self.vaccination.append_vaccination_percentage(self.df)
-        print(str(time.perf_counter()) + ": Done with " + str(time.perf_counter() - start))
+        Printer.print(str(time.perf_counter()) + ": Done with " + str(time.perf_counter() - start))
         self.df.to_csv("./dataset/data/fulldata.csv", sep=";", index=False)        
         
     def plot_correlation(self, filename=""):
@@ -213,7 +215,7 @@ class Dataset(DatasetBase):
         plt.subplots_adjust(left = 0.25, right = 0.9, bottom = 0.1, top = 0.95,
                             wspace = 0.2, hspace = 0.9)
         for column_name in self.train.columns:
-            print(column_name)
+            Printer.print(column_name)
             try:             
                 ax = axs[self.train.columns.get_loc(column_name) - 1]
                 ax.set_xlabel('Valores de ' + column_name)
@@ -243,7 +245,7 @@ class Dataset(DatasetBase):
                                                 legend=True,
                                                 label='ÓBITOS')
             except Exception as e:
-                print(e)
+                Printer.print(e)
 
             ax.grid('on')
         # plt.show()

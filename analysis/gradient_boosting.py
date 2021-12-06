@@ -1,10 +1,11 @@
 from sklearn.ensemble import GradientBoostingClassifier
 import matplotlib.pyplot as plt
+import shap
 
 from analysis.base import AnalysisModel
 from column_names import *
+from printer import Printer
 
-import shap
 class GradientBoosting(AnalysisModel):
     CONFIG = {
         "target": SEVERITY,
@@ -24,18 +25,9 @@ class GradientBoosting(AnalysisModel):
         self.model = GradientBoostingClassifier(n_estimators=100, 
                                                 learning_rate=0.1, 
                                                 max_depth=5, random_state=0)
+        self.binary_only = True
+        self.type = "GradientBoosting"
         
     def visualize_model(self, filename=None):
-        print("Can't visualize Gradient Boosting yet")
+        Printer.print("Can't visualize Gradient Boosting yet")
         return self
-      
-    def make_shap_values(self, show=True):
-        # Only works for binary
-        explainer = shap.TreeExplainer(self.model)
-        plt.rcParams.update({'figure.figsize': (100, 60)})
-        shap_values = explainer.shap_values(self.train)
-        shap.summary_plot(shap_values, self.train, show=show)
-        plt.savefig(self.make_filename("shap_values_bar") + ".png", format='png')
-        shap.summary_plot(shap_values[-1], self.train, plot_type="dot", show=show)
-        plt.savefig(self.make_filename("shap_values_dot") + ".png", format='png')
-        return shap_values

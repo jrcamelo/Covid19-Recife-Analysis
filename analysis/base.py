@@ -4,12 +4,14 @@ import matplotlib
 import matplotlib.pyplot as plt
 import graphviz
 import seaborn as sns
+import shap
 from pylab import rcParams
 from IPython.display import SVG,display
 from sklearn import metrics
 from dtreeviz.trees import dtreeviz
 
 from column_names import *
+from printer import Printer
 
 class AnalysisModel:
     CONFIG = {
@@ -29,6 +31,7 @@ class AnalysisModel:
         self.type = "model"
         self.filename = filename
         self.current_time = datetime.datetime.now().strftime("%m-%d-%H-%M")
+        self.binary_only = False
         
     def train_model(self):
         self.model.fit(self.train, self.train_labels)
@@ -37,7 +40,7 @@ class AnalysisModel:
     def test_model(self):
         self.run_model_score()
         self.predictions = self.model.predict(self.test)
-        print(self.predictions)
+        Printer.print(self.predictions)
         self.classification_report = metrics.classification_report(self.test_labels, self.predictions)
         self.accuracy = metrics.accuracy_score(self.test_labels, self.predictions)
         self.confusion_matrix = metrics.confusion_matrix(self.test_labels, self.predictions)
@@ -50,20 +53,20 @@ class AnalysisModel:
         self.model.score(self.test, self.test_labels)
     
     def print_results(self, verbose=False):
-        print(datetime.datetime.now().strftime("%m-%d-%H:%M:%S") + " - " + self.type)
-        print("Accuracy: " + str(self.accuracy))
-        print("Confusion Matrix:" + str(self.confusion_matrix))
-        print("Classification Report: " + str(self.classification_report))
+        Printer.print(datetime.datetime.now().strftime("%m-%d-%H:%M:%S") + " - " + self.type)
+        Printer.print("Accuracy: " + str(self.accuracy))
+        Printer.print("Confusion Matrix:" + str(self.confusion_matrix))
+        Printer.print("Classification Report: " + str(self.classification_report))
         if (verbose):
-            print("Precision: " + self.precision)
-            print("Recall: " + self.recall)
-            print("F1: " + self.f1)
-        print("")
+            Printer.print("Precision: " + self.precision)
+            Printer.print("Recall: " + self.recall)
+            Printer.print("F1: " + self.f1)
+        Printer.print("")
         return self
     
     def plot_roc_curve(self):
         if len(self.test_labels.unique()) > 2:
-            print("ROC curve not supported for more than 2 classes")
+            Printer.print("ROC curve not supported for more than 2 classes")
             return
         self.fpr, self.tpr, _ = metrics.roc_curve(self.test_labels, self.predictions)
         self.roc_auc = metrics.roc_auc_score(self.test_labels, self.predictions)
@@ -93,14 +96,13 @@ class AnalysisModel:
     def make_dtreeviz(self):
         return dtreeviz(self.model, 
                         self.classes, 
-                        self.train.columns,
-                        feature_names=self.train.columns,
-                        class_names=self.classes)
+                        self.get_beautified_column_names(),
+                        class_names=self.get_beautified_classes())
     
     def visualize_feature_importance(self, filename=None):
         if filename == None:
             filename = self.make_filename(str(round(self.accuracy)) + "acc_Feature-Importance")
-        feature_imp = pd.Series(self.model.feature_importances_, index=self.test.columns)
+        feature_imp = pd.Series(self.model.feature_importances_, index=self.get_beautified_column_names())
         matplotlib.rc('figure', figsize=(30, 10))
         sns.barplot(x=feature_imp, y=feature_imp.index)
         plt.xlabel('Feature Importance Score')
@@ -108,9 +110,53 @@ class AnalysisModel:
         plt.title("Visualizing Important Features")
         plt.legend()
         plt.savefig(filename, format="png")
+        plt.clf()
+        
+          
+    def make_shap_values(self, show=True):
+        if (self.binary_only and self.get_classes_count() > 2):
+            Printer.print("SHAP only supported for binary classification for " + self.type)
+            return
+        explainer = shap.TreeExplainer(self.model)
+        shap_values = explainer.shap_values(self.train)
+        Printer.print("SHAP values BAR for " + self.type + " " + self.filename)
+        shap.summary_plot(shap_values, self.train, plot_type="bar", show=show, feature_names=self.get_beautified_column_names(), class_names=self.get_beautified_classes())
+        plt.savefig(self.make_filename("SHAP-Bar") + ".png", format='png', dpi=1000, bbox_inches='tight')
+        plt.clf()
+        classes_count = self.get_classes_count()
+        for i in range(classes_count):
+            if (classes_count == 2 and i == 0):
+                continue
+            try:
+                Printer.print("SHAP values PLOT " + str(i) + " for " + self.type + " " + self.filename)
+                shap.summary_plot(shap_values[i], self.train, plot_type="dot", show=show, feature_names=self.get_beautified_column_names(), class_names=self.get_beautified_classes())
+                #shap.save_html(file, self.make_filename("SHAP-Plot-" + str(i)) + ".html")
+                plt.savefig(self.make_filename("SHAP-Plot-" + str(i)) + ".png", format='png', dpi=1000, bbox_inches='tight')
+                plt.clf()
+            except AssertionError:
+                Printer.print("\n\nERROR at SHAP values PLOT " + str(i) + " for " + self.type + " " + self.filename + "\n\n")
+                                
+        return shap_values
       
     def make_filename(self, filename):
-        return "results/" + self.current_time + " " + self.type + filename + "-" + self.filename
+        return "results/" + self.type + " " + filename + "-" + self.filename
+    
+    def get_classes_count(self):
+        return len(self.train_labels.value_counts())
+    
+    def get_beautified_column_names(self):
+        return [BETTER_COLUMN_NAMES.get(i, i) for i in self.train.columns]
+    
+    def get_beautified_classes(self):
+        classes = ["LEVE", "GRAVE"]
+        if (self.get_classes_count() > 2):
+            classes.append("ÓBITO")
+        return classes
+    
+    def get_beautified_train_labels(self):
+        return [self.get_beautified_classes()[i] for i in self.train_labels]    
+    def get_beautified_test_labels(self):
+        return [self.get_beautified_classes()[i] for i in self.test_labels]
               
     @staticmethod
     def run_classificator(clazz, data, name="", visualize=True):
@@ -132,15 +178,15 @@ class AnalysisModel:
             classificators.append(classificator)
             acc.append(classificator.accuracy)
         
-        print("Average Accuracy: " + str(sum(acc)/len(acc)))
-        print("Max Accuracy: " + str(max(acc)))
-        print("Min Accuracy: " + str(min(acc)))
-        print("")
+        Printer.print("Average Accuracy: " + str(sum(acc)/len(acc)))
+        Printer.print("Max Accuracy: " + str(max(acc)))
+        Printer.print("Min Accuracy: " + str(min(acc)))
+        Printer.print("")
         
         best = max(classificators, key=lambda x: x.accuracy)
-        print(best.accuracy)
-        print(best.confusion_matrix)
-        print(best.classification_report)
+        Printer.print(best.accuracy)
+        Printer.print(best.confusion_matrix)
+        Printer.print(best.classification_report)
         
         best.visualize_model(best.make_filename("best_of_" + str(n) + "-" + best.accuracy + "acc"))
         return best
