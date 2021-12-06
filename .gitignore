@@ -1,6 +1,5 @@
-*__pycache__
-*/misc/*txt
-*/misc/*csv
-*/data/*txt
-test.*
-/results/*
+*__pycache__*
+code/*/data/*txt
+code/*test.*
+code/results/*
+code/*.txt

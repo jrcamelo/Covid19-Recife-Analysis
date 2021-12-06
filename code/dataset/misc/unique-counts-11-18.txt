@@ -1,0 +1,252 @@
+Loading from cases and vaccination data...
+0.2789764: Reading mild cases...
+Deleting empty ages: 532
+Processing data...
+83.6876007: Reading severe cases...
+Deleting empty ages: 2
+Processing data...
+88.8855129: Reading vaccination data...
+88.904349: Appending vaccination percentage...
+96.9350218: Done with 96.6562253
+
+FEMININO      341476
+MASCULINO     262839
+INDEFINIDO       181
+Name: sexo, dtype: int64
+
+30-39    134019
+40-49    115644
+20-29    109463
+50-59     89069
+60-69     56773
+10-19     36629
+70-79     26312
+0-9       23670
+80+       12919
+Name: idade, dtype: int64
+
+2020-12-15    3071
+2021-05-27    2819
+2020-11-09    2803
+2021-05-19    2785
+2021-05-17    2766
+              ...
+2020-03-05       2
+2020-02-26       2
+2020-03-01       1
+2020-03-09       1
+2020-02-29       1
+Name: data_notificacao, Length: 576, dtype: int64
+
+False    570998
+True      33500
+Name: profissional_saude, dtype: int64
+
+LEVE         573745
+GRAVE         14127
+INTERNADO      8894
+OBITO          7732
+Name: severidade, dtype: int64
+
+False    372470
+True     232028
+Name: sintoma_tosse, dtype: int64
+
+False    522953
+True      81545
+Name: sintoma_dispneia, dtype: int64
+
+False    426592
+True     177906
+Name: sintoma_febre, dtype: int64
+
+False    590228
+True      14270
+Name: sintoma_baixa_saturacao_o2, dtype: int64
+
+False    594263
+True      10235
+Name: sintoma_desconforto_respiratorio, dtype: int64
+
+False    596780
+True       7718
+Name: sintoma_aperto_toracico, dtype: int64
+
+False    437519
+True     166979
+Name: sintoma_dor_garganta, dtype: int64
+
+False    415275
+True     189223
+Name: sintoma_cefaleia, dtype: int64
+
+False    556355
+True      48143
+Name: sintoma_mialgia, dtype: int64
+
+False    574315
+True      30183
+Name: sintoma_diarreia, dtype: int64
+
+False    473239
+True     131259
+Name: sintoma_coriza, dtype: int64
+
+False    598030
+True       6468
+Name: sintoma_congestao_nasal, dtype: int64
+
+False    588443
+True      16055
+Name: sintoma_fadiga, dtype: int64
+
+False    520406
+True      84092
+Name: sintoma_anosmia_ou_hiposmia, dtype: int64
+
+False    598852
+True       5646
+Name: sintoma_vomito, dtype: int64
+
+False    595522
+True       8976
+Name: sintoma_astenia, dtype: int64
+
+False    599999
+True       4499
+Name: sintoma_nausea, dtype: int64
+
+False    603581
+True        917
+Name: sintoma_inaptencia, dtype: int64
+
+False    602885
+True       1613
+Name: sintoma_dor_abdominal, dtype: int64
+
+False    603618
+True        880
+Name: sintoma_rebaixamento_consciencia, dtype: int64
+
+False    425389
+True     179109
+Name: sintoma_outros, dtype: int64
+
+False    570202
+True      34296
+Name: doenca_cardiaca_ou_vascular, dtype: int64
+
+False    584200
+True      20298
+Name: doenca_diabetes, dtype: int64
+
+False    602418
+True       2080
+Name: doenca_has, dtype: int64
+
+False    591816
+True      12682
+Name: doenca_respiratoria_cronica, dtype: int64
+
+False    599367
+True       5131
+Name: doenca_obesidade, dtype: int64
+
+False    602139
+True       2359
+Name: doenca_renal, dtype: int64
+
+False    600685
+True       3813
+Name: doenca_imunosupressao, dtype: int64
+
+False    603449
+True       1049
+Name: doenca_tabagista, dtype: int64
+
+False    604154
+True        344
+Name: doenca_etilismo, dtype: int64
+
+False    604296
+True        202
+Name: doenca_hepatica, dtype: int64
+
+False    604058
+True        440
+Name: doenca_neurologica, dtype: int64
+
+False    586747
+True      17751
+Name: doenca_outros, dtype: int64
+
+0.000000    272317
+0.585196      2819
+0.406145      2785
+0.364876      2766
+0.671319      2656
+             ...
+0.283267       297
+0.125152       283
+0.089893       280
+0.007482       259
+0.541187       246
+Name: populacao_vacinada, Length: 250, dtype: int64
+
+       populacao_vacinada
+count       604498.000000
+mean             0.185472
+std              0.222987
+min              0.000000
+25%              0.000000
+50%              0.045936
+75%              0.381737
+max              0.678617
+        sexo  idade data_notificacao  profissional_saude severidade  sintoma_tosse  ...  doenca_tabagista  doenca_etilismo  doenca_hepatica  doenca_neurologica  doenca_outros  populacao_vacinada
+0  MASCULINO  50-59       2020-03-30               False       LEVE           True  ...             False            False            False               False          False                 0.0
+1   FEMININO  40-49       2020-03-24               False       LEVE           True  ...             False            False            False               False          False                 0.0
+2   FEMININO  20-29       2020-03-23                True       LEVE           True  ...             False            False            False               False          False                 0.0
+3   FEMININO    0-9       2020-03-06               False       LEVE           True  ...             False            False            False               False          False                 0.0
+5   FEMININO  40-49       2020-03-12               False       LEVE           True  ...             False            False            False               False          False                 0.0
+
+[5 rows x 39 columns]
+sexo                                 object
+idade                                object
+data_notificacao                     object
+profissional_saude                     bool
+severidade                           object
+sintoma_tosse                          bool
+sintoma_dispneia                       bool
+sintoma_febre                          bool
+sintoma_baixa_saturacao_o2             bool
+sintoma_desconforto_respiratorio       bool
+sintoma_aperto_toracico                bool
+sintoma_dor_garganta                   bool
+sintoma_cefaleia                       bool
+sintoma_mialgia                        bool
+sintoma_diarreia                       bool
+sintoma_coriza                         bool
+sintoma_congestao_nasal                bool
+sintoma_fadiga                         bool
+sintoma_anosmia_ou_hiposmia            bool
+sintoma_vomito                         bool
+sintoma_astenia                        bool
+sintoma_nausea                         bool
+sintoma_inaptencia                     bool
+sintoma_dor_abdominal                  bool
+sintoma_rebaixamento_consciencia       bool
+sintoma_outros                         bool
+doenca_cardiaca_ou_vascular            bool
+doenca_diabetes                        bool
+doenca_has                             bool
+doenca_respiratoria_cronica            bool
+doenca_obesidade                       bool
+doenca_renal                           bool
+doenca_imunosupressao                  bool
+doenca_tabagista                       bool
+doenca_etilismo                        bool
+doenca_hepatica                        bool
+doenca_neurologica                     bool
+doenca_outros                          bool
+populacao_vacinada                  float64
+dtype: object

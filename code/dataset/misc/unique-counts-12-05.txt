@@ -1,0 +1,173 @@
+1.0    341476
+0.0    262839
+Name: sexo, dtype: int64
+
+30-39    133961
+40-49    115602
+20-29    109439
+50-59     89035
+60-69     56755
+10-19     36626
+70-79     26312
+0-9       23666
+80+       12919
+Name: idade, dtype: int64
+
+0.0    570815
+1.0     33500
+Name: profissional_saude, dtype: int64
+
+0.0    372281
+1.0    232034
+Name: sintoma_tosse, dtype: int64
+
+0.0    597880
+1.0      6435
+Name: sintoma_espirros, dtype: int64
+
+0.0    522770
+1.0     81545
+Name: sintoma_dispneia, dtype: int64
+
+0.0    426417
+1.0    177898
+Name: sintoma_febre, dtype: int64
+
+0.0    589759
+1.0     14556
+Name: sintoma_baixa_saturacao_o2, dtype: int64
+
+0.0    594080
+1.0     10235
+Name: sintoma_desconforto_respiratorio, dtype: int64
+
+0.0    594863
+1.0      9452
+Name: sintoma_aperto_toracico, dtype: int64
+
+0.0    437348
+1.0    166967
+Name: sintoma_dor_garganta, dtype: int64
+
+0.0    414890
+1.0    189425
+Name: sintoma_cefaleia, dtype: int64
+
+0.0    554808
+1.0     49507
+Name: sintoma_mialgia, dtype: int64
+
+0.0    574132
+1.0     30183
+Name: sintoma_diarreia, dtype: int64
+
+0.0    472837
+1.0    131478
+Name: sintoma_coriza, dtype: int64
+
+0.0    597847
+1.0      6468
+Name: sintoma_congestao_nasal, dtype: int64
+
+0.0    578826
+1.0     25489
+Name: sintoma_astenia, dtype: int64
+
+0.0    519716
+1.0     84599
+Name: sintoma_anosmia_ou_hiposmia, dtype: int64
+
+0.0    593186
+1.0     11129
+Name: sintoma_nausea, dtype: int64
+
+0.0    603398
+1.0       917
+Name: sintoma_inaptencia, dtype: int64
+
+0.0    602702
+1.0      1613
+Name: sintoma_dor_abdominal, dtype: int64
+
+0.0    603435
+1.0       880
+Name: sintoma_rebaixamento_consciencia, dtype: int64
+
+0.0    430172
+1.0    174143
+Name: sintoma_outros, dtype: int64
+
+0.0    569927
+1.0     34388
+Name: doenca_cardiaca_ou_vascular, dtype: int64
+
+0.0    583980
+1.0     20335
+Name: doenca_diabetes, dtype: int64
+
+0.0    602235
+1.0      2080
+Name: doenca_has, dtype: int64
+
+0.0    591567
+1.0     12748
+Name: doenca_respiratoria_cronica, dtype: int64
+
+0.0    599184
+1.0      5131
+Name: doenca_obesidade, dtype: int64
+
+0.0    601950
+1.0      2365
+Name: doenca_renal, dtype: int64
+
+0.0    600491
+1.0      3824
+Name: doenca_imunosupressao, dtype: int64
+
+0.0    603218
+1.0      1097
+Name: doenca_tabagista, dtype: int64
+
+0.0    603971
+1.0       344
+Name: doenca_etilismo, dtype: int64
+
+0.0    604113
+1.0       202
+Name: doenca_hepatica, dtype: int64
+
+0.0    603602
+1.0       713
+Name: doenca_neurologica, dtype: int64
+
+0.0    588606
+1.0     15709
+Name: doenca_outros, dtype: int64
+
+1    332171
+0    272144
+Name: vacinacao_acima_0, dtype: int64
+
+0    344057
+1    260258
+Name: vacinacao_acima_15, dtype: int64
+
+0    415736
+1    188579
+Name: vacinacao_acima_30, dtype: int64
+
+0    492312
+1    112003
+Name: vacinacao_acima_45, dtype: int64
+
+0    568243
+1     36072
+Name: vacinacao_acima_60, dtype: int64
+
+0    604315
+Name: vacinacao_acima_75, dtype: int64
+
+0    604315
+Name: vacinacao_acima_90, dtype: int64
+

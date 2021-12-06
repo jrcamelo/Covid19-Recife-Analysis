@@ -1,0 +1,1837 @@
+3.6403137
+12-06-13:45:26
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+9.2052273
+9.205788
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest NONE with NONE --- normal
+	Accuracy avg: 0.9650612677163399
+	Accuracy std: 0.0006510910742836964
+
+	Precision avg: 0.9569771792055886
+	Precision std: 0.0009737208811138769
+	Precision Macro avg: 0.77012370867189
+	Precision Macro std: 0.008472467412250271
+
+	Recall avg: 0.9650612677163399
+	Recall std: 0.0006510910742836964
+	Recall Macro avg: 0.4867547433027911
+	Recall Macro std: 0.007268248108761576
+
+	F1 avg: 0.9562504895728082
+	F1 std: 0.0010175082152072286
+	F1 Macro avg: 0.5306864969729344
+	F1 Macro std: 0.012007917393018852
+[[114690     26      0]
+ [  2746   1842     13]
+ [   550    961     35]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+DecisionTree NONE with NONE --- normal
+	Accuracy avg: 0.9695787792790183
+	Accuracy std: 0.0012220915684965355
+
+	Precision avg: 0.9637864933127084
+	Precision std: 0.001695285572539407
+	Precision Macro avg: 0.7583524426382747
+	Precision Macro std: 0.005092821091423444
+
+	Recall avg: 0.9695787792790183
+	Recall std: 0.0012220915684965355
+	Recall Macro avg: 0.5899541300671313
+	Recall Macro std: 0.015182955175315004
+
+	F1 avg: 0.9650466140630514
+	F1 std: 0.0017023629630597609
+	F1 Macro avg: 0.6497438103221193
+	F1 Macro std: 0.013278294861198373
+[[114631     74     11]
+ [  1932   2265    404]
+ [   321    692    533]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+XGBoost NONE with NONE --- normal
+	Accuracy avg: 0.9756501162473213
+	Accuracy std: 0.0
+
+	Precision avg: 0.972168232511657
+	Precision std: 0.0
+	Precision Macro avg: 0.7975844957074348
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9756501162473213
+	Recall std: 0.0
+	Recall Macro avg: 0.66628075997492
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9731101726256774
+	F1 std: 0.0
+	F1 Macro avg: 0.7194704652878875
+	F1 Macro std: 0.0
+[[114559    142     15]
+ [  1532   2733    336]
+ [   227    691    628]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+LightGradientBoosting NONE with NONE --- normal
+	Accuracy avg: 0.9753770798341923
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9718424378180295
+	Precision std: 0.0
+	Precision Macro avg: 0.7949463186868515
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9753770798341923
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.6660290290603271
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9727399436287862
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.7191353426857615
+	F1 Macro std: 0.0
+[[114590    113     13]
+ [  1579   2639    383]
+ [   240    648    658]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest vacinacao_acima_0 with True --- alguma-v
+	Accuracy avg: 0.9831594791901859
+	Accuracy std: 0.0008110609747432842
+
+	Precision avg: 0.9802894256985366
+	Precision std: 0.0009051920550734469
+	Precision Macro avg: 0.7965983829512593
+	Precision Macro std: 0.013736606121913991
+
+	Recall avg: 0.9831594791901859
+	Recall std: 0.0008110609747432842
+	Recall Macro avg: 0.5881031774560262
+	Recall Macro std: 0.018978399747859385
+
+	F1 avg: 0.9798958859702674
+	F1 std: 0.0012664356096848477
+	F1 Macro avg: 0.6305198853829058
+	F1 Macro std: 0.020272068594644713
+[[64331     8     1]
+ [  607   840    16]
+ [  197   371    64]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+DecisionTree vacinacao_acima_0 with True --- alguma-v
+	Accuracy avg: 0.984914578159103
+	Accuracy std: 0.0007285938444347249
+
+	Precision avg: 0.9828276367565749
+	Precision std: 0.0008336263145398134
+	Precision Macro avg: 0.7615599118864698
+	Precision Macro std: 0.008534679328951989
+
+	Recall avg: 0.984914578159103
+	Recall std: 0.0007285938444347249
+	Recall Macro avg: 0.664315354874988
+	Recall Macro std: 0.01126820575796476
+
+	F1 avg: 0.9835166191162908
+	F1 std: 0.0008551461870414002
+	F1 Macro avg: 0.7013781661573397
+	F1 Macro std: 0.008622151467378292
+[[64189   143     8]
+ [  382   963   118]
+ [  109   303   220]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+XGBoost vacinacao_acima_0 with True --- alguma-v
+	Accuracy avg: 0.9877775269059983
+	Accuracy std: 0.0
+
+	Precision avg: 0.986644229242704
+	Precision std: 0.0
+	Precision Macro avg: 0.7822044593267918
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9877775269059983
+	Recall std: 0.0
+	Recall Macro avg: 0.7216836636125549
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9870601620533531
+	F1 std: 0.0
+	F1 Macro avg: 0.7467451701429245
+	F1 Macro std: 0.0
+[[64272    61     7]
+ [  214  1081   168]
+ [   51   311   270]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+LightGradientBoosting vacinacao_acima_0 with True --- alguma-v
+	Accuracy avg: 0.9881237299616166
+	Accuracy std: 0.0
+
+	Precision avg: 0.9869854121000035
+	Precision std: 0.0
+	Precision Macro avg: 0.795930801917147
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9881237299616166
+	Recall std: 0.0
+	Recall Macro avg: 0.7258876519642525
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9873547600604645
+	F1 std: 0.0
+	F1 Macro avg: 0.7540017096554394
+	F1 Macro std: 0.0
+[[64278    57     5]
+ [  218  1097   148]
+ [   58   303   271]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest vacinacao_acima_0 with False --- nenhuma-v
+	Accuracy avg: 0.9449447904609674
+	Accuracy std: 0.001049689096067533
+
+	Precision avg: 0.9337610202565007
+	Precision std: 0.002703360179038729
+	Precision Macro avg: 0.7974745899228592
+	Precision Macro std: 0.03779539049922339
+
+	Recall avg: 0.9449447904609674
+	Recall std: 0.001049689096067533
+	Recall Macro avg: 0.4631353388179294
+	Recall Macro std: 0.011262566901131567
+
+	F1 avg: 0.9301794529902556
+	F1 std: 0.001714705932719244
+	F1 Macro avg: 0.5113206800799576
+	F1 Macro std: 0.020842894712038082
+[[50374     2     0]
+ [ 2022  1116     0]
+ [  323   588     4]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+DecisionTree vacinacao_acima_0 with False --- nenhuma-v
+	Accuracy avg: 0.950552095390325
+	Accuracy std: 0.0034952816430806758
+
+	Precision avg: 0.9403228414427913
+	Precision std: 0.0050393193952366295
+	Precision Macro avg: 0.7485855876931313
+	Precision Macro std: 0.010812820536169547
+
+	Recall avg: 0.950552095390325
+	Recall std: 0.0034952816430806758
+	Recall Macro avg: 0.5459040438475257
+	Recall Macro std: 0.025028087596654893
+
+	F1 avg: 0.9413448693538602
+	F1 std: 0.004833698844411259
+	F1 Macro avg: 0.6088607981678908
+	F1 Macro std: 0.02653712956742686
+[[50316    54     6]
+ [ 1625  1309   204]
+ [  254   380   281]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+XGBoost vacinacao_acima_0 with False --- nenhuma-v
+	Accuracy avg: 0.9595068805232504
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9531435489983069
+	Precision std: 0.0
+	Precision Macro avg: 0.7786299746800535
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9595068805232504
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.6257147832684219
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9541666108331409
+	F1 std: 0.0
+	F1 Macro avg: 0.6845005621159292
+	F1 Macro std: 0.0
+[[50296    71     9]
+ [ 1329  1588   221]
+ [  164   410   341]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+LightGradientBoosting vacinacao_acima_0 with False --- nenhuma-v
+	Accuracy avg: 0.9593231549357879
+	Accuracy std: 0.0
+
+	Precision avg: 0.9530569512530469
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.7810391917999496
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9593231549357879
+	Recall std: 0.0
+	Recall Macro avg: 0.6254584421181303
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9537432657918767
+	F1 std: 0.0
+	F1 Macro avg: 0.6849906031872163
+	F1 Macro std: 0.0
+[[50319    47    10]
+ [ 1362  1543   233]
+ [  175   387   353]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest vacinacao_acima_30 with True --- v-acima-30
+	Accuracy avg: 0.9827606320924807
+	Accuracy std: 0.0012497494224499959
+
+	Precision avg: 0.9800893248174131
+	Precision std: 0.0021738654923639774
+	Precision Macro avg: 0.8095793536044557
+	Precision Macro std: 0.024695595861196764
+
+	Recall avg: 0.9827606320924807
+	Recall std: 0.0012497494224499959
+	Recall Macro avg: 0.583453017899182
+	Recall Macro std: 0.02180312668306099
+
+	F1 avg: 0.9794026971896341
+	F1 std: 0.0016437089262337837
+	F1 Macro avg: 0.6296052591621769
+	F1 Macro std: 0.013602132006710751
+[[36517    16     0]
+ [  257   561     6]
+ [   83   231    45]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+DecisionTree vacinacao_acima_30 with True --- v-acima-30
+	Accuracy avg: 0.9847809948032665
+	Accuracy std: 0.0010400769261145254
+
+	Precision avg: 0.9826014265271429
+	Precision std: 0.0012724969198786807
+	Precision Macro avg: 0.7690431320778514
+	Precision Macro std: 0.02399419527776466
+
+	Recall avg: 0.9847809948032665
+	Recall std: 0.0010400769261145254
+	Recall Macro avg: 0.6603390030181304
+	Recall Macro std: 0.016180478095951915
+
+	F1 avg: 0.9832614441052485
+	F1 std: 0.0011365765145877518
+	F1 Macro avg: 0.7007285992029045
+	F1 Macro std: 0.016795842025956693
+[[36504    23     6]
+ [  196   571    57]
+ [   50   174   135]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+XGBoost vacinacao_acima_30 with True --- v-acima-30
+	Accuracy avg: 0.9883868915049316
+	Accuracy std: 0.0
+
+	Precision avg: 0.9873975717485045
+	Precision std: 0.0
+	Precision Macro avg: 0.791324837179948
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9883868915049316
+	Recall std: 0.0
+	Recall Macro avg: 0.7387904228586527
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9878159187995047
+	F1 std: 0.0
+	F1 Macro avg: 0.7627224222026175
+	F1 Macro std: 0.0
+[[36503    26     4]
+ [  116   599   109]
+ [   29   154   176]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+LightGradientBoosting vacinacao_acima_30 with True --- v-acima-30
+	Accuracy avg: 0.9880422102025666
+	Accuracy std: 0.0
+
+	Precision avg: 0.9868596695518888
+	Precision std: 0.0
+	Precision Macro avg: 0.7874681196594725
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9880422102025666
+	Recall std: 0.0
+	Recall Macro avg: 0.7260576111124921
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9873391264631884
+	F1 std: 0.0
+	F1 Macro avg: 0.7532089504139728
+	F1 Macro std: 0.0
+[[36506    24     3]
+ [  124   595   105]
+ [   35   160   164]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest vacinacao_acima_45 with True --- v-acima-45
+	Accuracy avg: 0.9830007588946922
+	Accuracy std: 0.0006116938755577391
+
+	Precision avg: 0.9807035262473296
+	Precision std: 0.001307940662194501
+	Precision Macro avg: 0.8085919148169485
+	Precision Macro std: 0.014067423220503686
+
+	Recall avg: 0.9830007588946922
+	Recall std: 0.0006116938755577391
+	Recall Macro avg: 0.5981405729396777
+	Recall Macro std: 0.01151038717421272
+
+	F1 avg: 0.979998069721933
+	F1 std: 0.0008230820044566822
+	F1 Macro avg: 0.6425990349262255
+	F1 Macro std: 0.010435089104999077
+[[21697    10     0]
+ [  186   282     8]
+ [   68   114    36]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+DecisionTree vacinacao_acima_45 with True --- v-acima-45
+	Accuracy avg: 0.9849828132672649
+	Accuracy std: 0.00016607361490771574
+
+	Precision avg: 0.9830732472580153
+	Precision std: 0.0003561546282889332
+	Precision Macro avg: 0.7610041955794841
+	Precision Macro std: 0.003431398480135158
+
+	Recall avg: 0.9849828132672649
+	Recall std: 0.00016607361490771574
+	Recall Macro avg: 0.6699125045259058
+	Recall Macro std: 0.008533630159240099
+
+	F1 avg: 0.9836881960582167
+	F1 std: 0.0003049096985494759
+	F1 Macro avg: 0.7042897678698276
+	F1 Macro std: 0.005754453041127774
+[[21669    32     6]
+ [  110   329    37]
+ [   39   112    67]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+XGBoost vacinacao_acima_45 with True --- v-acima-45
+	Accuracy avg: 0.9877237623320386
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9866789565795762
+	Precision std: 0.0
+	Precision Macro avg: 0.7712764281266572
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9877237623320386
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.723723597998439
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9871233432192648
+	F1 std: 0.0
+	F1 Macro avg: 0.7449567787621326
+	F1 Macro std: 0.0
+[[21684    22     1]
+ [   60   344    72]
+ [   24    96    98]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+LightGradientBoosting vacinacao_acima_45 with True --- v-acima-45
+	Accuracy avg: 0.98848265702424
+	Accuracy std: 0.0
+
+	Precision avg: 0.9875479283126294
+	Precision std: 0.0
+	Precision Macro avg: 0.8002306428613627
+	Precision Macro std: 0.0
+
+	Recall avg: 0.98848265702424
+	Recall std: 0.0
+	Recall Macro avg: 0.7452859268254283
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9879205989456785
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.7696620118979275
+	F1 Macro std: 0.0
+[[21682    23     2]
+ [   64   353    59]
+ [   25    85   108]]
+ROC curve not supported for more than 2 classes
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest NONE with NONE --- binary-normal
+	Accuracy avg: 0.974940221573186
+	Accuracy std: 0.00038301313023354365
+
+	Precision avg: 0.975100949931446
+	Precision std: 0.0003577864908851998
+	Precision Macro avg: 0.9780487588822403
+	Precision Macro std: 0.0028243342817633817
+
+	Recall avg: 0.974940221573186
+	Recall std: 0.00038301313023354365
+	Recall Macro avg: 0.7583164195653211
+	Recall Macro std: 0.004491758900424005
+
+	F1 avg: 0.9712139064770353
+	F1 std: 0.0005447018088925755
+	F1 Macro avg: 0.8321245141671945
+	F1 Macro std: 0.003647054761319916
+[[114672     44]
+ [  2918   3229]]
+
+
+
+
+DecisionTree NONE with NONE --- binary-normal
+	Accuracy avg: 0.9775580616069434
+	Accuracy std: 0.0018592282538623074
+
+	Precision avg: 0.9766155158640176
+	Precision std: 0.0021439925671355715
+	Precision Macro avg: 0.952399870793883
+	Precision Macro std: 0.010399505754712232
+
+	Recall avg: 0.9775580616069434
+	Recall std: 0.0018592282538623074
+	Recall Macro avg: 0.8025128109642955
+	Recall Macro std: 0.014529145867867754
+
+	F1 avg: 0.9753192562765378
+	F1 std: 0.0021661501911893603
+	F1 Macro avg: 0.8608091210883263
+	F1 Macro std: 0.012804428082145002
+[[114507    209]
+ [  2063   4084]]
+
+
+
+
+XGBoost NONE with NONE --- binary-normal
+	Accuracy avg: 0.9839156731174967
+	Accuracy std: 0.0
+
+	Precision avg: 0.9835766612202976
+	Precision std: 0.0
+	Precision Macro avg: 0.971825006473491
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9839156731174967
+	Recall std: 0.0
+	Recall Macro avg: 0.8564236642817246
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9827962532256251
+	F1 std: 0.0
+	F1 Macro avg: 0.9051881445151533
+	F1 Macro std: 1.1102230246251565e-16
+[[114527    189]
+ [  1755   4392]]
+
+
+
+
+LightGradientBoosting NONE with NONE --- binary-normal
+	Accuracy avg: 0.9836426367043678
+	Accuracy std: 0.0
+
+	Precision avg: 0.9833629339621808
+	Precision std: 0.0
+	Precision Macro avg: 0.9741774992929415
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9836426367043678
+	Recall std: 0.0
+	Recall Macro avg: 0.8516609167314734
+	Recall Macro std: 1.1102230246251565e-16
+
+	F1 avg: 0.9824306433427406
+	F1 std: 0.0
+	F1 Macro avg: 0.9028269486794009
+	F1 Macro std: 0.0
+[[114554    162]
+ [  1815   4332]]
+
+
+
+
+GradientBoosting NONE with NONE --- binary-normal
+	Accuracy avg: 0.983551624566658
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.983231823232485
+	Precision std: 0.0
+	Precision Macro avg: 0.9726074318463652
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.983551624566658
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.8519208998480247
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9823491518573684
+	F1 std: 0.0
+	F1 Macro avg: 0.9024524201713995
+	F1 Macro std: 1.1102230246251565e-16
+[[114539    177]
+ [  1811   4336]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest vacinacao_acima_0 with True --- binary-alguma-v
+	Accuracy avg: 0.9899269963121847
+	Accuracy std: 0.0010927767378108662
+
+	Precision avg: 0.9897866442099919
+	Precision std: 0.0010806116183634624
+	Precision Macro avg: 0.9819521993609583
+	Precision Macro std: 0.004679422791356375
+
+	Recall avg: 0.9899269963121847
+	Recall std: 0.0010927767378108662
+	Recall Macro avg: 0.8495682653979493
+	Recall Macro std: 0.01857131282859775
+
+	F1 avg: 0.9891086519761396
+	F1 std: 0.0013315389360869494
+	F1 Macro avg: 0.9042105592235472
+	F1 Macro std: 0.012838519749886002
+[[64321    19]
+ [  571  1524]]
+
+
+
+
+DecisionTree vacinacao_acima_0 with True --- binary-alguma-v
+	Accuracy avg: 0.9917513358922255
+	Accuracy std: 0.0007743384139455438
+
+	Precision avg: 0.9914766913573725
+	Precision std: 0.0008280346023869386
+	Precision Macro avg: 0.9647426854570433
+	Precision Macro std: 0.004974227508536005
+
+	Recall avg: 0.9917513358922255
+	Recall std: 0.0007743384139455438
+	Recall Macro avg: 0.8953494153597795
+	Recall Macro std: 0.011278172004298842
+
+	F1 avg: 0.991414056710099
+	F1 std: 0.0008517226014712605
+	F1 Macro avg: 0.9269697281050462
+	F1 Macro std: 0.0076133252344489305
+[[64256    84]
+ [  389  1706]]
+
+
+
+
+XGBoost vacinacao_acima_0 with True --- binary-alguma-v
+	Accuracy avg: 0.9950026341536841
+	Accuracy std: 0.0
+
+	Precision avg: 0.9949061419671953
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9784057129891615
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9950026341536841
+	Recall std: 0.0
+	Recall Macro avg: 0.9380806433305168
+	Recall Macro std: 1.1102230246251565e-16
+
+	F1 avg: 0.9948927000558168
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.9572946345517283
+	F1 Macro std: 0.0
+[[64265    75]
+ [  257  1838]]
+
+
+
+
+LightGradientBoosting vacinacao_acima_0 with True --- binary-alguma-v
+	Accuracy avg: 0.9950477910739821
+	Accuracy std: 0.0
+
+	Precision avg: 0.9949671066915096
+	Precision std: 0.0
+	Precision Macro avg: 0.9837065699493677
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9950477910739821
+	Recall std: 0.0
+	Recall Macro avg: 0.933717003864464
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9949128835418282
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.9572567430086059
+	F1 Macro std: 0.0
+[[64287    53]
+ [  276  1819]]
+
+
+
+
+GradientBoosting vacinacao_acima_0 with True --- binary-alguma-v
+	Accuracy avg: 0.9950176864604501
+	Accuracy std: 0.0
+
+	Precision avg: 0.9949315307589182
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9824599920569133
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9950176864604501
+	Recall std: 0.0
+	Recall Macro avg: 0.9343941382408343
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9948870999579242
+	F1 std: 0.0
+	F1 Macro avg: 0.9570807890289522
+	F1 Macro std: 0.0
+[[64282    58]
+ [  273  1822]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest vacinacao_acima_0 with False --- binary-nenhuma-v
+	Accuracy avg: 0.9567399731760643
+	Accuracy std: 0.0005791991032874121
+
+	Precision avg: 0.9582505082424895
+	Precision std: 0.0005532368406815012
+	Precision Macro avg: 0.973302223853081
+	Precision Macro std: 0.0013286298237743092
+
+	Recall avg: 0.9567399731760643
+	Recall std: 0.0005791991032874121
+	Recall Macro avg: 0.7112222651670373
+	Recall Macro std: 0.003929481876881063
+
+	F1 avg: 0.9485306143538585
+	F1 std: 0.000853744920613618
+	F1 Macro avg: 0.7848928774169389
+	F1 Macro std: 0.004031201250260195
+[[50369     8]
+ [ 2326  1726]]
+
+
+
+
+DecisionTree vacinacao_acima_0 with False --- binary-nenhuma-v
+	Accuracy avg: 0.9604769516250528
+	Accuracy std: 0.0049816189366243225
+
+	Precision avg: 0.9597234248436489
+	Precision std: 0.005313851531898475
+	Precision Macro avg: 0.9508012529678533
+	Precision Macro std: 0.008523606386206218
+
+	Recall avg: 0.9604769516250528
+	Recall std: 0.0049816189366243225
+	Recall Macro avg: 0.7488481459861743
+	Recall Macro std: 0.03295440404344091
+
+	F1 avg: 0.9546123327083131
+	F1 std: 0.006838274061340754
+	F1 Macro avg: 0.8149156643801282
+	F1 Macro std: 0.03116553364126389
+[[50252   125]
+ [ 1649  2403]]
+
+
+
+
+XGBoost vacinacao_acima_0 with False --- binary-nenhuma-v
+	Accuracy avg: 0.9697220231861692
+	Accuracy std: 0.0
+
+	Precision avg: 0.9693827992973642
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9638650511762655
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9697220231861692
+	Recall std: 0.0
+	Recall Macro avg: 0.809352350013377
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9667057736935403
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.8685823483100936
+	F1 Macro std: 0.0
+[[50265   112]
+ [ 1536  2516]]
+
+
+
+
+LightGradientBoosting vacinacao_acima_0 with False --- binary-nenhuma-v
+	Accuracy avg: 0.9699792390086166
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9699096239410899
+	Precision std: 0.0
+	Precision Macro avg: 0.9688097201200859
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9699792390086166
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.8079027126581078
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9668794747920044
+	F1 std: 0.0
+	F1 Macro avg: 0.8689281942090767
+	F1 Macro std: 0.0
+[[50293    84]
+ [ 1550  2502]]
+
+
+
+
+GradientBoosting vacinacao_acima_0 with False --- binary-nenhuma-v
+	Accuracy avg: 0.9697403957449154
+	Accuracy std: 0.0
+
+	Precision avg: 0.9693832344758189
+	Precision std: 0.0
+	Precision Macro avg: 0.9635532500533734
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9697403957449154
+	Recall std: 0.0
+	Recall Macro avg: 0.8097026872465518
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9667389749726099
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.8687539028957595
+	F1 Macro std: 0.0
+[[50263   114]
+ [ 1533  2519]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest vacinacao_acima_30 with True --- binary-v-acima-30
+	Accuracy avg: 0.9909163219853643
+	Accuracy std: 0.0007268110603083785
+
+	Precision avg: 0.9907295552056137
+	Precision std: 0.0007337332265861445
+	Precision Macro avg: 0.9787393805933728
+	Precision Macro std: 0.0034396460957455224
+
+	Recall avg: 0.9909163219853643
+	Recall std: 0.0007268110603083785
+	Recall Macro avg: 0.8676833817827438
+	Recall Macro std: 0.012567642613141925
+
+	F1 avg: 0.9903137410762272
+	F1 std: 0.0008483303264498901
+	F1 Macro avg: 0.9153089668549367
+	F1 Macro std: 0.007984711604509724
+[[36515    19]
+ [  356   826]]
+
+
+
+
+DecisionTree vacinacao_acima_30 with True --- binary-v-acima-30
+	Accuracy avg: 0.9916375013256973
+	Accuracy std: 0.0008585934732425031
+
+	Precision avg: 0.9913575434109679
+	Precision std: 0.0009397616936033543
+	Precision Macro avg: 0.9639310747281173
+	Precision Macro std: 0.010090426613111417
+
+	Recall avg: 0.9916375013256973
+	Recall std: 0.0008585934732425031
+	Recall Macro avg: 0.8933519822575396
+	Recall Macro std: 0.007424789870141736
+
+	F1 avg: 0.9912943515226761
+	F1 std: 0.0008862157937733259
+	F1 Macro avg: 0.925495749981598
+	F1 Macro std: 0.0075374574378641295
+[[36491    43]
+ [  239   943]]
+
+
+
+
+XGBoost vacinacao_acima_30 with True --- binary-v-acima-30
+	Accuracy avg: 0.9948297804645243
+	Accuracy std: 0.0
+
+	Precision avg: 0.9947274604339184
+	Precision std: 0.0
+	Precision Macro avg: 0.9787220722835359
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9948297804645243
+	Recall std: 0.0
+	Recall Macro avg: 0.9342950548255029
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9947039998948842
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.9553536043379867
+	F1 Macro std: 0.0
+[[36493    41]
+ [  154  1028]]
+
+
+
+
+LightGradientBoosting vacinacao_acima_30 with True --- binary-v-acima-30
+	Accuracy avg: 0.994644182840174
+	Accuracy std: 0.0
+
+	Precision avg: 0.994533462521115
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9776619766617436
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.994644182840174
+	Recall std: 0.0
+	Recall Macro avg: 0.9321526238405557
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9945102435535272
+	F1 std: 0.0
+	F1 Macro avg: 0.9536910912989555
+	F1 Macro std: 1.1102230246251565e-16
+[[36491    43]
+ [  159  1023]]
+
+
+
+
+GradientBoosting vacinacao_acima_30 with True --- binary-v-acima-30
+	Accuracy avg: 0.9946972107328454
+	Accuracy std: 0.0
+
+	Precision avg: 0.9945980471813425
+	Precision std: 0.0
+	Precision Macro avg: 0.9811148553631416
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9946972107328454
+	Recall std: 0.0
+	Recall Macro avg: 0.9297240398277218
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9945476307673328
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.953871085068857
+	F1 Macro std: 0.0
+[[36499    35]
+ [  165  1017]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros
+Normalizing columns
+RandomForest vacinacao_acima_45 with True --- binary-v-acima-45
+	Accuracy avg: 0.9904914959153608
+	Accuracy std: 0.000734067400244433
+
+	Precision avg: 0.9903059285720743
+	Precision std: 0.0008311363914425945
+	Precision Macro avg: 0.9791200202610106
+	Precision Macro std: 0.008382278745076407
+
+	Recall avg: 0.9904914959153608
+	Recall std: 0.000734067400244433
+	Recall Macro avg: 0.858398046606833
+	Recall Macro std: 0.009223252103389472
+
+	F1 avg: 0.9898045767599785
+	F1 std: 0.0008106087098030211
+	F1 Macro avg: 0.9094258727247396
+	F1 Macro std: 0.0074083996191858055
+[[21701     6]
+ [  206   488]]
+
+
+
+
+DecisionTree vacinacao_acima_45 with True --- binary-v-acima-45
+	Accuracy avg: 0.9910182581134771
+	Accuracy std: 0.0012239740235997665
+
+	Precision avg: 0.9906770352997413
+	Precision std: 0.0013275654870772919
+	Precision Macro avg: 0.9620089732966314
+	Precision Macro std: 0.007471236461727964
+
+	Recall avg: 0.9910182581134771
+	Recall std: 0.0012239740235997665
+	Recall Macro avg: 0.8822428826462574
+	Recall Macro std: 0.015812059673094056
+
+	F1 avg: 0.9905846983607896
+	F1 std: 0.0013388563766797096
+	F1 Macro avg: 0.9180052787973565
+	F1 Macro std: 0.012104112623780739
+[[21674    33]
+ [  130   564]]
+
+
+
+
+XGBoost vacinacao_acima_45 with True --- binary-v-acima-45
+	Accuracy avg: 0.9943752511048614
+	Accuracy std: 0.0
+
+	Precision avg: 0.9942470639545636
+	Precision std: 0.0
+	Precision Macro avg: 0.9725245108158098
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9943752511048614
+	Recall std: 0.0
+	Recall Macro avg: 0.9315395676423586
+	Recall Macro std: 1.1102230246251565e-16
+
+	F1 avg: 0.9942477631049662
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.9510396124308871
+	F1 Macro std: 0.0
+[[21675    32]
+ [   94   600]]
+
+
+
+
+LightGradientBoosting vacinacao_acima_45 with True --- binary-v-acima-45
+	Accuracy avg: 0.9945091736976028
+	Accuracy std: 0.0
+
+	Precision avg: 0.9943910162361973
+	Precision std: 0.0
+	Precision Macro avg: 0.9769062082325854
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9945091736976028
+	Recall std: 0.0
+	Recall Macro avg: 0.9295163886229612
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9943656499346641
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.9518886804891483
+	F1 Macro std: 0.0
+[[21681    26]
+ [   97   597]]
+
+
+
+
+GradientBoosting vacinacao_acima_45 with True --- binary-v-acima-45
+	Accuracy avg: 0.99455381456185
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9944454412856718
+	Precision std: 0.0
+	Precision Macro avg: 0.9798476999245878
+	Precision Macro std: 0.0
+
+	Recall avg: 0.99455381456185
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.9274471415149286
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9943965599018382
+	F1 std: 0.0
+	F1 Macro avg: 0.9520325577117632
+	F1 Macro std: 1.1102230246251565e-16
+[[21685    22]
+ [  100   594]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros,sintoma_tosse,sintoma_espirros,sintoma_dispneia,sintoma_febre,sintoma_baixa_saturacao_o2,sintoma_desconforto_respiratorio,sintoma_aperto_toracico,sintoma_dor_garganta,sintoma_cefaleia,sintoma_mialgia,sintoma_diarreia,sintoma_coriza,sintoma_congestao_nasal,sintoma_astenia,sintoma_anosmia_ou_hiposmia,sintoma_nausea,sintoma_inaptencia,sintoma_dor_abdominal,sintoma_rebaixamento_consciencia,sintoma_outros
+Normalizing columns
+RandomForest NONE with NONE --- sem-sintomas-binary-normal
+	Accuracy avg: 0.9508551004029355
+	Accuracy std: 0.0010010637660348794
+
+	Precision avg: 0.9530857719122231
+	Precision std: 0.000843797574333059
+	Precision Macro avg: 0.9734556830142284
+	Precision Macro std: 0.0014533815968153117
+
+	Recall avg: 0.9508551004029355
+	Recall std: 0.0010010637660348794
+	Recall Macro avg: 0.5169307316980364
+	Recall Macro std: 0.009895814023340345
+
+	F1 avg: 0.9284839984615472
+	F1 std: 0.002360484263776688
+	F1 Macro avg: 0.5197807119331694
+	F1 Macro std: 0.01878300562330385
+[[114716      0]
+ [  5940    207]]
+
+
+
+
+DecisionTree NONE with NONE --- sem-sintomas-binary-normal
+	Accuracy avg: 0.9538402985198117
+	Accuracy std: 0.0002792096082923032
+
+	Precision avg: 0.9538584136835395
+	Precision std: 0.002018135322590899
+	Precision Macro avg: 0.9538494138298708
+	Precision Macro std: 0.02117786769903357
+
+	Recall avg: 0.9538402985198117
+	Recall std: 0.0002792096082923032
+	Recall Macro avg: 0.5486186307600202
+	Recall Macro std: 0.003213815132119165
+
+	F1 avg: 0.935593884856611
+	F1 std: 0.0006348744981156863
+	F1 Macro avg: 0.5765190405041916
+	F1 Macro std: 0.005310149536929155
+[[114714      2]
+ [  5550    597]]
+
+
+
+
+XGBoost NONE with NONE --- sem-sintomas-binary-normal
+	Accuracy avg: 0.9558591132108255
+	Accuracy std: 0.0
+
+	Precision avg: 0.9520173285753286
+	Precision std: 0.0
+	Precision Macro avg: 0.9105809371496122
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9558591132108255
+	Recall std: 0.0
+	Recall Macro avg: 0.5776727460423365
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9410346320431687
+	F1 std: 0.0
+	F1 Macro avg: 0.6212493954265739
+	F1 Macro std: 0.0
+[[114565    151]
+ [  5184    963]]
+
+
+
+
+LightGradientBoosting NONE with NONE --- sem-sintomas-binary-normal
+	Accuracy avg: 0.9559914945020396
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.953243755347297
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9239335478122964
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9559914945020396
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.5762028454531289
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9409270417908889
+	F1 std: 0.0
+	F1 Macro avg: 0.6195411965566763
+	F1 Macro std: 0.0
+[[114601    115]
+ [  5204    943]]
+
+
+
+
+GradientBoosting NONE with NONE --- sem-sintomas-binary-normal
+	Accuracy avg: 0.9559170300257316
+	Accuracy std: 0.0
+
+	Precision avg: 0.9528582966514236
+	Precision std: 0.0
+	Precision Macro avg: 0.9201729006164587
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9559170300257316
+	Recall std: 0.0
+	Recall Macro avg: 0.576163618143948
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9408731809160186
+	F1 std: 0.0
+	F1 Macro avg: 0.6193582883978205
+	F1 Macro std: 0.0
+[[114592    124]
+ [  5204    943]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros,sintoma_tosse,sintoma_espirros,sintoma_dispneia,sintoma_febre,sintoma_baixa_saturacao_o2,sintoma_desconforto_respiratorio,sintoma_aperto_toracico,sintoma_dor_garganta,sintoma_cefaleia,sintoma_mialgia,sintoma_diarreia,sintoma_coriza,sintoma_congestao_nasal,sintoma_astenia,sintoma_anosmia_ou_hiposmia,sintoma_nausea,sintoma_inaptencia,sintoma_dor_abdominal,sintoma_rebaixamento_consciencia,sintoma_outros
+Normalizing columns
+RandomForest vacinacao_acima_0 with True --- sem-sintomas-binary-alguma-v
+	Accuracy avg: 0.9711597802363212
+	Accuracy std: 0.0015270785915395557
+
+	Precision avg: 0.9719959883817406
+	Precision std: 0.0014385787907948552
+	Precision Macro avg: 0.9855420693825065
+	Precision Macro std: 0.0007427104597953078
+
+	Recall avg: 0.9711597802363212
+	Recall std: 0.0015270785915395557
+	Recall Macro avg: 0.5427207637231504
+	Recall Macro std: 0.02421276043649913
+
+	F1 avg: 0.9591024018189149
+	F1 std: 0.003422839010630009
+	F1 Macro avg: 0.5694844627951726
+	F1 Macro std: 0.04291205607966178
+[[64340     0]
+ [ 1806   289]]
+
+
+
+
+DecisionTree vacinacao_acima_0 with True --- sem-sintomas-binary-alguma-v
+	Accuracy avg: 0.9738059757657862
+	Accuracy std: 0.00048340173250050155
+
+	Precision avg: 0.9741869960611496
+	Precision std: 0.0006482481806671425
+	Precision Macro avg: 0.9810388555669263
+	Precision Macro std: 0.0061113245552642595
+
+	Recall avg: 0.9738059757657862
+	Recall std: 0.00048340173250050155
+	Recall Macro avg: 0.5856475518260316
+	Recall Macro std: 0.0074473813468973835
+
+	F1 avg: 0.9647446551945338
+	F1 std: 0.0009178045486709662
+	F1 Macro avg: 0.6392357558151497
+	F1 Macro std: 0.010956460743044193
+[[64340     0]
+ [ 1692   403]]
+
+
+
+
+XGBoost vacinacao_acima_0 with True --- sem-sintomas-binary-alguma-v
+	Accuracy avg: 0.9747873861669302
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9739623877236256
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9581032067157584
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9747873861669302
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.6067036470184127
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9670056289389404
+	F1 std: 0.0
+	F1 Macro avg: 0.6678237397133528
+	F1 Macro std: 0.0
+[[64312    28]
+ [ 1647   448]]
+
+
+
+
+LightGradientBoosting vacinacao_acima_0 with True --- sem-sintomas-binary-alguma-v
+	Accuracy avg: 0.9748777000075262
+	Accuracy std: 0.0
+
+	Precision avg: 0.9748918951663417
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9751601336789282
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9748777000075262
+	Recall std: 0.0
+	Recall Macro avg: 0.6042104593511647
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9669010833523013
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.6654411539628226
+	F1 Macro std: 0.0
+[[64329    11]
+ [ 1658   437]]
+
+
+
+
+GradientBoosting vacinacao_acima_0 with True --- sem-sintomas-binary-alguma-v
+	Accuracy avg: 0.9748024384736962
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9743520101928768
+	Precision std: 0.0
+	Precision Macro avg: 0.9657727848747619
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9748024384736962
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.6050951723503494
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9669062637415609
+	F1 std: 0.0
+	F1 Macro avg: 0.6661122636180822
+	F1 Macro std: 0.0
+[[64320    20]
+ [ 1654   441]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros,sintoma_tosse,sintoma_espirros,sintoma_dispneia,sintoma_febre,sintoma_baixa_saturacao_o2,sintoma_desconforto_respiratorio,sintoma_aperto_toracico,sintoma_dor_garganta,sintoma_cefaleia,sintoma_mialgia,sintoma_diarreia,sintoma_coriza,sintoma_congestao_nasal,sintoma_astenia,sintoma_anosmia_ou_hiposmia,sintoma_nausea,sintoma_inaptencia,sintoma_dor_abdominal,sintoma_rebaixamento_consciencia,sintoma_outros
+Normalizing columns
+RandomForest vacinacao_acima_0 with False --- sem-sintomas-binary-nenhuma-v
+	Accuracy avg: 0.9284829778243215
+	Accuracy std: 0.0011679862025946103
+
+	Precision avg: 0.9320723802757277
+	Precision std: 0.0011993399292131706
+	Precision Macro avg: 0.9534768379753779
+	Precision Macro std: 0.0018503739082922478
+
+	Recall avg: 0.9284829778243215
+	Recall std: 0.0011679862025946103
+	Recall Macro avg: 0.5200550994563184
+	Recall Macro std: 0.007974676146853482
+
+	F1 avg: 0.8968355815723026
+	F1 std: 0.0027776431386663377
+	F1 Macro avg: 0.5197601927835757
+	F1 Macro std: 0.015319348439756846
+[[50373     4]
+ [ 3838   214]]
+
+
+
+
+DecisionTree vacinacao_acima_0 with False --- sem-sintomas-binary-nenhuma-v
+	Accuracy avg: 0.931650406952176
+	Accuracy std: 0.0007022452453451536
+
+	Precision avg: 0.9232270714026416
+	Precision std: 0.003653288820026023
+	Precision Macro avg: 0.8664401583283162
+	Precision Macro std: 0.028217974109966876
+
+	Recall avg: 0.931650406952176
+	Recall std: 0.0007022452453451536
+	Recall Macro avg: 0.5546046153561867
+	Recall Macro std: 0.0071855777102978104
+
+	F1 avg: 0.907041717943706
+	F1 std: 0.0018508178894334456
+	F1 Macro avg: 0.5796841890753786
+	F1 Macro std: 0.011371065806591285
+[[50328    49]
+ [ 3703   349]]
+
+
+
+
+XGBoost vacinacao_acima_0 with False --- sem-sintomas-binary-nenhuma-v
+	Accuracy avg: 0.9327564349887009
+	Accuracy std: 0.0
+
+	Precision avg: 0.9245100660771908
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.8683976924247652
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9327564349887009
+	Recall std: 0.0
+	Recall Macro avg: 0.5628954230021727
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9095044776470983
+	F1 std: 0.0
+	F1 Macro avg: 0.5930688360931203
+	F1 Macro std: 0.0
+[[50249   128]
+ [ 3532   520]]
+
+
+
+
+LightGradientBoosting vacinacao_acima_0 with False --- sem-sintomas-binary-nenhuma-v
+	Accuracy avg: 0.9328666703411784
+	Accuracy std: 0.0
+
+	Precision avg: 0.9242188869794752
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.8649221782419246
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9328666703411784
+	Recall std: 0.0
+	Recall Macro avg: 0.5647705050219469
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9099631358134633
+	F1 std: 0.0
+	F1 Macro avg: 0.5958701112437794
+	F1 Macro std: 0.0
+[[50239   138]
+ [ 3516   536]]
+
+
+
+
+GradientBoosting vacinacao_acima_0 with False --- sem-sintomas-binary-nenhuma-v
+	Accuracy avg: 0.9328850428999246
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9242575606890766
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.8650825364934083
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9328850428999246
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.5648939008758462
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9099996379670605
+	F1 std: 0.0
+	F1 Macro avg: 0.5960623020135719
+	F1 Macro std: 0.0
+[[50239   138]
+ [ 3515   537]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros,sintoma_tosse,sintoma_espirros,sintoma_dispneia,sintoma_febre,sintoma_baixa_saturacao_o2,sintoma_desconforto_respiratorio,sintoma_aperto_toracico,sintoma_dor_garganta,sintoma_cefaleia,sintoma_mialgia,sintoma_diarreia,sintoma_coriza,sintoma_congestao_nasal,sintoma_astenia,sintoma_anosmia_ou_hiposmia,sintoma_nausea,sintoma_inaptencia,sintoma_dor_abdominal,sintoma_rebaixamento_consciencia,sintoma_outros
+Normalizing columns
+RandomForest vacinacao_acima_30 with True --- sem-sintomas-binary-v-acima-30
+	Accuracy avg: 0.9709831371301304
+	Accuracy std: 0.0019152981875650101
+
+	Precision avg: 0.9655626445397625
+	Precision std: 0.01370518276700418
+	Precision Macro avg: 0.8854595815057438
+	Precision Macro std: 0.2005660319291957
+
+	Recall avg: 0.9709831371301304
+	Recall std: 0.0019152981875650101
+	Recall Macro avg: 0.5370558375634518
+	Recall Macro std: 0.030557270068613293
+
+	F1 avg: 0.9585015124868137
+	F1 std: 0.00427600361278875
+	F1 Macro avg: 0.5585839828002529
+	F1 Macro std: 0.053877964705773114
+[[36534     0]
+ [  995   187]]
+
+
+
+
+DecisionTree vacinacao_acima_30 with True --- sem-sintomas-binary-v-acima-30
+	Accuracy avg: 0.9737671014953865
+	Accuracy std: 0.0010730256648790778
+
+	Precision avg: 0.9735562213521913
+	Precision std: 0.001026302594997039
+	Precision Macro avg: 0.9691453647639875
+	Precision Macro std: 0.016751198647521642
+
+	Recall avg: 0.9737671014953865
+	Recall std: 0.0010730256648790778
+	Recall Macro avg: 0.5849922844973835
+	Recall Macro std: 0.018825372240617082
+
+	F1 avg: 0.9647155338802685
+	F1 std: 0.0022702926839439285
+	F1 Macro avg: 0.6368900304283243
+	F1 Macro std: 0.02825070526206172
+[[36534     0]
+ [  986   196]]
+
+
+
+
+XGBoost vacinacao_acima_30 with True --- sem-sintomas-binary-v-acima-30
+	Accuracy avg: 0.975023862551702
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9726699119878542
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.924288016445326
+	Precision Macro std: 0.0
+
+	Recall avg: 0.975023862551702
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.6183052071097669
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9680283515299546
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.6804640426452879
+	F1 Macro std: 0.0
+[[36493    41]
+ [  901   281]]
+
+
+
+
+LightGradientBoosting vacinacao_acima_30 with True --- sem-sintomas-binary-v-acima-30
+	Accuracy avg: 0.9752624880687242
+	Accuracy std: 0.0
+
+	Precision avg: 0.9740664534072747
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9502856787438582
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9752624880687242
+	Recall std: 0.0
+	Recall Macro avg: 0.6143351204176959
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9679563707115486
+	F1 std: 0.0
+	F1 Macro avg: 0.6774210942088887
+	F1 Macro std: 0.0
+[[36512    22]
+ [  911   271]]
+
+
+
+
+GradientBoosting vacinacao_acima_30 with True --- sem-sintomas-binary-v-acima-30
+	Accuracy avg: 0.9751299183370452
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9733976184027453
+	Precision std: 0.0
+	Precision Macro avg: 0.9385227509327152
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9751299183370452
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.6154946688975349
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9679303482250287
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.678045151641886
+	F1 Macro std: 0.0
+[[36504    30]
+ [  908   274]]
+
+
+
+
+
+
+
+
+./dataset/data/fulldata.csv loaded
+Dropping: data_notificacao,doenca_outros,sintoma_tosse,sintoma_espirros,sintoma_dispneia,sintoma_febre,sintoma_baixa_saturacao_o2,sintoma_desconforto_respiratorio,sintoma_aperto_toracico,sintoma_dor_garganta,sintoma_cefaleia,sintoma_mialgia,sintoma_diarreia,sintoma_coriza,sintoma_congestao_nasal,sintoma_astenia,sintoma_anosmia_ou_hiposmia,sintoma_nausea,sintoma_inaptencia,sintoma_dor_abdominal,sintoma_rebaixamento_consciencia,sintoma_outros
+Normalizing columns
+RandomForest vacinacao_acima_45 with True --- sem-sintomas-binary-v-acima-45
+	Accuracy avg: 0.9705281014240436
+	Accuracy std: 0.0013297883317288366
+
+	Precision avg: 0.9652035233280781
+	Precision std: 0.013143195130276468
+	Precision Macro avg: 0.8852426435267949
+	Precision Macro std: 0.2003672192710297
+
+	Recall avg: 0.9705281014240436
+	Recall std: 0.0013297883317288366
+	Recall Macro avg: 0.5243515850144093
+	Recall Macro std: 0.021461519033903007
+
+	F1 avg: 0.9572837300876088
+	F1 std: 0.003047385153384419
+	F1 Macro avg: 0.5373653426082328
+	F1 Macro std: 0.03910303143528885
+[[21707     0]
+ [  624    70]]
+
+
+
+
+DecisionTree vacinacao_acima_45 with True --- sem-sintomas-binary-v-acima-45
+	Accuracy avg: 0.9741529396009108
+	Accuracy std: 0.00045612391498395054
+
+	Precision avg: 0.9730853636612553
+	Precision std: 0.0005604108900542501
+	Precision Macro avg: 0.9527478006932949
+	Precision Macro std: 0.012284109317725597
+
+	Recall avg: 0.9741529396009108
+	Recall std: 0.00045612391498395054
+	Recall Macro avg: 0.5895483256241196
+	Recall Macro std: 0.009630714149653512
+
+	F1 avg: 0.9655654309946831
+	F1 std: 0.0010335280224922133
+	F1 Macro avg: 0.6435923992439292
+	F1 Macro std: 0.013313816626490019
+[[21702     5]
+ [  571   123]]
+
+
+
+
+XGBoost vacinacao_acima_45 with True --- sem-sintomas-binary-v-acima-45
+	Accuracy avg: 0.9745993482433819
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.9716923088863865
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9123858836353727
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9745993482433819
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.6088881672587589
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9672560661276665
+	F1 std: 0.0
+	F1 Macro avg: 0.6676358970062517
+	F1 Macro std: 0.0
+[[21680    27]
+ [  542   152]]
+
+
+
+
+LightGradientBoosting vacinacao_acima_45 with True --- sem-sintomas-binary-v-acima-45
+	Accuracy avg: 0.9747779117003705
+	Accuracy std: 0.0
+
+	Precision avg: 0.9726790521475042
+	Precision std: 1.1102230246251565e-16
+	Precision Macro avg: 0.9308352800560613
+	Precision Macro std: 0.0
+
+	Recall avg: 0.9747779117003705
+	Recall std: 0.0
+	Recall Macro avg: 0.6061905952328954
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9672102054124384
+	F1 std: 1.1102230246251565e-16
+	F1 Macro avg: 0.6654640721518648
+	F1 Macro std: 0.0
+[[21688    19]
+ [  546   148]]
+
+
+
+
+GradientBoosting vacinacao_acima_45 with True --- sem-sintomas-binary-v-acima-45
+	Accuracy avg: 0.9747332708361235
+	Accuracy std: 1.1102230246251565e-16
+
+	Precision avg: 0.972322986557167
+	Precision std: 0.0
+	Precision Macro avg: 0.9238102436896283
+	Precision Macro std: 1.1102230246251565e-16
+
+	Recall avg: 0.9747332708361235
+	Recall std: 1.1102230246251565e-16
+	Recall Macro avg: 0.6075624152901447
+	Recall Macro std: 0.0
+
+	F1 avg: 0.9672683364178678
+	F1 std: 0.0
+	F1 Macro avg: 0.6667689744814628
+	F1 Macro std: 0.0
+[[21685    22]
+ [  544   150]]
+
+
+
+
+
+
+
+
+----------------------------------------------------
+
+
+
+
