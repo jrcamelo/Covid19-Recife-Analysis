@@ -127,7 +127,6 @@ class Dataset(DatasetBase):
         count_not_mild = self.train[self.train[SEVERITY] != 0].shape[0]
         rus = RandomUnderSampler(sampling_strategy={0: amount * count_not_mild})
         self.train, self.train_labels = rus.fit_resample(self.train, self.train_labels)
-        Printer.print(self.train_labels.value_counts())
     
     def oversample(self, amount):
         Printer.print("Oversampling: " + str(amount))

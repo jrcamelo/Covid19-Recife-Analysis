@@ -40,13 +40,15 @@ class AnalysisModel:
     def test_model(self):
         self.run_model_score()
         self.predictions = self.model.predict(self.test)
-        Printer.print(self.predictions)
         self.classification_report = metrics.classification_report(self.test_labels, self.predictions)
         self.accuracy = metrics.accuracy_score(self.test_labels, self.predictions)
         self.confusion_matrix = metrics.confusion_matrix(self.test_labels, self.predictions)
         self.precision = metrics.precision_score(self.test_labels, self.predictions, average='weighted')
+        self.precision_macro = metrics.precision_score(self.test_labels, self.predictions, average='macro')
         self.recall = metrics.recall_score(self.test_labels, self.predictions, average='weighted')
+        self.recall_macro = metrics.recall_score(self.test_labels, self.predictions, average='macro')
         self.f1 = metrics.f1_score(self.test_labels, self.predictions, average='weighted')
+        self.f1_macro = metrics.f1_score(self.test_labels, self.predictions, average='macro')
         return self
 
     def run_model_score(self):
@@ -81,7 +83,7 @@ class AnalysisModel:
         plt.ylabel('True Positive Rate')
         plt.title('Receiver operating characteristic example')
         plt.legend(loc="lower right")
-        plt.show()
+        plt.savefig(self.make_filename("roc-curve.png"), format='png')
         return self
         
     def visualize_model(self, filename=None):
@@ -159,11 +161,12 @@ class AnalysisModel:
         return [self.get_beautified_classes()[i] for i in self.test_labels]
               
     @staticmethod
-    def run_classificator(clazz, data, name="", visualize=True):
+    def run_classificator(clazz, data, name="", visualize=True, should_print=True):
         classificator = clazz(data.train, data.test, data.train_labels, data.test_labels, None, filename=name)
         classificator.train_model()
         classificator.test_model()
-        classificator.print_results()
+        if (should_print):
+            classificator.print_results()
         if (visualize):
             classificator.visualize_model()
         return classificator
