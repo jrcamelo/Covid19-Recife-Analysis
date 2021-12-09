@@ -127,15 +127,14 @@ class Dataset(DatasetBase):
         count_not_mild = self.train[self.train[SEVERITY] != 0].shape[0]
         rus = RandomUnderSampler(sampling_strategy={0: amount * count_not_mild})
         self.train, self.train_labels = rus.fit_resample(self.train, self.train_labels)
+        self.test, self.test_labels = rus.fit_resample(self.test, self.test_labels)
     
     def oversample(self, amount):
         Printer.print("Oversampling: " + str(amount))
         Printer.print(self.train_labels.value_counts())
         oversample = SMOTE()
         self.train, self.train_labels = oversample.fit_resample(self.train, self.train_labels)
-        Printer.print(self.train_labels.value_counts())
-        
-        
+        self.test, self.test_labels = oversample.fit_resample(self.test, self.test_labels)
             
     def set_target(self, target):
         self.target_column = target
@@ -214,7 +213,6 @@ class Dataset(DatasetBase):
         plt.subplots_adjust(left = 0.25, right = 0.9, bottom = 0.1, top = 0.95,
                             wspace = 0.2, hspace = 0.9)
         for column_name in self.train.columns:
-            Printer.print(column_name)
             try:             
                 ax = axs[self.train.columns.get_loc(column_name) - 1]
                 ax.set_xlabel('Valores de ' + column_name)
@@ -249,5 +247,49 @@ class Dataset(DatasetBase):
             ax.grid('on')
         # plt.show()
         fig.savefig(self.filename + filename + 'column-densities.png')
+        return self
+    
+    def plot_pairplot(self, filename=""):
+        rcParams['figure.figsize'] = 15, 15
+        fig = plt.figure()
+        sns.pairplot(self.df_with_target, hue=SEVERITY)
+        # plt.show()
+        fig.savefig(self.filename + filename + 'pairplot.png')
+        return self
+    
+    def print_severity_distribution(self):
+        # Print counts and percentages of each severity
+        Printer.print("MILD: " + str(len(self.df_with_target[SEVERITY] == 0)) + " (" + str(len(self.df_with_target[SEVERITY] == 0) / len(self.df_with_target) * 100) + "%)")
+        Printer.print("SEVERE: " + str(len(self.df_with_target[SEVERITY] == 1)) + " (" + str(len(self.df_with_target[SEVERITY] == 1) / len(self.df_with_target) * 100) + "%)")
+        Printer.print("DEATH: " + str(len(self.df_with_target[SEVERITY] == 2)) + " (" + str(len(self.df_with_target[SEVERITY] == 2) / len(self.df_with_target) * 100) + "%)")
+        return self
+        
+    def print_column_densities_according_to_severity(self):
+        for column_name in self.train.columns:
+            count = len(self.train[column_name].unique())
+            if (count > 2):
+                continue
+            # Count how many rows have label as 0, 1 and 2
+            count_0 = len(self.df_with_target[self.df_with_target[SEVERITY] == 0][column_name])
+            count_1 = len(self.df_with_target[self.df_with_target[SEVERITY] == 1][column_name])
+            count_2 = len(self.df_with_target[self.df_with_target[SEVERITY] == 2][column_name])
+            count_column_0 = len(self.df_with_target.loc[(self.df_with_target[SEVERITY] == 0) & (self.df_with_target[column_name] == 1)])
+            count_column_1 = len(self.df_with_target.loc[(self.df_with_target[SEVERITY] == 1) & (self.df_with_target[column_name] == 1)])
+            if (count_2 > 0):
+                count_column_2 = len(self.df_with_target.loc[(self.df_with_target[SEVERITY] == 2) & (self.df_with_target[column_name] == 1)])
+            
+            percentage_column_0 = count_column_0 / count_0
+            percentage_column_1 = count_column_1 / count_1
+            percentage_column_2 = -1
+            if (count_2 > 0):
+                percentage_column_2 = count_column_2 / count_2
+                
+            # Print counts and percentages as table
+            Printer.print("\n" + column_name + ":")
+            Printer.print("LEVES: " + str(count_column_0) + " / " + str(count_0) + " (" + str(percentage_column_0) + ")")
+            Printer.print("GRAVES: " + str(count_column_1) + " / " + str(count_1) + " (" + str(percentage_column_1) + ")")
+            if (count_2 > 0):
+                Printer.print("ÓBITOS: " + str(count_column_2) + " / " + str(count_2) + " (" + str(percentage_column_2) + ")")
+            
         return self
         

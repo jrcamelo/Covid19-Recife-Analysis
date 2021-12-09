@@ -26,14 +26,14 @@ class RandomForest(AnalysisModel):
         self.model = RandomForestClassifier(bootstrap=True, 
                                             class_weight=None, 
                                             criterion='gini',
-                                            max_depth=1000, 
+                                            max_depth=10000, 
                                             max_features='auto', 
                                             min_impurity_decrease=0.0, 
                                             min_impurity_split=None,
-                                            min_samples_leaf=0.001,  #0.00001, #
+                                            min_samples_leaf=0.00001,  #0.00001, #
                                             #min_samples_split=2,
                                             min_weight_fraction_leaf=0.0, 
-                                            n_estimators=10,  #100
+                                            n_estimators=100,  #100
                                             n_jobs=-1,
                                             oob_score=True, 
                                             random_state=None, 

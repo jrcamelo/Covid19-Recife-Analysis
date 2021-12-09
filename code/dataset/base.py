@@ -56,6 +56,13 @@ class DatasetBase:
         for column in self.df.columns:
             uniques += str(self.df[column].value_counts()) + "\n"
         return uniques
+    
+    def count_blanks(self):
+        blanks = ""
+        for column in self.df.columns:
+            blanks += column + "\n"
+            blanks += str(self.df[column].isnull().sum()) + "\n"
+        return blanks
         
     def write_to_csv(self, file):
         self.df.to_csv(file, index=False, sep=";", encoding="utf-8")

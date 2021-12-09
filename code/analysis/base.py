@@ -49,6 +49,14 @@ class AnalysisModel:
         self.recall_macro = metrics.recall_score(self.test_labels, self.predictions, average='macro')
         self.f1 = metrics.f1_score(self.test_labels, self.predictions, average='weighted')
         self.f1_macro = metrics.f1_score(self.test_labels, self.predictions, average='macro')
+
+        self.roc_auc = 0
+        self.roc_auc_macro = 0
+        try:
+            self.roc_auc = metrics.roc_auc_score(self.test_labels, self.predictions)
+            self.roc_auc_macro = metrics.roc_auc_score(self.test_labels, self.predictions, average='macro')
+        except:
+            pass
         return self
 
     def run_model_score(self):
@@ -83,7 +91,7 @@ class AnalysisModel:
         plt.ylabel('True Positive Rate')
         plt.title('Receiver operating characteristic example')
         plt.legend(loc="lower right")
-        plt.savefig(self.make_filename("roc-curve.png"), format='png')
+        plt.savefig(self.make_filename("roc-curve") + ".png", format='png')
         return self
         
     def visualize_model(self, filename=None):
