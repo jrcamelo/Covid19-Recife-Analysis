@@ -20,11 +20,22 @@ class GradientBoosting(AnalysisModel):
         "drop": [DATE]
     }
     
+    PARAMS = {
+        "n_estimators": [100,],
+        "learning_rate": [0.05, 0.1, 0.5],
+        "max_depth": [3, 5, 7],
+        "min_samples_leaf": [1, 5, 10],
+        "max_features": ['auto', 'sqrt', 'log2'],
+        "subsample": [0.1, 0.2],
+        "random_state": [0]
+    }
+    
     def __init__(self, train, test, train_labels, test_labels, classes=None, filename=""):
         super().__init__(train, test, train_labels, test_labels, classes, filename)
         self.model = GradientBoostingClassifier(n_estimators=100, 
                                                 learning_rate=0.1, 
-                                                max_depth=5, random_state=0)
+                                                max_depth=5, 
+                                                random_state=0)
         self.binary_only = True
         self.type = "GradientBoosting"
         

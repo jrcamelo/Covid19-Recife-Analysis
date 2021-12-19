@@ -24,7 +24,7 @@ Printer.print(time.perf_counter())
 Printer.print(datetime.datetime.now().strftime("%m-%d-%H:%M:%S"))
 data = Dataset(NeuralNetwork.CONFIG,
                 should_update_data=False,
-                should_binary_severe=False,
+                should_binary_severe=True,
                 target=SEVERITY,
                 # undersample_amount=1,
                 # oversample_amount=1,
@@ -35,8 +35,12 @@ data = Dataset(NeuralNetwork.CONFIG,
                 should_categorize_booleans=True,
                 drop_diseases=False,
                 drop_symptoms=False,
-                drop=[DATE, DISEASE_OTHER])
+                drop=[DATE, DISEASE_OTHER],
+                filter_column=SEVERITY,
+                filter_column_value=1,)
 Printer.print(time.perf_counter())
+
+data.print_percentages()
 
 
 # XGBoost.run_classificator(XGBoost, data, "XGBoost", True).make_shap_values(True)
@@ -101,6 +105,30 @@ Printer.print(time.perf_counter())
 
 
 
+def do_gridsearch(models, name, filter_column, filter_value, binary=False, drop_symptoms=False):
+    data = Dataset(DecisionTree.CONFIG,
+                should_update_data=False,
+                should_binary_severe=binary,
+                target=SEVERITY,
+                should_normalize=True,
+                should_categorize_age=True,
+                should_categorize_gender=True,
+                should_categorize_severity=True,
+                should_categorize_booleans=True,
+                drop_diseases=False,
+                drop_symptoms=drop_symptoms,
+                drop=[DATE, DISEASE_OTHER],
+                filter_column=filter_column,
+                filter_column_value=filter_value,
+                filename=name)
+        
+    for model in models:
+        model.run_gridsearch(model, data, model.PARAMS)
+# XGBoost, 
+#do_gridsearch([LightGradientBoosting], "test", None, None, False, False)
+
+
+
 
 
 # tree.visualize_model("testrandomf")
@@ -132,7 +160,7 @@ Printer.print(time.perf_counter())
 
 # run_decision_tree(data)
 
-#   data.plot_densities().plot_correlation()
+# data.plot_correlation()
 # AnalysisModel.run_classificator(KNN, data).plot_densities()
 # AnalysisModel.run_classificator(DecisionTree, data).make_shap_values()
 # AnalysisModel.run_classificator(RandomForest, data).make_shap_values()
@@ -165,14 +193,18 @@ def test_with_filter(models, name, filter_column, filter_value, binary=False, dr
         Printer.print("\n\n" + str(model.__name__) + " " + str(filter_column) + " with " + str(filter_value) + " --- " + str(name))
         AnalysisModel.run_classificator(model, data, name, False).make_shap_values(False)
 
-full = [RandomForest, DecisionTree, XGBoost, LightGradientBoosting, ]
-binary = [RandomForest, DecisionTree, XGBoost, LightGradientBoosting, GradientBoosting]
+full = [KNN, DecisionTree, RandomForest, LightGradientBoosting, XGBoost]
+binary = [KNN, DecisionTree, RandomForest, GradientBoosting, LightGradientBoosting, XGBoost]
+
+# ###################
+# full = [XGBoost]
+# binary = [XGBoost]
 
 # test_with_filter(full, "normal", None, None, binary=False, drop_symptoms=False)
 # test_with_filter(full, "alguma-v", VACCINATION_ABOVE_0, True, binary=False, drop_symptoms=False)
 # test_with_filter(full, "nenhuma-v", VACCINATION_ABOVE_0, False, binary=False, drop_symptoms=False)
 # test_with_filter(full, "v-acima-30", VACCINATION_ABOVE_30, True, binary=False, drop_symptoms=False)
-# test_with_filter(full, "v-acima-45", VACCINATION_ABOVE_45, True, binary=False, drop_symptoms=False)
+# # test_with_filter(full, "v-acima-45", VACCINATION_ABOVE_45, True, binary=False, drop_symptoms=False)
 
 # # test_with_filter(full, "sem-sintomas-normal", None, None, binary=False, drop_symptoms=True)
 # # test_with_filter(full, "sem-sintomas-alguma-v", VACCINATION_ABOVE_0, True, binary=False, drop_symptoms=True)
@@ -184,13 +216,13 @@ binary = [RandomForest, DecisionTree, XGBoost, LightGradientBoosting, GradientBo
 # test_with_filter(binary, "binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=False)
 # test_with_filter(binary, "binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=False)
 # test_with_filter(binary, "binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=False)
-# test_with_filter(binary, "binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=False)
+# # test_with_filter(binary, "binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=False)
 
 # test_with_filter(binary, "sem-sintomas-binary-normal", None, None, binary=True, drop_symptoms=True)
 # test_with_filter(binary, "sem-sintomas-binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=True)
 # test_with_filter(binary, "sem-sintomas-binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=True)
 # test_with_filter(binary, "sem-sintomas-binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=True)
-# test_with_filter(binary, "sem-sintomas-binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=True)
+# # test_with_filter(binary, "sem-sintomas-binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=True)
 
 
 
@@ -211,10 +243,13 @@ def test_metrics(models, name, filter_column, filter_value, binary=False, drop_s
     
         if (key not in metrics):
             metrics[key] = []
-        for i in range(0, 10):
+        ################################################################################################################
+        for i in range(0, 2):
             data = Dataset(DecisionTree.CONFIG,
                             should_update_data=False,
-                            should_binary_severe=binary,
+                            # should_binary_severe=binary,
+                            should_death_only=binary, ###########################
+                            undersample_amount=1,
                             target=SEVERITY,
                             should_normalize=True,
                             should_categorize_age=True,
@@ -231,39 +266,42 @@ def test_metrics(models, name, filter_column, filter_value, binary=False, drop_s
             
     for key in metrics:
         try:
+            Printer.print("\n\n[RESULT]")
             Printer.print(key)
-            Printer.print("\n\tAccuracy avg: " + str(np.mean([metric.accuracy for metric in metrics[key]])))
-            Printer.print("\tAccuracy best: " + str(np.max([metric.accuracy for metric in metrics[key]])))
-            Printer.print("\tAccuracy worst: " + str(np.min([metric.accuracy for metric in metrics[key]])))
-            Printer.print("\tAccuracy std: " + str(np.std([metric.accuracy for metric in metrics[key]])))
-            Printer.print("\n\tPrecision avg: " + str(np.mean([metric.precision for metric in metrics[key]])))
-            Printer.print("\tPrecision best: " + str(np.max([metric.precision for metric in metrics[key]])))
-            Printer.print("\tPrecision worst: " + str(np.min([metric.precision for metric in metrics[key]])))
-            Printer.print("\tPrecision std: " + str(np.std([metric.precision for metric in metrics[key]])))
-            Printer.print("\tPrecision Macro avg: " + str(np.mean([metric.precision_macro for metric in metrics[key]])))
-            Printer.print("\tPrecision Macro best: " + str(np.max([metric.precision_macro for metric in metrics[key]])))
-            Printer.print("\tPrecision Macro worst: " + str(np.min([metric.precision_macro for metric in metrics[key]])))
-            Printer.print("\tPrecision Macro std: " + str(np.std([metric.precision_macro for metric in metrics[key]])))
-            Printer.print("\n\tRecall avg: " + str(np.mean([metric.recall for metric in metrics[key]])))
-            Printer.print("\tRecall best: " + str(np.max([metric.recall for metric in metrics[key]])))
-            Printer.print("\tRecall worst: " + str(np.min([metric.recall for metric in metrics[key]])))
-            Printer.print("\tRecall std: " + str(np.std([metric.recall for metric in metrics[key]])))
-            Printer.print("\tRecall Macro avg: " + str(np.mean([metric.recall_macro for metric in metrics[key]])))
-            Printer.print("\tRecall Macro best: " + str(np.max([metric.recall_macro for metric in metrics[key]])))
-            Printer.print("\tRecall Macro worst: " + str(np.min([metric.recall_macro for metric in metrics[key]])))
-            Printer.print("\tRecall Macro std: " + str(np.std([metric.recall_macro for metric in metrics[key]])))
-            Printer.print("\n\tF1 avg: " + str(np.mean([metric.f1 for metric in metrics[key]])))
-            Printer.print("\tF1 best: " + str(np.max([metric.f1 for metric in metrics[key]])))
-            Printer.print("\tF1 worst: " + str(np.min([metric.f1 for metric in metrics[key]])))
-            Printer.print("\tF1 std: " + str(np.std([metric.f1 for metric in metrics[key]])))
-            Printer.print("\tF1 Macro avg: " + str(np.mean([metric.f1_macro for metric in metrics[key]])))
-            Printer.print("\tF1 Macro best: " + str(np.max([metric.f1_macro for metric in metrics[key]])))
-            Printer.print("\tF1 Macro worst: " + str(np.min([metric.f1_macro for metric in metrics[key]])))
-            Printer.print("\tF1 Macro std: " + str(np.std([metric.f1_macro for metric in metrics[key]])))
-            Printer.print("\n\tROC avg: " + str(np.mean([metric.roc_auc for metric in metrics[key]])))
-            Printer.print("\tROC best: " + str(np.max([metric.roc_auc for metric in metrics[key]])))
-            Printer.print("\tROC worst: " + str(np.min([metric.roc_auc for metric in metrics[key]])))
-            Printer.print("\tROC std: " + str(np.std([metric.roc_auc for metric in metrics[key]])))
+            accavg = np.mean([metric.accuracy for metric in metrics[key]])
+            accstd = np.std([metric.accuracy for metric in metrics[key]])
+            precisionavg = np.mean([metric.precision for metric in metrics[key]])
+            precisionstd = np.std([metric.precision for metric in metrics[key]])
+            precisionmacroavg = np.mean([metric.precision_macro for metric in metrics[key]])
+            precisionmacrostd = np.std([metric.precision_macro for metric in metrics[key]])            
+            recallavg = np.mean([metric.recall for metric in metrics[key]])
+            recallstd = np.std([metric.recall for metric in metrics[key]])
+            recallmacroavg = np.mean([metric.recall_macro for metric in metrics[key]])
+            recallmacrostd = np.std([metric.recall_macro for metric in metrics[key]])
+            f1avg = np.mean([metric.f1 for metric in metrics[key]])
+            f1std = np.std([metric.f1 for metric in metrics[key]])
+            f1macroavg = np.mean([metric.f1_macro for metric in metrics[key]])
+            f1macrostd = np.std([metric.f1_macro for metric in metrics[key]])
+            rocavg = np.mean([metric.roc_auc for metric in metrics[key]])
+            rocstd = np.std([metric.roc_auc for metric in metrics[key]])
+            Printer.print("\n")
+            Printer.print("Accuracy: {:.4f}±{:.4f}".format(accavg, accstd))
+            Printer.print("Precision: {:.4f}±{:.4f}".format(precisionavg, precisionstd))
+            Printer.print("Precision Macro: {:.4f}±{:.4f}".format(precisionmacroavg, precisionmacrostd))
+            Printer.print("Recall: {:.4f}±{:.4f}".format(recallavg, recallstd))
+            Printer.print("Recall Macro: {:.4f}±{:.4f}".format(recallmacroavg, recallmacrostd))
+            Printer.print("F1: {:.4f}±{:.4f}".format(f1avg, f1std))
+            Printer.print("F1 Macro: {:.4f}±{:.4f}".format(f1macroavg, f1macrostd))
+            Printer.print("ROC: {:.4f}±{:.4f}".format(rocavg, rocstd))
+            Printer.print("\n")
+            Printer.print("{:.4f}±{:.4f}".format(accavg, accstd) + 
+                          "\t" + "{:.4f}±{:.4f}".format(precisionavg, precisionstd) + 
+                          "\t" + "{:.4f}±{:.4f}".format(precisionmacroavg, precisionmacrostd) + 
+                          "\t" + "{:.4f}±{:.4f}".format(recallavg, recallstd) + 
+                          "\t" + "{:.4f}±{:.4f}".format(recallmacroavg, recallmacrostd) + 
+                          "\t" + "{:.4f}±{:.4f}".format(f1avg, f1std) + 
+                          "\t" + "{:.4f}±{:.4f}".format(f1macroavg, f1macrostd) + 
+                          "\t" + "{:.4f}±{:.4f}".format(rocavg, rocstd))
             
             best_f1 = np.argmax([metric.f1_macro for metric in metrics[key]])
             Printer.print("\n\tBest F1 macro: " + str(metrics[key][best_f1].f1_macro))
@@ -282,10 +320,11 @@ def test_metrics(models, name, filter_column, filter_value, binary=False, drop_s
             Printer.print(e)
             Printer.print("\n\n")
         try:
-            # best_i = np.argmax([metric.precision_macro for metric in metrics[key]])
+            best_i = np.argmax([metric.precision_macro for metric in metrics[key]])
             # metrics[key][best_i].visualize_model()
-            # metrics[key][best_i].plot_roc_curve()
-            pass
+            metrics[key][best_i].plot_roc_curve()
+            metrics[key][best_i].make_shap_values(False)
+            # pass
         except Exception as e:
             Printer.print(e)
             Printer.print("\n\n")
@@ -293,32 +332,29 @@ def test_metrics(models, name, filter_column, filter_value, binary=False, drop_s
     Printer.print("\n\n\n")
 
 
-    
+# test_metrics(binary, "binary-normal", None, None, binary=True, drop_symptoms=False)
+# # test_metrics(binary, "binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=False)
+# test_metrics(binary, "binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=False)
+# test_metrics(binary, "binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=False)
+# # test_metrics(binary, "binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=False)
 
+# test_metrics(binary, "sem-sintomas-binary-normal", None, None, binary=True, drop_symptoms=True)
+# # test_metrics(binary, "sem-sintomas-binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=True)
+# test_metrics(binary, "sem-sintomas-binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=True)
+# test_metrics(binary, "sem-sintomas-binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=True)
+# # test_metrics(binary, "sem-sintomas-binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=True)
 
-test_metrics(full, "normal", None, None, binary=False, drop_symptoms=False)
-test_metrics(full, "alguma-v", VACCINATION_ABOVE_0, True, binary=False, drop_symptoms=False)
-test_metrics(full, "nenhuma-v", VACCINATION_ABOVE_0, False, binary=False, drop_symptoms=False)
-test_metrics(full, "v-acima-30", VACCINATION_ABOVE_30, True, binary=False, drop_symptoms=False)
-test_metrics(full, "v-acima-45", VACCINATION_ABOVE_45, True, binary=False, drop_symptoms=False)
+# test_metrics(full, "normal", None, None, binary=False, drop_symptoms=False)
+# # test_metrics(full, "alguma-v", VACCINATION_ABOVE_0, True, binary=False, drop_symptoms=False)
+# test_metrics(full, "nenhuma-v", VACCINATION_ABOVE_0, False, binary=False, drop_symptoms=False)
+# test_metrics(full, "v-acima-30", VACCINATION_ABOVE_30, True, binary=False, drop_symptoms=False)
+# # test_metrics(full, "v-acima-45", VACCINATION_ABOVE_45, True, binary=False, drop_symptoms=False)
 
 # test_metrics(full, "sem-sintomas-normal", None, None, binary=False, drop_symptoms=True)
 # test_metrics(full, "sem-sintomas-alguma-v", VACCINATION_ABOVE_0, True, binary=False, drop_symptoms=True)
 # test_metrics(full, "sem-sintomas-nenhuma-v", VACCINATION_ABOVE_0, False, binary=False, drop_symptoms=True)
 # test_metrics(full, "sem-sintomas-v-acima-30", VACCINATION_ABOVE_30, True, binary=False, drop_symptoms=True)
 # test_metrics(full, "sem-sintomas-v-acima-45", VACCINATION_ABOVE_45, True, binary=False, drop_symptoms=True)
-
-test_metrics(binary, "binary-normal", None, None, binary=True, drop_symptoms=False)
-test_metrics(binary, "binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=False)
-test_metrics(binary, "binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=False)
-test_metrics(binary, "binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=False)
-test_metrics(binary, "binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=False)
-
-test_metrics(binary, "sem-sintomas-binary-normal", None, None, binary=True, drop_symptoms=True)
-test_metrics(binary, "sem-sintomas-binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=True)
-test_metrics(binary, "sem-sintomas-binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=True)
-test_metrics(binary, "sem-sintomas-binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=True)
-test_metrics(binary, "sem-sintomas-binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=True)
 
 
 
@@ -328,6 +364,7 @@ def test_neural_with_filter(name, filter_column, filter_value, binary=False, dro
     data = Dataset(NeuralNetwork.CONFIG,
                 should_update_data=False,
                 should_binary_severe=binary,
+                undersample_amount=1,
                 target=SEVERITY,
                 should_normalize=True,
                 should_categorize_age=True,
@@ -346,12 +383,44 @@ def test_neural_with_filter(name, filter_column, filter_value, binary=False, dro
         filter_value = "NONE"
         
     Printer.print("\n\nNeural Network " + str(filter_column) + " with " + str(filter_value) + " --- " + str(name))
-    AnalysisModel.run_classificator(NeuralNetwork, data, name, False)
+    AnalysisModel.run_classificator(NeuralNetwork, data, name, True).save()
     
-# test_neural_with_filter("normal", None, None, binary=False, drop_symptoms=False)
-# test_neural_with_filter("sem-sintomas-normal", None, None, binary=False, drop_symptoms=True)
 # test_neural_with_filter("binary-normal", None, None, binary=True, drop_symptoms=False)
 # test_neural_with_filter("sem-sintomas-binary-normal", None, None, binary=True, drop_symptoms=True)
+# test_neural_with_filter("normal", None, None, binary=False, drop_symptoms=False)
+# test_neural_with_filter("sem-sintomas-normal", None, None, binary=False, drop_symptoms=True)
+
+
+def test_neural_grid(name, filter_column, filter_value, binary=False, drop_symptoms=False):
+    data = Dataset(NeuralNetwork.CONFIG,
+                should_update_data=False,
+                should_binary_severe=binary,
+                # undersample_amount=1,
+                target=SEVERITY,
+                should_normalize=True,
+                should_categorize_age=True,
+                should_categorize_gender=True,
+                should_categorize_severity=True,
+                should_categorize_booleans=True,
+                drop_diseases=False,
+                drop_symptoms=drop_symptoms,
+                drop=[DATE],
+                filter_column=filter_column,
+                filter_column_value=filter_value,
+                filename=name)
+    if (filter_column is None):
+        filter_column = "NONE"
+    if (filter_value is None):
+        filter_value = "NONE"
+        
+    Printer.print("\n\nNeural Network " + str(filter_column) + " with " + str(filter_value) + " --- " + str(name))
+    nn = NeuralNetwork(data.train, data.test, data.train_labels, data.test_labels, None, name)
+    nn.grid_search()
+    
+# test_neural_grid("binary-normal", None, None, binary=True, drop_symptoms=False)
+# test_neural_grid("sem-sintomas-binary-normal", None, None, binary=True, drop_symptoms=True)
+# test_neural_grid("normal", None, None, binary=False, drop_symptoms=False)
+# test_neural_grid("sem-sintomas-normal", None, None, binary=False, drop_symptoms=True)
 
 
 def plot_dataset_graphs(name, filter_column, filter_value, binary=False, drop_symptoms=False):
@@ -396,6 +465,61 @@ def plot_dataset_graphs(name, filter_column, filter_value, binary=False, drop_sy
 # plot_dataset_graphs("sem-sintomas-binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=True)
 # plot_dataset_graphs("sem-sintomas-binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=True)
 # plot_dataset_graphs("sem-sintomas-binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=True)
-# plot_dataset_graphs("sem-sintomas-binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=True)        
+# plot_dataset_graphs("sem-sintomas-binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=True)  
+
+
+def count_percentages(name, filter_column, filter_value, binary=False, drop_symptoms=False):
+    filter_column_str = filter_column
+    filter_value_str = filter_value
+    if (filter_column is None):
+        filter_column_str = "NONE"
+    if (filter_value is None):
+        filter_value_str = "NONE"
+
+    key = str(filter_column_str) + " with " + str(filter_value_str) + " --- " + str(name)
+
+    data = Dataset(DecisionTree.CONFIG,
+                    should_update_data=False,
+                    should_binary_severe=binary,
+                    target=SEVERITY,
+                    should_normalize=True,
+                    should_categorize_age=True,
+                    should_categorize_gender=True,
+                    should_categorize_severity=True,
+                    should_categorize_booleans=True,
+                    drop_diseases=False,
+                    drop_symptoms=drop_symptoms,
+                    drop=[DATE, DISEASE_OTHER],
+                    filter_column=filter_column,
+                    filter_column_value=filter_value,
+                    filename=name)
+    Printer.print(key)
+    data.print_percentages()
+    Printer.print("\n\n")
+
+# count_percentages("binary-normal", None, None, binary=True, drop_symptoms=False)
+# # count_percentages("binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=False)
+# count_percentages("binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=False)
+# count_percentages("binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=False)
+# # count_percentages("binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=False)
+
+# count_percentages("sem-sintomas-binary-normal", None, None, binary=True, drop_symptoms=True)
+# # count_percentages("sem-sintomas-binary-alguma-v", VACCINATION_ABOVE_0, True, binary=True, drop_symptoms=True)
+# count_percentages("sem-sintomas-binary-nenhuma-v", VACCINATION_ABOVE_0, False, binary=True, drop_symptoms=True)
+# count_percentages("sem-sintomas-binary-v-acima-30", VACCINATION_ABOVE_30, True, binary=True, drop_symptoms=True)
+# # count_percentages("sem-sintomas-binary-v-acima-45", VACCINATION_ABOVE_45, True, binary=True, drop_symptoms=True)
+
+# count_percentages("normal", None, None, binary=False, drop_symptoms=False)
+# # count_percentages("alguma-v", VACCINATION_ABOVE_0, True, binary=False, drop_symptoms=False)
+# count_percentages("nenhuma-v", VACCINATION_ABOVE_0, False, binary=False, drop_symptoms=False)
+# count_percentages("v-acima-30", VACCINATION_ABOVE_30, True, binary=False, drop_symptoms=False)
+# # count_percentages("v-acima-45", VACCINATION_ABOVE_45, True, binary=False, drop_symptoms=False)
+
+# count_percentages("sem-sintomas-normal", None, None, binary=False, drop_symptoms=True)
+# count_percentages("sem-sintomas-alguma-v", VACCINATION_ABOVE_0, True, binary=False, drop_symptoms=True)
+# count_percentages("sem-sintomas-nenhuma-v", VACCINATION_ABOVE_0, False, binary=False, drop_symptoms=True)
+# count_percentages("sem-sintomas-v-acima-30", VACCINATION_ABOVE_30, True, binary=False, drop_symptoms=True)
+# count_percentages("sem-sintomas-v-acima-45", VACCINATION_ABOVE_45, True, binary=False, drop_symptoms=True)
+
 
 Printer.print("----------------------------------------------------\n\n\n\n")

@@ -14,7 +14,7 @@ from dataset.cases import TRAIN_TO_TEST_RATIO
 from dataset.cases_mild import DatasetMild
 from dataset.cases_severe import DatasetSevere
 from dataset.vaccination import DatasetVaccination
-from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity, make_binary_mild_severe
+from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity, make_binary_mild_severe, make_binary_death
 from dataset.normalizer import vaccination_thermometer_normalization, normalize_min_max, one_hot_encoding
 
 from printer import Printer
@@ -26,6 +26,7 @@ class Dataset(DatasetBase):
                  config=None,
                  should_update_data=True,
                  should_binary_severe=False,
+                 should_death_only=False,
                  target=None,
                  oversample_amount=None,
                  undersample_amount=None,
@@ -46,6 +47,7 @@ class Dataset(DatasetBase):
         self.should_categorize_gender = should_categorize_gender
         self.should_categorize_age = should_categorize_age
         self.should_categorize_severity = should_categorize_severity
+        self.should_death_only = should_death_only
         self.should_categorize_booleans = should_categorize_booleans
         self.should_normalize = should_normalize
         self.drop_symptoms = drop_symptoms
@@ -87,6 +89,8 @@ class Dataset(DatasetBase):
             self.normalize_columns(should_categorize_booleans)
         if (self.should_binary_severe):
             make_binary_mild_severe(self.df)
+        elif (self.should_death_only):
+            make_binary_death(self.df)
         
         # Remove data according to filters
         self.filter_data(filter_column, filter_column_value)
@@ -127,6 +131,8 @@ class Dataset(DatasetBase):
         count_not_mild = self.train[self.train[SEVERITY] != 0].shape[0]
         rus = RandomUnderSampler(sampling_strategy={0: amount * count_not_mild})
         self.train, self.train_labels = rus.fit_resample(self.train, self.train_labels)
+        count_not_mild = self.test[self.test[SEVERITY] != 0].shape[0]
+        rus = RandomUnderSampler(sampling_strategy={0: amount * count_not_mild})
         self.test, self.test_labels = rus.fit_resample(self.test, self.test_labels)
     
     def oversample(self, amount):
@@ -171,7 +177,7 @@ class Dataset(DatasetBase):
         if (not should_update_data):
             try:
                 self.df = pd.read_csv(DATA_PATH, sep=";")
-                Printer.print(DATA_PATH + " loaded")
+                # Printer.print(DATA_PATH + " loaded")
             except FileNotFoundError as e:
                 Printer.print("No pre-processed data found")
                 self.df = pd.DataFrame()   
@@ -192,12 +198,24 @@ class Dataset(DatasetBase):
         Printer.print(str(time.perf_counter()) + ": Appending vaccination percentage...")
         self.df = self.vaccination.append_vaccination_percentage(self.df)
         Printer.print(str(time.perf_counter()) + ": Done with " + str(time.perf_counter() - start))
-        self.df.to_csv("./dataset/data/fulldata.csv", sep=";", index=False)        
+        self.df.to_csv("./dataset/data/fulldata.csv", sep=";", index=False)
+        
+    def print_percentages(self):
+        for column in self.df_with_target.columns:
+            self.print_column_percentage_count(column)            
+    
+    def print_column_percentage_count(self, column):
+        Printer.print(column)
+        for value in self.df_with_target[column].unique():
+            count = self.df_with_target[self.df_with_target[column] == value].shape[0]
+            percentage = count / self.df_with_target.shape[0]
+            Printer.print(str(value) + ": " + str(count) + " (" + str(percentage) + ")")
+        Printer.print("")
         
     def plot_correlation(self, filename=""):
-        rcParams['figure.figsize'] = 30, 30
+        rcParams['figure.figsize'] = 22, 22
         fig = plt.figure()
-        sns.heatmap(self.df_with_target.corr(), annot=True, fmt=".2f")
+        sns.heatmap(self.df_with_target.corr(), annot=True, fmt=".1f")
         # plt.show()
         fig.savefig(self.filename + filename + 'correlation.png')
         return self

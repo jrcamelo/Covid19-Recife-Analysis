@@ -20,6 +20,14 @@ class LightGradientBoosting(AnalysisModel):
         "drop": [DATE]
     }
     
+    PARAMS = {
+        "n_estimators": [100,],
+        "learning_rate": [0.06, 0.1, 0.4],
+        "max_depth": [5],
+        "subsample": [None, 0.1],
+        "random_state": [0]
+    }
+    
     def __init__(self, train, test, train_labels, test_labels, classes=None, filename=""):
         super().__init__(train, test, train_labels, test_labels, classes, filename)
         self.model = LGBMClassifier(n_estimators=100, 

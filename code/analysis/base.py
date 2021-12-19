@@ -9,6 +9,7 @@ from pylab import rcParams
 from IPython.display import SVG,display
 from sklearn import metrics
 from dtreeviz.trees import dtreeviz
+from sklearn.model_selection import GridSearchCV
 
 from column_names import *
 from printer import Printer
@@ -92,6 +93,7 @@ class AnalysisModel:
         plt.title('Receiver operating characteristic example')
         plt.legend(loc="lower right")
         plt.savefig(self.make_filename("roc-curve") + ".png", format='png')
+        plt.clf()
         return self
         
     def visualize_model(self, filename=None):
@@ -123,11 +125,11 @@ class AnalysisModel:
         plt.clf()
         
           
-    def make_shap_values(self, show=True):
+    def make_shap_values(self, show=True, approximate=False):
         if (self.binary_only and self.get_classes_count() > 2):
             Printer.print("SHAP only supported for binary classification for " + self.type)
             return
-        explainer = shap.TreeExplainer(self.model)
+        explainer = shap.TreeExplainer(self.model, approximate=approximate)
         shap_values = explainer.shap_values(self.train)
         Printer.print("SHAP values BAR for " + self.type + " " + self.filename)
         shap.summary_plot(shap_values, self.train, plot_type="bar", show=show, feature_names=self.get_beautified_column_names(), class_names=self.get_beautified_classes())
@@ -140,11 +142,11 @@ class AnalysisModel:
             try:
                 Printer.print("SHAP values PLOT " + str(i) + " for " + self.type + " " + self.filename)
                 shap.summary_plot(shap_values[i], self.train, plot_type="dot", show=show, feature_names=self.get_beautified_column_names(), class_names=self.get_beautified_classes())
-                #shap.save_html(file, self.make_filename("SHAP-Plot-" + str(i)) + ".html")
                 plt.savefig(self.make_filename("SHAP-Plot-" + str(i)) + ".png", format='png', dpi=1000, bbox_inches='tight')
                 plt.clf()
-            except AssertionError:
+            except AssertionError as e:
                 Printer.print("\n\nERROR at SHAP values PLOT " + str(i) + " for " + self.type + " " + self.filename + "\n\n")
+                print(e)
                                 
         return shap_values
       
@@ -201,4 +203,13 @@ class AnalysisModel:
         
         best.visualize_model(best.make_filename("best_of_" + str(n) + "-" + best.accuracy + "acc"))
         return best
-
+    
+    @staticmethod
+    def run_gridsearch(clazz, data, hyperparameters):
+        classificator = AnalysisModel.run_classificator(clazz, data, None, False, False)
+        Printer.print(classificator.type)
+        grid = GridSearchCV(classificator.model, hyperparameters) #, scoring='f1_macro'
+        grid_result = grid.fit(data.train, data.train_labels)
+        Printer.print("Best Parameters: " + str(grid_result.best_params_))
+        Printer.print("Best Accuracy: " + str(grid_result.best_score_))
+        Printer.print("\n\n\n")

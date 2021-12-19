@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from keras.models import Sequential, model_from_json
 from sklearn.model_selection import cross_val_score, KFold
 from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import GridSearchCV
 from keras.layers import Dense
 from sklearn import metrics
 
@@ -40,12 +41,16 @@ class NeuralNetwork(AnalysisModel):
         super().__init__(train, test, train_labels, test_labels, classes, filename)
         self.cfg = model_config if model_config is not None else NeuralNetworkConfig(self.train, self.train_labels)
         self.type = "NeuralNetwork"
+        # self.create_model()
+        self.model = KerasClassifier(build_fn=self.create_model, epochs=self.cfg.epochs, batch_size=self.cfg.batch_size, verbose=0)
+
+    def create_model(self):
         self.model = Sequential()
         self.add_input_layer()
         self.add_second_layer()
         self.compile_model()
-        # self.model = KerasClassifier(build_fn=self.model, epochs=self.cfg.epochs, batch_size=self.cfg.batch_size, verbose=0)
-
+        return self.model
+    
     def add_input_layer(self):
         dense = Dense(self.cfg.input_layer_output_dim,
                       kernel_initializer=self.cfg.kernel_initializer,
@@ -135,6 +140,26 @@ class NeuralNetwork(AnalysisModel):
             Printer.print("F1: " + self.f1)
         Printer.print("")
         return self
+    
+    def grid_search(self):
+        # Create hyperparameter space
+        epoch_values = [10, 25, 50, 100, 150, 200]
+        batches = [10, 20, 30, 40, 50, 100, 1000]
+        optimizers = ['rmsprop', 'adam', 'SGD']
+        neurons = [16, 32, 64, 128, 256]
+        lr_values = [0.001, 0.01, 0.1, 0.2, 0.3]
+
+        # Create hyperparameter options
+        hyperparameters = dict(batch_size=batches)
+
+        grid = GridSearchCV(self.model, hyperparameters, cv=5)
+        grid_result = grid.fit(self.train, self.train_labels)
+        Printer.print("Best Parameters: " + str(grid_result.best_params_))
+        Printer.print("Best Accuracy: " + str(grid_result.best_score_))
+        return self
+    
+    def visualize_model(self, filename=None):
+        return self
         
 
         
@@ -162,13 +187,13 @@ class NeuralNetworkConfig:
     input_layer_output_dim: int = 64
     second_layer_output_dim: int = 64
     output_layer_output_dim: int = 3
-    kernel_initializer = "uniform"
-    activation = "relu"
-    output_activation = "softmax"
-    optimizer = "adam"
+    kernel_initializer = 'glorot_uniform'
+    activation = 'relu'
+    output_activation = 'softmax'
+    optimizer = 'adam'
     optimizer_metrics = ["accuracy", "mse", "mae"]
     batch_size = 32
-    epochs = 1 # 100
+    epochs = 200 # 100
     
     # Dynamic values
     input_columns = 1
@@ -177,6 +202,8 @@ class NeuralNetworkConfig:
     def __init__(self, data, target) -> None:
         self.input_columns = len(data.columns)
         Printer.print(target.value_counts())
+        self.output_layer_output_dim: int = 2
         if (len(target.value_counts()) > 2):
+            self.output_layer_output_dim: int = 3
             self.optimizer_loss = "sparse_categorical_crossentropy"
             self.output_layer_output_dim = len(target.value_counts()) - 1

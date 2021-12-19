@@ -39,3 +39,9 @@ def categorize_severity(df):
 def make_binary_mild_severe(df):
     df.loc[df[SEVERITY] != 0, SEVERITY] = 1
     df[SEVERITY] = df[SEVERITY].astype(int)
+
+def make_binary_death(df):
+    df.loc[df[SEVERITY] != 2, SEVERITY] = 0
+    df.loc[df[SEVERITY] == 2, SEVERITY] = 1
+    df[SEVERITY] = df[SEVERITY].astype(int)
+    

@@ -33,7 +33,7 @@ class RandomForest(AnalysisModel):
                                             min_samples_leaf=0.00001,  #0.00001, #
                                             #min_samples_split=2,
                                             min_weight_fraction_leaf=0.0, 
-                                            n_estimators=100,  #100
+                                            n_estimators=10,  #100
                                             n_jobs=-1,
                                             oob_score=True, 
                                             random_state=None, 
@@ -51,6 +51,10 @@ class RandomForest(AnalysisModel):
                        feature_names=self.get_beautified_column_names(),
                        class_names=self.get_beautified_classes())
         viz.save(filename + ".svg")
+        
+    def make_shap_values(self, show=True):
+        Printer.print("Skipping Random Forest SHAP values")
+        return self
     
 def get_best_params(data):
     forest = RandomForest(data.train, data.test, data.train_labels, data.test_labels, ["LEVE", "GRAVE", "OBITO", "ASSINTOMATICO"])
