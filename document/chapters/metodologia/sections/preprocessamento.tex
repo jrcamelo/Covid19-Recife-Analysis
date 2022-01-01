@@ -1,0 +1,99 @@
+\section{Pré-processamento de Dados}
+\label{sec:preprocessamento}
+
+Observando os conjuntos de dados, foi possível perceber inconstância na apresentação dos dados, assim como uma grande quantidade de dados vazios.
+Devido a esses fatores, considerou-se necessário aplicar alguns procedimentos de pré-processamento para que os dados fossem adequadamente tratados.
+Também foi identificada a necessidade de mesclar os diferentes conjuntos de dados para possibilitar seu uso nos algoritmos de classificação.
+
+\subsection{Formatação}
+\label{subsec:formatação}
+
+Foi observado que muitos dados textuais similares tinham diferenças de caixa, acentuação e pontuação, dificultando a interpretação dos dados pelos algoritmos de classificação.
+Portanto, todos os dados textuais foram convertidos para caixa alta, assim como normalizados para o padrão unicode NFKD (\textit{Normalization Form Kompatible Decomposition}), e então decodificado para UTF-8 (\textit{UCS Transformation Format 8}), removendo assim caracteres especiais e acentuação.
+Também foram removidos pontuação e espaçamento extra, no começo, meio ou fim dos textos.
+Deste modo, os dados se tornaram mais uniformes e interpretáveis.
+
+\subsection{Filtragem}
+\label{subsec:filtragem}
+
+\subsubsection{Colunas dos Casos Leves e Graves}
+\label{subsubsec:casos-filtragem}
+
+Os conjuntos de dados de Casos Leves e Casos Graves contavam com uma quantidade considerável de dados vazios, sendo lidados de acordo com a relevância da coluna.
+Uma grande quantidade de células possuía textos como "IGNORADO", "IGN", "NENHUMA"\ ou "0", que foram então convertidos para dados nulos.
+
+As colunas \textbf{Raça}, \textbf{Etnia}, \textbf{Bairro}, \textbf{Município}, \textbf{Distrito Sanitário}, \textbf{Área de Atuação Profissional} e \textbf{Militar} tiveram entre 10\% e 90\% de dados nulos cada uma, sendo decidido remover essas colunas do conjunto de dados final.
+As colunas \textbf{Evolução do Caso}, \textbf{Tratamento Domiciliar} e \textbf{Classificação Final} não foram consideradas relevantes por sua inconsistência e quantidade de dados nulos, 6,1\%, 16,6\% e 95\% respectivamente, portanto também foram removidas do conjunto de dados final.
+A coluna \textbf{Data de Início de Sintomas} possuía cerca de 2,5\% de dados nulos, enquanto a \textbf{Data de Notificação} estava sempre presente, portanto, foi preferida como data dos casos.
+Porém, colunas como \textbf{Idade} e \textbf{Sexo}, dados demográficos básicos, tiveram somente cerca de 0,08\% de dados nulos, decidindo-se remover as linhas com dados nulos.
+O conjunto de dados de \textbf{Casos Graves} possuía duas colunas a mais que o de \textbf{Casos Leves}, sendo elas \textbf{Outros Sintomas} e \textbf{Outras Doenças Preexistentes}, que foram mesclados com suas respectivas colunas, \textbf{Sintomas} e \textbf{Doenças Preexistentes}.
+
+
+Restando assim, nos conjuntos de dados de \textbf{Casos Leves} e \textbf{Graves}, as colunas de \textbf{Data de Notificação}, \textbf{Sexo}, \textbf{Idade}, \textbf{Sintomas}, \textbf{Doenças Preexistentes}, \textbf{Data de Óbito} e \textbf{Categoria de Profissional de Saúde}.
+
+\subsubsection{Colunas da Vacinação}
+\label{subsubsec:vacinacao-filtragem}
+
+Devido à natureza da vacina, foi decidido ignorar a coluna de \textbf{Primeira Dose}, pois a mesma não é considerada eficaz tendo somente uma dosagem parcial.
+Considerando isto, a contagem de \textbf{Segundas Doses} e \textbf{Doses Únicas} então serviram como indicador de população devidamente vacinada. 
+Devido à redundância, as colunas \textbf{Dose de Reforço} e \textbf{Total de Doses no Dia} foram removidas.
+
+
+\subsection{Interpretação}
+\label{subsec:interpretando}
+
+Tendo os conjuntos de dados formatados e filtrados, foi possível interpretar os dados de forma a trazer valor para a análise.
+
+A coluna de \textbf{Severidade} então foi criada de acordo com a classificação da Secretaria de Saúde, para indicar a gravidade do caso. O conjunto de dados de \textbf{Casos Leves} resultou em severidade LEVE, enquanto os casos no conjunto de dados de \textbf{Casos Graves} resultou em severidade GRAVE. Além disso, de acordo com sua presença, se observou possível transformar a coluna de \textbf{Data de Óbito} em uma classificação de \textbf{Severidade}: ÓBITO.
+
+A \textbf{Categoria de Profissional de Saúde} foi simplificada, sendo Falsa caso nula, e Verdadeira caso contrário, indicando se o paciente era um profissional de saúde. \textbf{Sintomas} e \textbf{Doenças Preexistentes} estavam em extenso, com separadores não uniforme, muitos erros de digitação e nomenclaturas diferentes, portanto necessitaram esforço específico, descrito a seguir.
+
+\subsubsection{Sintomas}
+\label{subsubsec:interpretando-sintomas}
+
+A coluna \textbf{Sintomas} possuía separadores diversos, como ",", "E", "+"\ e "/", que foram usados para separar os sintomas em listas de texto. O texto foi limpo por espaços e pontuação, tendo então os valores únicos contados e ordenados por frequência de ocorrência. Com base nessa contagem, foram percebidas as seguintes categorias de sintomas relevantes na tabela abaixo.
+
+\input{chapters/metodologia/tables/sintomas.tex}
+
+O maior número possível de variações de nomenclatura, forma de escrita e erros de digitação foram considerados para cada categoria, abrangendo-se ao máximo os sintomas mais comuns. Os outros sintomas com menor frequência e entradas que não eram sintomas totalizaram 174.143 ocorrências nos 604.315 casos totais. Cada categoria se tornou então uma coluna no conjunto de dados final com valor Verdadeiro caso estivesse presente nos sintomas do paciente, e Falso caso contrário.
+
+\subsubsection{Doenças Preexistentes}
+\label{subsubsec:interpretando-doencas}
+
+A coluna \textbf{Doenças Preexistentes} passou pelo mesmo processo dos sintomas, com ",", "E", "+", "/"\ e ";"\ como separadores, que foram usados para formar listas de textos e valores únicos. As seguintes categorias de doenças foram percebidas na tabela a seguir.
+
+\input{chapters/metodologia/tables/doencas.tex}
+
+O maior número possível de variações foi considerado para cada categoria, deixando um total de 15.709 doenças não categorizadas. Similar aos sintomas, cada categoria se tornou então uma coluna lógica no conjunto de dados final.
+
+\subsubsection{Interpretando a Vacinação}
+\label{subsubsec:interpretando-vacinacao}
+
+De modo a identificar possíveis impactos da vacinação em andamento nos fatores de risco e efeitos da doença, foi criada uma nova coluna no conjunto de dados final: \textbf{População Vacinada}.
+
+Este valor se deu por um cálculo utilizando os dados da \textbf{Data de Notificação} e o conjunto de dados de Vacinação, considerando a população estimada do Recife em 2021 como 1.661.017 pessoas \cite{populacaorecife}. Sendo assim, foi encontrado um valor aproximado da porcentagem da população vacinada para cada dia, relacionando-o a cada caso como um valor de \textbf{População Vacinada}, que representa o progresso da vacinação no dia do caso.
+
+\subsection{Categorização}
+\label{subsec:categorizacao}
+
+De modo a facilitar o processo dos algoritmos de classificação, certos dados extensos foram categorizados em menor número.
+
+A idade foi agrupada em 9 grupos, com espaçamento de 10 anos entre elas, sendo 0 todas as idades abaixo de 10 anos, e 8 todas aquelas idades acima de 80 anos. Esse valor categorizado tomou o lugar do valor extenso na coluna de Idade.
+
+\input{chapters/metodologia/tables/idades.tex}
+
+De maneira similar, o valor extenso da coluna de \textbf{População Vacinada} foi categorizado em 6 grupos, com espaçamento de 15\% entre cada um. Foi utilizada a técnica de \textit{One-Hot Encoding} para transformar os valores em colunas lógicas em formato de termômetro \cite{onehot}.
+
+\input{chapters/metodologia/tables/vacinacao.tex}
+
+
+\subsection{Normalização}
+\label{subsec:normalizacao}
+
+Por fim, de forma que possam ser melhores utilizados como valores de entrada nos algoritmos de classificação, todos os valores foram normalizados em uma escala de 0 a 1. Os dados lógicos tendo Verdadeiro como 1 e Falso como 0 e os dados numéricos tendo 0 como seu valor mínimo e 1 como seu valor máximo. \textbf{Severidade}, a única coluna textual restante, foi transformada em números: 0 para LEVE, 1 para GRAVE e 2 para ÓBITO, quando presente.
+
+\subsection{Conjunto de Dados Final}
+\label{subsec:conjunto-dados-final}
+
+O conjunto de dados resultante do pré-processamento é composto de 40 colunas, sendo \textbf{Severidade}, \textbf{Sexo}, \textbf{Idade} e \textbf{Profissional de Saúde}, seguidas de 20 colunas de sintomas, 11 colunas de doenças preexistentes e 5 colunas de vacinação.
+Esse conjunto de dados foi salvo em um arquivo CSV, que pode ser utilizado como base para os algoritmos de classificação.

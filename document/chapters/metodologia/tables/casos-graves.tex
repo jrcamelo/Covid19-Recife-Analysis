@@ -1,0 +1,27 @@
+\begin{table}[H]
+  \centering
+  \begin{longtable}{lll}
+  \hline
+  \multicolumn{1}{|l|}{\textbf{Coluna}} & \multicolumn{1}{l|}{\textbf{Tipo}} & \multicolumn{1}{l|}{\textbf{Descrição}}                                                                                    \\ \hline
+  data\_notificacao                     & data                          & Data da notificação do caso no Notifica PE.                                                                                \\
+  sexo                                  & texto                               & Sexo declarado pelo paciente.                                                                                              \\
+  idade                                 & texto                               & Idade em anos.                                                                                                             \\
+  data\_inicio\_sintomas                & data                          & Data de início dos sintomas do caso no \\ & & Notifica PE.                                                                        \\
+  raca                                  & texto                               & Raça/cor declarada pelo paciente.                                                                                          \\
+  etnia                                 & texto                               & Tipo da etnia se a categoria Raça/Cor \\ & & for preenchida com “Indígena"                                                        \\
+  sintomas\_apresentados                & texto                               & Sintomas apresentados pelo paciente.                                                                                       \\
+  outros\_sintomas                      & texto                               & Demais sintomas apresentados pelo usuário.                                                                                 \\
+  doencas\_preexistentes                & texto                               & Comorbidades prévias informadas pelo \\ & & paciente.                                                                             \\
+  outras\_doencas\_preexistentes        & texto                               & Demais comorbidades prévias informadas \\ & & pelo paciente.                                                                      \\
+  evolucao                              & texto                               & Evolução clínica do paciente (Internado \\ & & leito de isolamento, Internado em UTI, \\ & & Isolamento domiciliar, Óbito e Recuperado) \\
+  classificacao\_final                  & texto                               & Classificação do caso de acordo com \\ & & critérios laboratoriais (Confirmado, \\ & & Descartado e Em Análise)                         \\
+  data\_obito                           & data                          & Data do óbito do paciente.                                                                                                 \\
+  profissional\_saude                   & texto                               & Área de atuação médica do paciente.                                                                                        \\
+  categoria\_profissional               & texto                               & Área de atuação profissional do paciente.                                                                                  \\
+  municipio\_notificacao                & texto                               & Munícipio da notificação.                                                                                                  \\
+  bairro                                & texto                               & Bairro da notificação.                                                                                                     \\
+  ds                                    & texto                               & Distrito Sanitário.                                                                                                       
+\end{longtable}
+\caption{Colunas do conjunto de dados de casos graves}
+\label{tbl:tabela-casosgraves}  
+\end{table}

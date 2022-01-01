@@ -1,0 +1,10 @@
+\subsection{Cálculo de Métricas de Desempenho}
+\label{subsec:calculo-metricas}
+
+A etapa de cálculo de métricas de desempenho recebe a lista de previsões dos algoritmos e os valores reais do conjunto de dados, que são usados para gerar diversas métricas. Cada uma das métricas é discutida na seção \ref{sec:metricas}
+
+De modo a acomodar as diferenças entre cada execução, as etapas de treinamento e teste são executadas 20 vezes para cada coleta de métricas, com conjuntos de treinamento e teste aleatórios em cada execução. O máximo, a média e o desvio padrão das métricas são calculados para cada algoritmo, e servem como referência na otimização e resultados do projeto. Este método é conhecido como \textit{k-fold cross-validation}, e permite avaliar os algoritmos de classificação de maneira mais consistente \cite{kfold}.
+
+
+
+

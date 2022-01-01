@@ -1,0 +1,85 @@
+\section{Comparação entre Algoritmos}
+\label{sec:comparacao-algoritmos}
+
+Após uma certa quantidade de iterações do processo de otimização de parâmetros como especificado na subseção \ref{subsec:otimizacao}, os modelos gerados pelos algoritmos de classificação \textit{k-Nearest Neighbors} (kNN), \textit{Decision Tree} (DT), \textit{Random Forest} (RF), \textit{Gradient Boosting} (GB), \textit{Light Gradient Boosting} (LGB) e \textit{XGBoost} (XGB) %e \textit{Neural Network} (NN)% 
+na etapa de treinamento foram aplicados no conjunto de dados de teste.
+
+Cada algoritmo foi executado 20 vezes, aleatorizando o conjunto de dados em cada uma delas, coletando então suas métricas de acurácia, precisão, sensibilidade, \textit{F1-Score} e \textit{AUC-ROC} para cada execução. 
+Como discutido na subseção \ref{subsec:calculo-metricas}, as métricas macro representam a média dos resultados de cada classe, que neste conjunto de dados são casos leves e casos graves. 
+A média e desvio padrão de cada métrica foi calculada, e as métricas consideradas relevantes para comparação se encontram na tabela \ref{tab:comparacao-algoritmos-normal}, onde o maior valor para cada uma está representado em negrito.
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+  \cline{2-6}
+  \textbf{}                          & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+  \multicolumn{1}{|l|}{\textbf{kNN}} & 0,9790±0,0001          & 0,9475±0,0007           & 0,8228±0,0020          & 0,8739±0,0011           & 0,8228±0,0020          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{DT}}  & 0,9767±0,0015          & 0,9558±0,0133           & 0,7913±0,0094          & 0,8534±0,0101           & 0,7913±0,0094          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{RF}}  & 0,9828±0,0001          & \textbf{0,9795±0,0006}  & 0,8395±0,0012          & 0,8962±0,0009           & 0,8395±0,0012          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{GB}}  & 0,9835±0,0002          & 0,9727±0,0022           & 0,8513±0,0015          & 0,9020±0,0012           & 0,8513±0,0015          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{LGB}} & 0,9835±0,0002          & 0,9748±0,0016           & 0,8498±0,0015          & 0,9018±0,0001           & 0,8498±0,0015          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{XGB}} & \textbf{0,9838±0,0003} & 0,9707±0,0010           & \textbf{0,8571±0,0031} & \textbf{0,9052±0,0022}  & \textbf{0,8571±0,0031} \\ \hline 
+\end{tabular}
+\caption{Médias de métricas de algoritmos de classificação na etapa de teste}
+\label{tab:comparacao-algoritmos-normal}
+\end{table}
+
+Levando em consideração a métrica \textit{AUC-ROC} como métrica de avaliação, é possível observar que, enquanto todos os algoritmos alcançaram um valor próximo ou acima de 80\%, o algoritmo \textit{XGBoost} obteve o melhor desempenho, bem próximo dos outros algoritmos de \textit{Gradient Boosting}. O \textit{F1-Score Macro} também é um indicador de desempenho satisfatório, e todos os algoritmos alcançaram valores acima de 85\%, com os algoritmos baseados em \textit{Gradient Boosting} alcançando valores acima de 90\%. 
+
+Embora a Precisão Macro tenha alcançado valores altos, até acima de 97\%, a Sensibilidade Macro ficou sempre abaixo dos 90\%, devido a uma quantidade considerável de falsos negativos, casos graves classificados como leves. É possível observar este resultado na tabela \ref{tab:matriz-confusao-xgboost}, que mostra a matriz de confusão do \textit{XGBoost} com melhor \textit{F1-Score} das 20 execuções, 90,97\%.
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \centering
+  \begin{tabular}{l|c|c|}
+    \cline{2-3}
+    \textbf{}                         & \multicolumn{1}{l|}{\textbf{Predição: LEVE}} & \multicolumn{1}{l|}{\textbf{Predição: GRAVE}} \\ \hline
+    \multicolumn{1}{|l|}{\textbf{Real: LEVE}}  & 114511                                       & 205 (0,18\%)                                           \\ \hline
+    \multicolumn{1}{|l|}{\textbf{Real: GRAVE}} & 1664 (27,07\%)                                         & 4483                                          \\ \hline   
+  \end{tabular}
+  \caption{Matriz de confusão de uma execução do \textit{XGBoost}}
+  \label{tab:matriz-confusao-xgboost}
+\end{table}
+
+Tomando a tabela \ref{tab:matriz-confusao-xgboost} como exemplo, somente 0,18\% de casos leves foram preditos como graves, um número ínfimo de falsos negativos. Isso significa que existe uma confiabilidade satisfatória nos casos preditos como graves. 
+
+Contudo, 27\% dos casos graves foram erroneamente preditos como leves, significando que cerca de 1/4 dos casos graves não foram percebidos pelo algoritmo. Este fenômeno se mostrou presente em todos os algoritmos analisados, sendo a causa da diminuição da Sensibilidade Macro observada na tabela \ref{tab:comparacao-algoritmos-normal}.
+
+Este problema ocorre devido ao desbalanceamento do conjunto de dados, onde existem 20x mais casos leves que graves. Portanto, durante a etapa de otimização de parâmetros descrita na subseção \ref{subsec:otimizacao}, técnicas de balanceamento de dados foram utilizadas. O processo de balanceamento consiste em igualar a quantidade de classes no conjunto de dados, excluindo registros aleatórios da classe mais comum. Os resultados se encontram na tabela \ref{tab:comparacao-algoritmos-undersample}.
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+  \cline{2-6}
+  \textbf{}                          & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+  \multicolumn{1}{|l|}{\textbf{kNN}} & 0,9047±0,0027          & 0,9050±0,0026           & 0,9047±0,0027          & 0,9047±0,0027           & 0,9047±0,0027          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{DT}}  & 0,8896±0,0102          & 0,8905±0,0096           & 0,8896±0,0102          & 0,8895±0,0103           & 0,8896±0,0102          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{RF}}  & 0,9150±0,0019          & 0,9158±0,0020           & 0,9150±0,0019          & 0,9150±0,0019           & 0,9150±0,0019          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{GB}}  & 0,9234±0,0022          & 0,9238±0,0022           & 0,9234±0,0022          & 0,9234±0,0022           & 0,9234±0,0022          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{LGB}} & 0,9233±0,0009          & 0,9239±0,0009           & 0,9233±0,0009          & 0,9233±0,0009           & 0,9233±0,0009          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{XGB}} & \textbf{0,9243±0,0016} & \textbf{0,9249±0,0013}  & \textbf{0,9243±0,0016} & \textbf{0,9242±0,0016}  & \textbf{0,9243±0,0016} \\ \hline
+\end{tabular}
+\caption{Médias de métricas de algoritmos de classificação na etapa de testes com classes balanceadas}
+\label{tab:comparacao-algoritmos-undersample}
+\end{table}
+
+A Sensibilidade Macro teve um aumento considerável, chegando acima dos 90\% na maioria dos algoritmos, enquanto a Precisão Macro sofreu uma queda. O \textit{F1-Score} consequentemente teve um aumento, por ser a média harmônica dessas medidas. A acurácia caiu significativamente, não mais inflada pelos casos leves, enquanto o valor \textit{AUC-ROC} cresceu proporcionalmente. Demonstram-se essas diferenças mais detalhadamente na tabela \ref{tab:matriz-confusao-xgboost-undersample}, uma matriz de confusão do XGBoost com \textit{F1-Score} de 92,67\%.
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \centering
+  \begin{tabular}{l|c|c|}
+    \cline{2-3}
+    \textbf{}                         & \multicolumn{1}{l|}{\textbf{Predição: LEVE}} & \multicolumn{1}{l|}{\textbf{Predição: GRAVE}} \\ \hline
+    \multicolumn{1}{|l|}{\textbf{Real: LEVE}}  & 5770                                       & 377 (6,13\%)                                           \\ \hline
+    \multicolumn{1}{|l|}{\textbf{Real: GRAVE}} & 524 (8,52\%)                                         & 5623                                          \\ \hline   
+  \end{tabular}
+  \caption{Matriz de confusão de uma execução do \textit{XGBoost} com classes balanceadas}
+  \label{tab:matriz-confusao-xgboost-undersample}
+\end{table}
+
+Neste cenário, a diferença entre a proporção de falsos positivos e falsos negativos se equilibra, ainda que se mantenha maior nos casos graves. Existe uma chance de que casos leves sejam preditos como graves, mas a chance de que casos graves sejam preditos como leves é muito menor que anteriormente. Considerando a natureza médica do problema, uma menor taxa de casos graves perdidos pode ser considerada uma melhoria significativa, mesmo que exista um aumento na quantidade de alarmes falsos para casos leves \cite{medical-ai-measure}. Portanto, assimilando este julgamento ao aumento do valor \textit{AUC-ROC}, escolhido como métrica de desempenho, balancear o conjunto de dados por \textit{RandomUnderSampler} se evidencia como uma melhoria.

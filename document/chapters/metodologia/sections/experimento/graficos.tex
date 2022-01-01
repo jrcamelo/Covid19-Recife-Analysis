@@ -1,0 +1,17 @@
+\subsection{Geração de Gráficos}
+\label{subsec:geracao-graficos}
+
+Tendo um modelo do algoritmo de classificação satisfatório, foram gerados então diversos gráficos interpretáveis para a análise dos dados. Em especial os gráficos SHAP para entender a interpretação do modelo sobre o conjunto de dados na importância de cada variável \cite{shap}. 
+
+\begin{figure}[ht!]
+  \centering
+  \fcolorbox{white}{white}{\includegraphics[width=0.5\textwidth]{chapters/resultados/images/xgboost_normal_dot.png}}
+  \caption{\textmd{Gráfico SHAP de interpretação de relevância de atributos.}}
+  \legend{Fonte: \textit{SHAP documentation}}
+  \label{fig:shap-exemplo}
+\end{figure}
+
+Gráficos SHAP de pontos como na figura \ref{fig:shap-exemplo} de exemplo combinam gráficos de dispersão com estimativas de densidade. A cor dos pontos significa o valor do atributo, onde pontos azuis significam que o valor do atributo é baixo ou falso, enquanto pontos vermelhos significam que o valor é alto ou verdadeiro. A posição horizontal dos pontos representa o impacto do atributo no resultado da classificação, onde pontos na esquerda significam que aquele valor é importante na classificação negativa, e pontos na direita na classificação positiva.
+
+
+Também é possível gerar gráficos de análise do conjunto de dados, como gráficos de Mapas de Calor de Correlação \cite{correlation} e Plotagens de Densidade das Colunas \cite{density}, que também podem servir como fonte de informação para a análise dos dados.

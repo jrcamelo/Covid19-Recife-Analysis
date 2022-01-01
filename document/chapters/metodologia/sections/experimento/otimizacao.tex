@@ -1,0 +1,8 @@
+\subsection{Otimização de Parâmetros}
+\label{subsec:otimizacao}
+
+A etapa de otimização de parâmetros consiste em ajustar os parâmetros de configuração dos algoritmos de classificação para que sejam o mais adequados o possível aos dados de treinamento. Para avaliar isso, são usadas as métricas obtidas na etapa anterior. De acordo com a necessidade, as etapas anteriores são executadas múltiplas vezes de modo a obter o melhor resultado.
+
+Para facilitar esse processo, foi utilizada a técnica de otimização de parâmetros (\textit{grid search}) do \textit{ScikitLearn} \cite{sklearn}. O \textit{grid search} tenta encontrar os melhores parâmetros de forma automatizada, executando uma busca exaustiva com diversos parâmetros de cada algoritmo \cite{gridsearch}.
+
+Notou-se que o conjunto de dados estava desbalanceado, ou seja, a quantidade de casos leves era 20 vezes maior que a quantidade de casos graves. Portanto, se viu necessário aplicar a técnica de balanceamento de conjunto de dados \textit{RandomUnderSampler}. Os registros da classe mais comum são removidos aleatoriamente para balancear as classes. Então a quantidade casos leves e torna igual à de casos graves no conjunto de dados balanceado.

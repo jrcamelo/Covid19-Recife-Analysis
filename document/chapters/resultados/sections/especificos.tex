@@ -1,0 +1,162 @@
+\section{Comparação entre Algoritmos em Subconjuntos}
+\label{sec:subconjuntos}
+
+Como discutido na subseção \ref{subsec:subconjuntos}, a aplicação de certos filtros no conjunto de dados permite observar diferentes cenários, que podem trazer novas percepções ao problema. Sendo assim, os algoritmos foram utilizados em subconjuntos de dados, para obter métricas que podem ser comparadas entre eles. As métricas foram obtidas usando os mesmos métodos que as métricas da seção \ref{sec:comparacao-algoritmos}, tendo o conjunto de dados balanceado por \textit{RandomUnderSampler}. Gráficos \textit{SHAP} gerados na execução dos algoritmos serão analisados e discutidos na seção \ref{sec:resultados-extras}.
+
+\subsection{Omitindo Dados Sintomáticos}
+\label{subsec:subconjuntos-sem-sintomas}
+
+Remover as colunas de dados sintomáticos permite observar como os algoritmos predizem os casos leves e graves se baseando somente nos dados demográficos, doenças preexistentes e progresso da vacinação.
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+  \cline{2-6}
+  \textbf{}                          & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+  \multicolumn{1}{|l|}{\textbf{kNN}} & 0,7125±0,0162          & 0,7144±0,0172           & 0,7125±0,0162          & 0,7119±0,0159           & 0,7125±0,0162          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{DT}}  & 0,7383±0,0051          & 0,7415±0,0036           & 0,7383±0,0051          & 0,7375±0,0056           & 0,7383±0,0051          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{RF}}  & 0,7383±0,0025          & 0,7402±0,0029           & 0,7383±0,0025          & 0,7378±0,0024           & 0,7383±0,0025          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{GB}}  & \textbf{0,7463±0,0044} & \textbf{0,7481±0,0042}  & \textbf{0,7463±0,0044} & \textbf{0,7459±0,0045}  & \textbf{0,7463±0,0044} \\ \hline
+  \multicolumn{1}{|l|}{\textbf{LGB}} & 0,7453±0,0019          & 0,7470±0,0019           & 0,7453±0,0019          & 0,7448±0,0019           & 0,7453±0,0019          \\ \hline
+  \multicolumn{1}{|l|}{\textbf{XGB}} & 0,7451±0,0047          & 0,7470±0,0045           & 0,7451±0,0047          & 0,7446±0,0047           & 0,7451±0,0047          \\ \hline
+  \end{tabular}
+\caption{Comparação de algoritmos sem dados sintomáticos}
+\label{tab:comparacao-sem-dados-sintomaticos}
+\end{table}
+
+A tabela \ref{tab:comparacao-sem-dados-sintomaticos} apresenta as métricas da aplicação dos algoritmos nos subconjuntos de dados sem dados sintomáticos. É possível perceber uma queda em todas as métricas, consistente entre os algoritmos, devido à importância dos dados sintomáticos no julgamento. Todos os valores do \textit{Gradient Boosting} se mantêm em torno dos 75\%, incluindo o \textit{AUC-ROC}, utilizado como métrica de desempenho, com uma queda média de 18\% comparado à sua execução no conjunto de dados completo. Com isso, embora menos precisos, é possível considerar válida a aplicação dos algoritmos nos subconjuntos de dados sem dados sintomáticos.
+
+
+
+\subsection{Prevendo Óbitos}
+\label{subsec:subconjuntos-com-morte}
+
+Separando o conjunto de dados entre casos leves ou graves e óbitos, é possível observar como os algoritmos predizem óbito do paciente de acordo com seus dados demográficos, sintomas, doenças preexistentes e progresso da vacinação.
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+    \cline{2-6}
+    \textbf{}                          & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+    \multicolumn{1}{|l|}{\textbf{kNN}} & 0,9354±0,0060          & 0,9356±0,0059           & 0,9354±0,0060          & 0,9354±0,0060           & 0,9354±0,0060          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{DT}}  & 0,9228±0,0069          & 0,9231±0,0067           & 0,9228±0,0069          & 0,9227±0,0069           & 0,9228±0,0069          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{RF}}  & 0,9435±0,0044          & 0,9435±0,0044           & 0,9435±0,0044          & 0,9435±0,0044           & 0,9435±0,0044          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{GB}}  & 0,9499±0,0038          & 0,9499±0,0038           & 0,9499±0,0038          & 0,9499±0,0038           & 0,9499±0,0038          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{LGB}} & 0,9465±0,0027          & 0,9465±0,0027           & 0,9465±0,0027          & 0,9465±0,0027           & 0,9465±0,0027          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{XGB}} & \textbf{0,9547±0,0057} & \textbf{0,9547±0,0057}  & \textbf{0,9547±0,0057} & \textbf{0,9547±0,0057}  & \textbf{0,9547±0,0057} \\ \hline
+    \end{tabular}
+\caption{Comparação de algoritmos prevendo óbito}
+\label{tab:comparacao-obito}
+\end{table}
+
+A tabela \ref{tab:comparacao-obito} apresenta as métricas da aplicação dos algoritmos nos subconjuntos de dados de óbito.
+Neste caso, todos os algoritmos alcançaram métricas acima de 92\%, sendo o \textit{XGBoost} o único que alcançou uma média acima de 95\%, mais preciso que no conjunto de dados completo. Acredita-se que isso ocorre devido a melhor separação das classes.
+
+Similar ao discutido na subseção \ref{subsec:subconjuntos-sem-sintomas}, é possível observar como os algoritmos predizem óbito do paciente sem os sintomas, usando seus dados demográficos, doenças preexistentes e progresso da vacinação.
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+    \cline{2-6}
+    \textbf{}                          & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+    \multicolumn{1}{|l|}{\textbf{kNN}} & 0,8450±0,0069          & 0,8460±0,0066           & 0,8450±0,0069          & 0,8449±0,0070           & 0,8450±0,0069          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{DT}}  & 0,8468±0,0094          & 0,8475±0,0091           & 0,8468±0,0094          & 0,8467±0,0095           & 0,8468±0,0094          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{RF}}  & 0,8473±0,0036          & 0,8476±0,0036           & 0,8473±0,0036          & 0,8473±0,0036           & 0,8473±0,0036          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{GB}}  & 0,8598±0,0021          & 0,8601±0,0022           & 0,8598±0,0021          & 0,8598±0,0021           & 0,8598±0,0021          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{LGB}} & 0,8554±0,0030          & 0,8557±0,0028           & 0,8554±0,0030          & 0,8553±0,0030           & 0,8554±0,0030          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{XGB}} & \textbf{0,8597±0,0050} & \textbf{0,8602±0,0051}  & \textbf{0,8597±0,0050} & \textbf{0,8596±0,0050}  & \textbf{0,8597±0,0050} \\ \hline
+    \end{tabular}
+\caption{Comparação de algoritmos prevendo óbito sem dados sintomáticos}
+\label{tab:comparacao-obito-sem-dados-sintomaticos}
+\end{table}
+
+A tabela \ref{tab:comparacao-obito-sem-dados-sintomaticos} apresenta as métricas da aplicação dos algoritmos nos subconjuntos de dados de óbito com dados sintomáticos omitidos. As métricas se mantêm em torno de 85\%, tendo um aumento se comparado à predição de casos leves e graves sem os dados sintomáticos. É possível considerar satisfatório aplicar os algoritmos de classificação na predição de óbito do paciente somente usando seus dados demográficos, doenças preexistentes e progresso da vacinação.
+
+
+\subsection{Filtrando por Progresso de Vacinação}
+\label{subsec:subconjuntos-vacinacao}
+
+Filtrando o conjunto de dados por progresso de vacinação, é possível observar possíveis mudanças no perfil de risco dos pacientes em casos leves e graves. Esta abordagem foi então aplicada no conjunto de dados completo e no subconjunto de dados de óbito.
+
+
+\subsubsection{Casos antes da vacina}
+\label{subsub:comparacao-antes-vacina}
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+    \cline{2-6}
+    \multicolumn{1}{c|}{\textbf{}}     & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+    \multicolumn{1}{|l|}{\textbf{kNN}} & 0.8557±0.0053          & 0.8571±0.0055           & 0.8557±0.0053          & 0.8555±0.0053           & 0.8557±0.0053          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{DT}}  & 0.8433±0.0099          & 0.8456±0.0102           & 0.8433±0.0099          & 0.8430±0.0099           & 0.8433±0.0099          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{RF}}  & 0.8716±0.0056          & 0.8737±0.0056           & 0.8716±0.0056          & 0.8714±0.0056           & 0.8716±0.0056          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{GB}}  & 0.8792±0.0040          & 0.8815±0.0039           & 0.8792±0.0040          & 0.8791±0.0041           & 0.8792±0.0040          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{LGB}} & \textbf{0.8806±0.0019} & \textbf{0.8832±0.0016}  & \textbf{0.8806±0.0019} & \textbf{0.8804±0.0020}  & \textbf{0.8806±0.0019} \\ \hline
+    \multicolumn{1}{|l|}{\textbf{XGB}} & 0.8798±0.0026          & 0.8817±0.0028           & 0.8798±0.0026          & 0.8796±0.0026           & 0.8798±0.0026          \\ \hline
+  \end{tabular}
+  \caption{Comparação de algoritmos prevendo severidade do caso antes da vacinação}
+  \label{tab:comparacao-antes-vacinacao}
+\end{table}
+
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+    \cline{2-6}
+    \multicolumn{1}{c|}{\textbf{}}     & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+    \multicolumn{1}{|l|}{\textbf{kNN}} & 0,9188±0,0059          & 0,9191±0,0058           & 0,9188±0,0059          & 0,9187±0,0059           & 0,9188±0,0059          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{DT}}  & 0,9015±0,0090          & 0,9022±0,0091           & 0,9015±0,0090          & 0,9015±0,0090           & 0,9015±0,0090          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{RF}}  & 0,9270±0,0049          & 0,9273±0,0049           & 0,9270±0,0049          & 0,9270±0,0049           & 0,9270±0,0049          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{GB}}  & 0,9362±0,0058          & 0,9364±0,0059           & 0,9362±0,0058          & 0,9362±0,0058           & 0,9362±0,0058          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{LGB}} & \textbf{0,9376±0,0039} & \textbf{0,9377±0,0038}  & \textbf{0,9376±0,0039} & \textbf{0,9376±0,0039}  & \textbf{0,9376±0,0039} \\ \hline
+    \multicolumn{1}{|l|}{\textbf{XGB}} & 0,9348±0,0050          & 0,9349±0,0049           & 0,9348±0,0050          & 0,9348±0,0050           & 0,9348±0,0050          \\ \hline
+  \end{tabular}
+  \caption{Comparação de algoritmos prevendo óbitos antes da vacinação}
+  \label{tab:comparacao-obito-antes-vacinacao}
+\end{table}
+
+As tabelas \ref{tab:comparacao-antes-vacinacao} e \ref{tab:comparacao-obito-antes-vacinacao} apresentam as métricas da aplicação dos algoritmos nos subconjuntos de dados filtrados por casos que ocorreram antes do início da vacinação, tanto predizendo severidade quanto óbito. Há uma queda significativa em todas as métricas, para ambas as abordagens. Isto ocorre por razão da importância dos dados de vacinação, ou possível incongruência na documentação dos casos no início da pandemia.
+
+\subsubsection{Casos com 30\% da população vacinada}
+\label{subsub:comparacao-vacinacao-30}
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+    \cline{2-6}
+    \multicolumn{1}{c|}{\textbf{}}     & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+    \multicolumn{1}{|l|}{\textbf{kNN}} & 0.9702±0.0030          & 0.9704±0.0030           & 0.9702±0.0030          & 0.9702±0.0030           & 0.9702±0.0030          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{DT}}  & 0.9636±0.0042          & 0.9636±0.0042           & 0.9636±0.0042          & 0.9635±0.0042           & 0.9636±0.0042          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{RF}}  & 0.9781±0.0030          & 0.9782±0.0030           & 0.9781±0.0030          & 0.9781±0.0030           & 0.9781±0.0030          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{GB}}  & 0.9811±0.0012          & 0.9811±0.0012           & 0.9811±0.0012          & 0.9811±0.0012           & 0.9811±0.0012          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{LGB}} & \textbf{0.9816±0.0016} & \textbf{0.9816±0.0016}  & \textbf{0.9816±0.0016} & \textbf{0.9816±0.0016}  & \textbf{0.9816±0.0016} \\ \hline
+    \multicolumn{1}{|l|}{\textbf{XGB}} & 0.9800±0.0021          & 0.9801±0.0021           & 0.9800±0.0021          & 0.9800±0.0021           & 0.9800±0.0021          \\ \hline
+    \end{tabular}
+\caption{Comparação de algoritmos prevendo severidade dos casos após 30\% da população vacinada}
+\label{tab:comparacao-vacinacao-30}
+\end{table}
+
+\begin{table}[H]
+  \footnotesize
+  \centering
+  \begin{tabular}{l|c|c|c|c|c|}
+    \cline{2-6}
+    \multicolumn{1}{c|}{\textbf{}}     & \textbf{Acurácia}      & \textbf{Precisão Macro} & \textbf{Sensib. Macro} & \textbf{F1-Score Macro} & \textbf{AUC-ROC}       \\ \hline
+    \multicolumn{1}{|l|}{\textbf{kNN}} & 0,9538±0,0054          & 0,9543±0,0054           & 0,9538±0,0054          & 0,9538±0,0054           & 0,9538±0,0054          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{DT}}  & 0,9378±0,0083          & 0,9379±0,0083           & 0,9378±0,0083          & 0,9378±0,0083           & 0,9378±0,0083          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{RF}}  & 0,9666±0,0075          & 0,9667±0,0076           & 0,9666±0,0075          & 0,9666±0,0075           & 0,9666±0,0075          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{GB}}  & \textbf{0,9719±0,0040} & \textbf{0,9721±0,0039}  & \textbf{0,9719±0,0040} & \textbf{0,9719±0,0040}  & \textbf{0,9719±0,0040} \\ \hline
+    \multicolumn{1}{|l|}{\textbf{LGB}} & 0,9696±0,0055          & 0,9697±0,0055           & 0,9696±0,0055          & 0,9696±0,0055           & 0,9696±0,0055          \\ \hline
+    \multicolumn{1}{|l|}{\textbf{XGB}} & 0,9619±0,0043          & 0,9620±0,0043           & 0,9619±0,0043          & 0,9619±0,0043           & 0,9619±0,0043          \\ \hline
+    \end{tabular}
+\caption{Comparação de algoritmos prevendo óbitos após 30\% da população vacinada}
+\label{tab:comparacao-vacinacao-obito-30}
+\end{table}
+
+Da mesma maneira, as tabelas \ref{tab:comparacao-vacinacao-30} e \ref{tab:comparacao-vacinacao-obito-30} apresentam as métricas da aplicação dos algoritmos nos subconjuntos de dados filtrados por casos que ocorreram após a vacinação alcançar 30\% da população, predizendo tanto a severidade quanto óbito. Desta vez há um aumento em todas as métricas, novamente em ambas abordagens, alcançando até uma média de 98\% na predição de severidade. É possível que o aumento do desempenho se dê por efeitos da vacinação ou menor quantidade de casos registrados.

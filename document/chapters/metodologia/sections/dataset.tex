@@ -1,0 +1,65 @@
+\section{Conjuntos de Dados}
+\label{sec:dataset}
+
+Todos os conjuntos de dados utilizados neste trabalho foram coletados e disponibilizados pela Prefeitura do Recife e Secretaria de Saúde do Recife e são de público acesso.
+
+No total foram utilizados três conjuntos de dados:
+
+\subsection{Casos Leves}
+\label{subsec:casosleves}
+
+No Portal de Dados Abertos da Prefeitura do Recife foi disponibilizado um conjunto de dados contendo as notificações de casos leves de COVID-19 dos residentes do Recife, realizados pela rede de saúde no sistema e-SUS Notifica do DATASUS desde abril de 2020 \cite{casosleves}. O conjunto de dados foi disponibilizado em 10 de julho de 2021, atualizado periodicamente, sendo que a última atualização até o desenvolvimento deste trabalho foi em 27 de setembro de 2021.
+
+Os dados são em sua maioria texto, com 16 colunas e um total de 574.292 linhas. 
+O conjunto de dados está disponível em formato CSV na seguinte URL: 
+\url{http://dados.recife.pe.gov.br/dataset/casos-leves-covid-19}
+
+\input{chapters/metodologia/tables/casos-leves.tex}
+
+
+
+\subsection{Casos Graves}
+\label{subsec:casosgraves}
+
+Similar ao conjunto de dados anterior, no Portal de Dados Abertos da Prefeitura do Recife foi disponibilizado um conjunto de dados contendo as notificações de Síndrome Respiratória Aguda Grave de residentes do Recife, realizados pela rede de saúde no sistema Notifica PE desde março de 2020 \cite{casosgraves}. O conjunto de dados de casos graves foi disponibilizado e atualizado nos mesmos dias que o conjunto de dados de casos leves.
+
+Não é informado como os casos foram categorizados como leves ou graves, tendo a Secretaria de Saúde do Recife e profissionais de saúde a responsabilidade pelo julgamento. Por meio de análise, é possível observar que os sintomas desempenham um papel crucial nesta categorização, em especial a saturação de oxigênio estando acima ou abaixo de 95\%.
+
+Os dados são em sua maioria texto, com 16 colunas e um total de 30.740 linhas.
+O conjunto de dados está disponível no formato CSV na URL: 
+\url{http://dados.recife.pe.gov.br/dataset/casos-graves-covid-19}
+
+\input{chapters/metodologia/tables/casos-graves.tex}
+
+
+\subsection{Vacinômetro}
+\label{subsec:vacinacao}
+
+Para fins de identificar possíveis impactos do progresso da vacina na cidade, decidiu-se utilizar um conjunto de dados que contém informações sobre a vacinação da população do Recife, realizados pela Secretaria de Saúde do Recife.
+
+Inicialmente foi utilizado o conjunto de dados da Relação de pessoas vacinadas - COVID-19, também disponível no Portal de Dados Abertos da Prefeitura do Recife \cite{vacinacao-relacao}, contendo informações de cada dosagem de vacinação aplicada, assim como dados demográficos de cada pessoa vacinada. 
+Porém, se observou que os dados não estavam de acordo com as informações disponibilizadas no medidor oficial de vacinação do Recife, o Vacinômetro \cite{vacinometro}.
+
+O Vacinômetro é mantido pela Prefeitura do Recife, contendo dados do \textit{App} Recife Vacina e \textit{Google Forms}, atualizado diariamente.
+Sendo assim, foi decidido utilizar o conjunto de dados disponibilizado pelo Vacinômetro, que contém informações de maneira mais organizada e completa. 
+
+A estrutura do conjunto de dados é a seguinte:
+
+\begin{itemize}
+  \item Número de doses recebidas por tipo de vacina;
+  \item Consolidado do esquema vacinal;
+  \item Número de doses aplicadas da vacina contra a COVID-19 segundo sexo;
+  \item Número de doses aplicadas da vacina contra a COVID-19 segundo raça cor;
+  \item Número de doses aplicadas da vacina contra a COVID-19 por distrito sanitário;
+  \item Número de doses aplicadas da vacina contra a COVID-19 por grupo prioritário;
+  \item Número de doses aplicadas da vacina contra a COVID-19 por dia;
+  \item Controle das doses distribuídas e aplicadas segundo locais de vacinação e tipo de vacina.
+\end{itemize}
+
+Foi decidido utilizar o subconjunto agrupado por datas "Número de doses aplicadas da vacina contra a COVID-19 por dia", com a seguinte estrutura:
+
+\input{chapters/metodologia/tables/vacinacao-dia.tex}
+
+Os dados são em sua maioria numéricos e datas, com formatos variados. 
+Todo o conjunto de dados está disponível na página e em formato ODS e PDF na seguinte URL: 
+\url{https://conectarecife.recife.pe.gov.br/vacinometro/}

@@ -1,0 +1,166 @@
+\section{Métricas de Desempenho}
+\label{sec:metricas}
+
+Para comparar os resultados obtidos com os algoritmos de classificação, são utilizadas métricas de desempenho. As predições dos algoritmos são comparadas com os valores reais do conjunto de dados, e a métrica de desempenho é calculada com base nesses valores. As subseções a seguir explicam cada métrica com um exemplo.
+
+\subsection{Matriz de Confusão}
+\label{subsec:matriz-confusao}
+
+A matriz de confusão é uma tabela que mostra a quantidade de acertos e erros de cada algoritmo para cada classe \cite{confusion}.
+
+\begin{table}[H] 
+  \centering
+  \begin{tabular}{l|c|c|}
+    \cline{2-3}
+    \textbf{}                         & \multicolumn{1}{l|}{\textbf{Predição: LEVE}} & \multicolumn{1}{l|}{\textbf{Predição: GRAVE}} \\ \hline
+    \multicolumn{1}{|l|}{\textbf{Real: LEVE}}  & 114631                                       & 85                                            \\ \hline
+    \multicolumn{1}{|l|}{\textbf{Real: GRAVE}} & 1949                                         & 4198                                          \\ \hline
+  \end{tabular}
+  \caption{Exemplo de matriz de confusão binária}
+  \label{tbl:tabela-matriz-confusao-metricas} 
+\end{table}
+
+O valor na primeira célula, \textbf{Predição: LEVE} e \textbf{Real: LEVE}, indica a quantidade de acertos para a classe LEVE, ou Verdadeiro Positivo (TP), com 114631 acertos. Assim, o valor da segunda célula, \textbf{Predição: GRAVE} e \textbf{Real: LEVE}, indica quantos casos leves foram preditos como graves, chamados de Falsos Positivos (FP), totalizando 85 erros nesta classe.
+
+Da mesma forma, o valor de \textbf{Predição: GRAVE} e \textbf{Real: GRAVE}, indica que houveram 4198 acertos na classe de casos graves, chamados de Verdadeiros Negativos (TN). Igualmente, \textbf{Predição: LEVE} e \textbf{Real: GRAVE} indica quantos casos graves foram preditos como leves, chamados de Falsos Negativos (FN), com 1949 casos graves preditos como leves, uma quantidade considerável e de grande relevância para o problema em questão.
+
+Destes valores, é possível, por meio de cálculos, obter as seguintes métricas.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{c|c|c|c}
+    \cline{2-3}
+    \textbf{} & \textbf{Positivo Predito} & \textbf{Negativo Predito}         & \textbf{}                              \\ \hline
+    \multicolumn{1}{|c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Positivo\\ Predito\end{tabular}}} &
+      \begin{tabular}[c]{@{}c@{}}TP\\ 114631\end{tabular} &
+      \begin{tabular}[c]{@{}c@{}}FN\\ 85\end{tabular} &
+      \multicolumn{1}{c|}{\textit{Sensibilidade}} \\ \hline
+    \multicolumn{1}{|c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Negativo\\ Predito\end{tabular}}} &
+      \begin{tabular}[c]{@{}c@{}}FP\\ 1949\end{tabular} &
+      \begin{tabular}[c]{@{}c@{}}TN\\ 4198\end{tabular} &
+      \multicolumn{1}{c|}{\textit{Especificidade}} \\ \hline
+    \textbf{} & \textit{Precisão}         & \textit{Valor Preditivo Negativo} & \multicolumn{1}{c|}{\textit{Acurácia}} \\ \cline{2-4} 
+  \end{tabular}
+  \caption{Exemplo de métricas de uma matriz de confusão binária}
+  \label{tbl:tabela-matriz-confusao-metricas-explicado}  
+\end{table}
+
+\subsection{Acurácia}
+\label{subsec:acuracia}
+
+A acurácia indica a quantidade de casos que foram preditos corretamente.
+
+  \begin{equation}
+    \textbf{Acurácia} = \frac{TP + TN}{TP + TN + FP + FN}
+  \end{equation}
+
+Portanto, a execução do \textit{Random Forest} de exemplo, com a matriz de confusão acima, obteve uma acurácia de 0,98317, ou 98,317\%.
+
+\subsection{Precisão}
+\label{subsec:precisao}
+
+A precisão indica a quantidade de casos leves que foram preditos corretamente, dividido pelo total de predições positivas. Essa métrica serve para o julgamento da veracidade dos casos leves preditos, porém ignora os casos graves.
+
+  \begin{equation}
+    \textbf{Precisão} = \frac{TP}{TP + FP}
+  \end{equation}
+
+Assim, a execução de exemplo obteve uma precisão de 98,328\%.
+
+\subsection{Valor Preditivo Negativo}
+\label{subsec:valor-preditivo-negativo}
+
+A precisão também pode ser chamada de valor preditivo positivo, então o valor preditivo negativo é a precisão dos casos negativos, ou casos graves, indicando a quantidade de casos graves que foram preditos corretamente, divido pelo total de predições negativas. Da mesma forma, a métrica ignora os casos leves, mas traz confiança que os casos graves são realmente graves.
+
+  \begin{equation}
+    \textbf{Valor Preditivo Negativo} = \frac{TN}{TN + FN}
+  \end{equation}
+
+A execução de exemplo obteve um valor preditivo negativo de 98,015\%
+
+\subsection{Precisão Macro}
+\label{subsec:precisao-macro}
+
+É possível utilizar a precisão de cada classe para calcular a precisão macro. Em conjuntos com apenas duas classes, a precisão macro é a média da precisão e do valor preditivo negativo, sendo mais dinâmica.
+
+  \begin{equation}
+    \textbf{Precisão Macro} = \frac{1}{N}\sum_{i=1}^{N}\frac{TP_{i}}{TP_{i} + FP_{i}}
+  \end{equation}
+
+A média das métricas então resulta em 98,171\%.
+
+
+\subsection{Sensibilidade}
+\label{subsec:sensibilidade}
+
+\textit{Recall}, ou sensibilidade, indica a quantidade de casos leves que foram preditos corretamente, dividido pelo total de casos leves. A sensibilidade então serve como uma medida de que as predições não vão resultar em alarmes falsos, prevendo casos leves como graves.
+
+  \begin{equation}
+    \textbf{Sensibilidade} = \frac{TP}{TP + FN}
+  \end{equation}
+
+Obtendo um valor de 99,925\%, com uma baixa quantidade de falsos negativos.
+
+\subsection{Especificidade}
+\label{subsec:especificidade}
+
+A especificidade indica a quantidade de casos graves que foram preditos corretamente, dividido pelo total de casos graves. É equivalente à sensibilidade dos casos graves, medindo os casos graves que foram julgados como LEVE, com grande relevância para o conjunto de dados em questão.
+
+  \begin{equation}
+    \textbf{Especificidade} = \frac{TN}{TN + FP}
+  \end{equation}
+
+Obtendo um valor de 68,293\%, relativamente baixa confiança em casos graves, significando que mais de 30\% dos casos graves não foram classificados corretamente.
+
+\subsection{Sensibilidade Macro}
+\label{subsec:sensibilidade-macro}
+
+Similar à precisão macro, a sensibilidade macro é a média da sensibilidade e da especificidade em conjuntos de dados binários, medindo os falsos positivos e falsos negativos.
+
+  \begin{equation}
+    \textbf{Sensibilidade Macro} = \frac{1}{N}\sum_{i=1}^{N}\frac{TP_{i}}{TP_{i} + FN_{i}}
+  \end{equation}
+
+A média então resulta em 84,109\%, que, em comparação com a sensibilidade, informa que a especificidade está baixa.
+
+\subsection{F1-Score}
+\label{subsec:f1-score}
+
+O \textit{F1-Score}, ou F1, é uma métrica composta que utiliza a média harmônica da precisão e da sensibilidade, de forma a medir tanto predições corretas quanto predições falsas dos casos leves.
+
+\begin{equation}
+  \textbf{F1-Score} = 2\times\frac{Precis.\times Sensib.}{Precis. + Sensib}
+\end{equation}
+
+Alternativamente:
+\begin{equation}
+  \textbf{F1-Score} = \frac{2TP}{2TP + FP + FN}
+\end{equation}
+
+Assim obtendo um valor de 99,120\%, um valor alto, demonstrando que as predições de casos leves são confiáveis.
+A mesma métrica pode ser aplicada à classe de casos graves, resultando em 80,5\%, um valor bem mais baixo em comparação.
+
+\subsection{F1-Score Macro}
+\label{subsec:f1-score-macro}
+
+É possível então utilizar o \textit{F1-score} de cada classe para calcular o \textit{F1-score} macro, levando em conta não só a precisão e a sensibilidade, mas também o valor preditivo negativo e a especificidade, sendo uma média entre os \textit{F1-scores} das classes.
+
+  \begin{equation}
+    \textbf{F1-Score Macro} = \frac{1}{N}\sum_{i=1}^{N}\frac{2TP_{i}}{2TP_{i} + FP_{i} + FN_{i}}
+  \end{equation}
+
+Obtendo-se assim um valor que considera todas as métricas anteriores, 89,810\%, trazendo uma visão mais ampla do desempenho do algoritmo em questão.
+
+\subsection{AUC ROC}
+\label{subsec:curva-roc}
+
+Além do \textit{F1-score}, é possível utilizar as métricas calculadas para plotar a curva Característica de Operação do Receptor (ROC), tendo a sensibilidade no eixo Y contra a especificidade invertida no eixo X. A curva permite não só visualizar o desempenho do classificador e encontrar o ponto ótimo da sensibilidade em função da especificidade, sendo o ponto mais próximo da esquerda superior \cite{roc}.
+
+\begin{figure}[ht!]
+  \centering
+  \fcolorbox{white}{white}{\includegraphics[width=0.5\textwidth]{chapters/metodologia/images/roc.png}}
+  \caption{\textmd{Curva ROC de uma execução de XGBoost}}
+  \label{fig:curva-roc-exemplo}
+\end{figure}
+
+Com a curva, é possível então calcular a Área Abaixo da Curva (AUC), onde um modelo com 0\% de acurácia teria um AUC de 0, e um modelo com 100\% de acurácia teria um AUC de 1. Na figura \ref{fig:curva-roc-exemplo}, o modelo de exemplo alcançou um AUC de 93,768\%.

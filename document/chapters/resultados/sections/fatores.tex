@@ -1,0 +1,149 @@
+\section{Gráficos SHAP}
+\label{sec:resultados-extras}
+
+Como discutido na seção \ref{subsec:geracao-graficos}, os gráficos \textit{SHAP} gerados na execução dos algoritmos nas seções \ref{sec:comparacao-algoritmos} e \ref{sec:subconjuntos} serão analisados para obter novas percepções sobre os resultados obtidos.
+
+\subsection{Conjunto de dados balanceado - XGBoost}
+\label{subsec:xgboost-balanceado}
+
+A figura \ref{fig:xgboost-balanceado} mostra o gráfico \textit{SHAP} de pontos da melhor execução dos algoritmos descritos na seção \ref{sec:comparacao-algoritmos}.
+
+\begin{figure}[ht!]
+  \centering
+  \fcolorbox{white}{white}{\includegraphics[width=0.5\textwidth]{chapters/resultados/images/xgboost_normal_dot.png}}
+  \caption{\textmd{Gráfico SHAP de interpretação de relevância de atributos na classificação para o modelo XGBoost no conjunto de dados balanceado com AUC-ROC de 92,50\%}}
+  \label{fig:xgboost-balanceado}
+\end{figure}
+
+ Baseando-se na interpretação do conjunto de dados pelo modelo, é possível elaborar certas observações. O fator mais decisivo para definir um caso grave foi a Baixa Saturação de $O_2$, acredita-se que o sintoma seja um dos critérios escolhidos pela Secretaria de Saúde de Recife para identificar casos graves de COVID-19. A variável de População Vacinada > 0 mostra que quando seu valor é verdadeiro, casos leves são mais comuns, e o contrário para casos graves, demonstrando que foi identificada uma relação entre a vacina e uma diminuição de severidade dos casos. Dispneia, ou falta de ar, se apresenta como terceiro fator relevante para os casos graves. Outros Sintomas, os sintomas não classificados, indicam uma menor chance de caso grave, e é possível interpretar que seja devido a sintomas menores que não foram agrupados. A falta de Aperto Torácico ou Congestão Nasal não é indicativos suficientes de caso leve, mas sua presença influencia significativamente na probabilidade de caso grave. A presença de Coriza, por outro lado, indica maior chance de caso leve, assim como Dor de Cabeça e Dor de Garganta, possivelmente ofuscados por sintomas mais graves durante a documentação de casos graves. Evidenciou-se que uma Idade mais elevada indica maior chance de caso grave, enquanto uma Idade mais baixa indica maior chance de caso leve.
+
+ \subsection{Subconjunto de dados sem colunas de sintomas - Gradient Boosting}
+ \label{subsec:gb-sem-sintomas}
+
+ Nota-se uma grande influência dos sintomas no julgamento da severidade dos casos, sinalizando menor importância dos fatores demográficos. Portanto, o gráfico \textit{SHAP} de pontos da melhor execução dos algoritmos descritos na subseção \ref{subsec:subconjuntos-sem-sintomas} na figura \ref{fig:xgboost-sem-sintomas} se prova útil para a discussão.
+
+ \begin{figure}[ht!]
+  \centering
+  \fcolorbox{white}{white}{\includegraphics[width=0.5\textwidth]{chapters/resultados/images/xgboost_no_symptoms_dot.png}}
+  \caption{\textmd{Gráfico SHAP de interpretação de relevância de atributos na classificação para o modelo Gradient Boosting no subconjunto sem colunas de sintomas com AUC-ROC de 75,11\%}}
+  \label{fig:xgboost-sem-sintomas}
+\end{figure}
+
+É possível então elaborar algumas observações sobre a interpretação do modelo em relação aos dados demográficos e comorbidades, mantendo em mente que seu desempenho não foi excepcional.
+A Idade dessa vez é a variável mais relevante, mantendo o padrão de que idades mais altas estão em maior risco de caso grave, e idades mais baixas em menor risco. A vacinação estar em progresso também indica menos casos graves. Porém, agora é possível observar comorbidades como a Hipertensão, Doenças Cardiovasculares e Diabetes sendo as mais influentes em casos graves. Sexo se mostra relevante, com homens sendo mais propensos a desenvolverem casos graves, e mulheres a casos leves, embora não tenham sido observadas correlações de sexo com idade ou comorbidades na seção \ref{sec:geral}. Dados relacionados a estilo de vida como Tabagismo, Etilismo e Obesidade também se evidenciaram como influentes na classificação dos casos graves. Outras estatísticas de vacinação se mostraram inconclusivas neste modelo.
+
+\subsection{Subconjunto de dados de vacinação - Light Gradient Boosting}
+\label{subsec:lgb-vacina}
+
+Filtrando os dados de vacinação, os gráficos \textit{SHAP} de pontos das melhores execuções dos algoritmos descritos na subseção \ref{subsec:subconjuntos-vacinacao} na figura \ref{fig:xgboost-vac} podem ser analisados.
+
+\begin{figure}[ht!]
+  \centering
+  \fcolorbox{white}{white}{\includegraphics[width=0.4\textwidth]{chapters/resultados/images/xgboost_v0_dot.png} \includegraphics[width=0.4\textwidth]{chapters/resultados/images/xgboost_v30_dot.png}}
+  \caption{\textmd{Gráfico SHAP de interpretação de relevância de atributos na classificação para o modelo Light Gradient Boosting no subconjunto sem vacinação com AUC-ROC de 88,29\% e vacinação acima de 30\% com AUC-ROC de 98,33\%}}
+  \label{fig:xgboost-vac}
+\end{figure}
+
+Ambos os gráficos \textit{SHAP} de pontos são similares à figura \ref{fig:xgboost-balanceado}, com pequenas diferenças em dimensões opostas.
+Além das diferenças na ordenação das relevâncias, é possível observar mais casos graves em geral no cenário antes da vacinação, e uma maior separação na influência de casos graves e casos leves no cenário da vacinação acima de 30\%. A Idade se torna um fator mais consistente ao decorrer da vacinação, sendo observada também uma diminuição na idade de risco para casos graves.
+
+\begin{table}[H]
+  \centering
+  \tiny
+  \begin{tabular}{|l|c|c|c|}
+    \hline
+    Vacinação                            & \textbf{0\%} & \textbf{\textgreater{}0\%} & \textbf{\textgreater{}30\% e \textless{}30\%} \\ \hline
+    \textbf{Idade}                       & 2.9\%        & 2.6\%                      & 9.2\%                       \\ \hline
+    \textbf{Sexo}                        & 0.0\%        & 0.3\%                      & 0.5\%                       \\ \hline
+    \textbf{Profissional de Saúde}       & -2.6\%       & 0.0\%                      & 0.0\%                       \\ \hline
+    \textbf{Baixa Saturação de $O_2$}    & -30.7\%      & -38.2\%                    & -43.4\%                     \\ \hline
+    \textbf{Aperto Torácico}             & 14.7\%       & 16.4\%                     & 28.8\%                      \\ \hline
+    \textbf{Dispneia}                    & 10.3\%       & -2.1\%                     & -14.9\%                     \\ \hline
+    \textbf{Desconforto Respiratório}    & -12.0\%      & 6.1\%                      & 11.5\%                      \\ \hline
+    \textbf{Tosse}                       & 1.2\%        & 0.0\%                      & -5.5\%                      \\ \hline
+    \textbf{Congestão Nasal}             & 8.5\%        & 4.5\%                      & 2.9\%                       \\ \hline
+    \textbf{Febre}                       & 0.4\%        & 0.0\%                      & -1.7\%                      \\ \hline
+    \textbf{Coriza}                      & -4.3\%       & -0.2\%                     & -1.7\%                      \\ \hline
+    \textbf{Dor no Corpo}                & 4.7\%        & 0.1\%                      & 1.3\%                       \\ \hline
+    \textbf{Náusea}                      & 0.0\%        & 0.0\%                      & 1.2\%                       \\ \hline
+    \textbf{Diarréia}                    & 2.6\%        & 0.0\%                      & 1.2\%                       \\ \hline
+    \textbf{Dor de Garganta}             & 0.5\%        & -0.3\%                     & 0.8\%                       \\ \hline
+    \textbf{Dor de Cabeça}               & 4.1\%        & -0.6\%                     & -0.6\%                      \\ \hline
+    \textbf{Anosmia ou Hiposmia}         & -1.5\%       & 1.8\%                      & 0.5\%                       \\ \hline
+    \textbf{Perda de Apetite}            & 0.0\%        & 0.0\%                      & 0.3\%                       \\ \hline
+    \textbf{Dor Abdominal}               & 0.0\%        & 0.5\%                      & 0.2\%                       \\ \hline
+    \textbf{Fraqueza}                    & -2.1\%       & 0.3\%                      & -0.1\%                      \\ \hline
+    \textbf{Rebaixamento de Consciência} & 0.0\%        & -0.5\%                     & 0.0\%                       \\ \hline
+    \textbf{Espirros}                    & 0.0\%        & 0.0\%                      & 0.0\%                       \\ \hline
+    \textbf{Outros Sintomas}             & 1.8\%        & 2.2\%                      & -1.5\%                      \\ \hline
+    \textbf{Doença Cardíaca ou Vascular} & -0.2\%       & -0.1\%                     & 2.9\%                       \\ \hline
+    \textbf{Obesidade/Sobrepeso}         & -1.7\%       & 0.0\%                      & -2.0\%                      \\ \hline
+    \textbf{Diabetes}                    & 0.1\%        & 0.1\%                      & 1.8\%                       \\ \hline
+    \textbf{Doença Renal}                & 0.0\%        & -0.3\%                     & 0.9\%                       \\ \hline
+    \textbf{Doença Neurológica}          & 0.0\%        & 0.0\%                      & 0.7\%                       \\ \hline
+    \textbf{Tabagista}                   & 0.1\%        & 0.0\%                      & 0.4\%                       \\ \hline
+    \textbf{Hipertensão}                 & 0.5\%        & 0.2\%                      & 0.3\%                       \\ \hline
+    \textbf{Etilista}                    & 0.1\%        & 0.1\%                      & -0.2\%                      \\ \hline
+    \textbf{Doença Respiratória}         & 0.0\%        & 0.0\%                      & 0.0\%                       \\ \hline
+    \textbf{Doença Hepática}             & 0.0\%        & 0.0\%                      & 0.0\%                       \\ \hline
+    \textbf{Imunossupressão}             & 0.0\%        & 0.0\%                      & 0.0\%                       \\ \hline
+    \textbf{Outras Doenças}              & 2.6\%        & -0.4\%                     & 6.3\%                       \\ \hline
+    \end{tabular}
+  \caption{\textmd{Valor SHAP médio de cada fator na classificação de casos graves de acordo com o progresso da vacinação em execuções de Light Gradient Boosting}}
+  \label{tab:shap-relevancias}
+  \end{table}
+
+Valores \textit{SHAP} são uma quantificação do que é demonstrado nos gráficos \textit{SHAP}, e mostram a relevância de uma variável para a classificação de classes. O valor \textit{SHAP} máximo é 50\%, significando que, independente do valor da variável, um valor \textit{SHAP} alto teve grande influencia na classificação da classe positiva, enquanto valores negativos, até -50\%, influenciaram na classe negativa. Portanto, nesta análise, um valor \textit{SHAP} de 50\% significa que a variável possibilitava a certeza de classificação como caso grave.
+
+A tabela \ref{tab:shap-relevancias} mostra o valor SHAP médio de cada fator na classificação de casos graves de acordo com o progresso da vacinação. Valores negativos mostram uma importância na classificação de casos leves. Em especial, se observa que a Idade se tornou um fator mais relevante para os casos graves de acordo com a vacinação. Infere-se também que a Baixa Saturação de $O_2$ se tornou menos presente em casos leves ao decorrer da vacinação, diminuindo seu valor \textit{SHAP}. Doenças Cardiovasculares, Diabetes e Doenças Renais também tiveram um aumenta na sua relevância para os casos graves, mostrando que ao decorrer da vacinação, casos graves dependeram mais destas comorbidades.
+
+\begin{table}[H]
+  \centering
+  \tiny
+  \begin{tabular}{|l|c|l|c|l|c|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Vacinação 0\%}} & \textbf{0\%} & \multicolumn{1}{c|}{\textbf{Vacinação \textgreater{}0\% e \textless{}30\%}} & \textbf{\textgreater{}0\% e \textless{}30\%} & \multicolumn{1}{c|}{\textbf{Vacinação \textgreater{}30\%}} & \textbf{\textgreater{}30\%} \\ \hline
+  Baixa Saturação de $O_2$                        & -30.7\%      & Baixa Saturação de $O_2$                                                       & -38.2\%                                      & Baixa Saturação de $O_2$                                      & -43.4\%                     \\ \hline
+  Aperto Torácico                              & 14.7\%       & Aperto Torácico                                                             & 16.4\%                                       & Aperto Torácico                                            & 28.8\%                      \\ \hline
+  Desconforto Respiratório                     & -12.0\%      & Desconforto Respiratório                                                    & 6.1\%                                        & Dispneia                                                   & -14.9\%                     \\ \hline
+  Dispneia                                     & 10.3\%       & Congestão Nasal                                                             & 4.5\%                                        & Desconforto Respiratório                                   & 11.5\%                      \\ \hline
+  Congestão Nasal                              & 8.5\%        & Idade                                                                       & 2.6\%                                        & Idade                                                      & 9.2\%                       \\ \hline
+  Dor no Corpo                                 & 4.7\%        & Outros Sintomas                                                             & 2.2\%                                        & Outras Doenças                                             & 6.3\%                       \\ \hline
+  Coriza                                       & -4.3\%       & Dispneia                                                                    & -2.1\%                                       & Tosse                                                      & -5.5\%                      \\ \hline
+  Dor de Cabeça                                & 4.1\%        & Anosmia ou Hiposmia                                                         & 1.8\%                                        & Congestão Nasal                                            & 2.9\%                       \\ \hline
+  Idade                                        & 2.9\%        & Dor de Cabeça                                                               & -0.6\%                                       & Doença Cardíaca ou Vascular                                & 2.9\%                       \\ \hline
+  Profissional de Saúde                        & -2.6\%       & Dor Abdominal                                                               & 0.5\%                                        & Obesidade/Sobrepeso                                        & -2.0\%                      \\ \hline
+  \end{tabular}
+  \caption{\textmd{10 valores SHAP mais relevantes para a classificação de casos graves de acordo com a vacinação em execuções de Light Gradient Boost}}
+  \label{tab:shap-relevancias2}
+  \end{table}
+
+A tabela \ref{tab:shap-relevancias2} mostra os 10 fatores mais relevantes para a classificação de casos graves de acordo com a vacinação, organizados por ordem decrescente de valor \textit{SHAP}. Baixa Saturação de $O_2$ e Aperto Torácio, assim como a Idade, cresceram em relevância ao decorrer da vacinação. Por outro lado, a relevância de sintomas menores como Congestão Nasal e Dor de Cabeça diminuiu. Desconforto Respiratório deixou de ser relevante em casos leves e passou a ser relevante em casos graves.
+
+\subsection{Subconjunto de dados de óbitos - XGBoost}
+\label{subsec:xgb-obitos}
+
+Dividindo o conjunto de dados entre casos leves ou graves e óbitos na subseção \ref{subsec:subconjuntos-com-morte}, é possível analisar os fatores que influenciam na chance de morte conforme o \textit{XGBoost} com melhor resultado, na figura \ref{fig:xgb-obito}.
+
+\begin{figure}[ht!]
+  \centering
+  \fcolorbox{white}{white}{\includegraphics[width=0.5\textwidth]{chapters/resultados/images/xgboost_normal_death_dot.png}}
+  \caption{\textmd{Gráfico SHAP de interpretação de relevância de atributos na classificação para o modelo XGBoost no subconjunto de óbitos com AUC-ROC de 96,24\%}}
+  \label{fig:xgb-obito}
+\end{figure}
+
+Assim como na figura \ref{fig:xgboost-balanceado}, a Baixa Saturação de $O_2$ é o fator mais relevante, embora mais proeminente neste cenário de óbitos. A Idade sobe em relevância e em detalhamento, havendo uma maior separação entre idades em relação à chance de óbito. A influência da vacinação se mantêm, porém, um pouco menos relevante. Os efeitos dos sintomas como Dispneia, Coriza e Febre na chance de óbito se tornam mais claros, enquanto comorbidades como Doenças Cardiovasculares, Hipertensão e Diabetes têm um aumento considerável na sua relevância.
+
+Para observar melhor a relevância dos fatores demográficos e comorbidades, similar à subseção \ref{subsec:gb-sem-sintomas}, os gráficos \textit{SHAP} do subconjunto de dados sem colunas de sintomas descrito na subseção \ref{subsec:subconjuntos-com-morte} pode ser analisado na figura \ref{fig:xgb-obito-sem-sintomas}.
+
+\begin{figure}[ht!]
+  \centering
+  \fcolorbox{white}{white}{\includegraphics[width=0.5\textwidth]{chapters/resultados/images/xgboost_no_symptoms_death_dot.png}}
+  \caption{\textmd{Gráfico SHAP de interpretação de relevância de atributos na classificação para o modelo XGBoost no subconjunto de óbitos sem colunas de sintomas com AUC-ROC de 86,57\%}}
+  \label{fig:xgb-obito-sem-sintomas}
+\end{figure}
+
+A Idade novamente fica acima dos outros fatores, sendo o principal fator demográfico a ser considerado. Tendo as comorbidades de Doenças Cardiovasculares, Hipertensão, Diabetes e Doenças Neurológicas como principais influências. Estilo de vida também é um fator relevante, com Obesidade, Tabagismo e Etilismo aumentando as chances de óbito. População Vacinada e Sexo possuem grande relevância, porém menos influência que nos cenários de severidade.
+
+
+

@@ -1,0 +1,19 @@
+\subsection{Subconjuntos}
+\label{subsec:subconjuntos}
+
+Foi observado que o conjunto de dados permite diferentes cenários por meio de subconjuntos, podendo oferecer \textit{insights} sobre os resultados, fatores de risco e impactos das variáveis. Portanto, as seguintes análises são propostas.
+
+\subsubsection{Omitir dados sintomáticos}
+\label{subsubsec:omitindosintomas}
+
+O conjunto de dados utilizado no experimento possui 20 colunas de dados sintomáticos apresentados pelos pacientes após confirmado o diagnóstico de COVID-19. Ao omitir essas colunas, é possível observar como os algoritmos predizem os casos leves e graves se baseando somente nos dados demográficos, doenças preexistentes e progresso da vacinação. Idealmente, será possível perceber fatores de risco demográficos e clínicos antes mesmo do paciente contrair COVID-19, permitindo uma melhor priorização de tratamento.
+
+\subsubsection{Possibilidade de óbito}
+\label{subsubsec:analisandoobito}
+
+Cerca de 1/4 dos casos graves resultaram em óbito do paciente, como demonstrado na coluna \textbf{Data de Óbito}. Por meio desta, é possível comparar casos onde não houve óbito com casos que resultaram em óbito, em um conjunto de dados binário. Sendo assim, é possível identificar especificamente fatores de risco que podem ocasionar no óbito do paciente.
+
+\subsubsection{Progresso da vacinação}
+\label{subsubsec:progressovacinacao}
+
+Filtrando o conjunto de dados pelas colunas de vacinação, é possível identificar mudanças nos fatores de risco, de modo a perceber os impactos da vacinação no Recife de acordo com seu progresso. Se propõe então observar a situação antes do início da vacinação, assim como depois de um certo progresso da vacinação, para identificar possíveis impactos. 

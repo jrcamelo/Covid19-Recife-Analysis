@@ -1,0 +1,54 @@
+\chapter{Contexto}
+\label{chap:contexto}
+
+Este capítulo introduz temas que servem como base para a análise e o desenvolvimento presentes nesse estudo.
+
+A seção \ref{sec:ia-na-saude} reflete sobre os avanços, tanto atuais quanto possíveis, providos pela aplicação de inteligência artificial na área de saúde. Em seguida, a seção \ref{sec:algoritmos} explica o funcionamento teórico dos modelos de aprendizado de máquina utilizados no desenvolvimento deste trabalho. Por fim, a seção \ref{sec:trabalhos} contém alguns trabalhos relacionados ao presente estudo, servindo como base acadêmica.
+
+
+\section{Aprendizado de Máquina na Saúde}
+\label{sec:ia-na-saude}
+
+Aprendizado de máquina é um ramo da inteligência artificial e ciência da computação que foca no uso de dados e algoritmos para imitar como os humanos aprendem, melhorando gradativamente sua precisão \cite{ibm}. Algoritmos de aprendizado de máquina são então treinados para reconhecer padrões em dados ou mídias. A partir disso, é possível obter resultados como classificação de dados que não conheciam anteriormente, ou produção de conteúdo se baseando nos padrões percebidos.
+
+Duas áreas da medicina que se beneficiam do aprendizado de máquina são as de diagnóstico e prognóstico de doenças. Diagnóstico consiste em avaliar o estado atual do paciente, tendo visto avanços, por exemplo, utilizar fotos para identificar câncer de pele. Prognóstico consistem em prever a evolução da doença no paciente, como utilizar a coleta de dados de tecnologias vestíveis em pacientes com diabetes para ajudar no tratamento \cite{ml-medicina}.
+
+Uma conquista recente para a medicina veio da rede de inteligência artificial da \textit{Google}, \textit{DeepMind}. Seu algoritmo, \textit{AlphaFold2}, conseguiu prever precisamente a estrutura tridimensional de proteínas a partir da sequência de aminoácidos, um problema enfrentado na área há décadas \cite{deepmind}. Este avanço possibilita um melhor entendimento de como proteínas se comportam e pode trazer uma mudança de paradigma na fabricação de remédios e na compreensão do funcionamento de células \cite{deepmind2}.
+
+O uso de aprendizado de máquina depende da análise de grandes quantidades de dados, mas a emergência de tecnologias vestíveis e sistemas mais distribuídos trazem bons prospectos para seu uso na área de saúde \cite{wearables}.
+
+
+% \input{chapters/contexto/sections/trabalhos}
+
+\input{chapters/contexto/sections/algoritmos}
+
+\input{chapters/contexto/sections/metricas}
+
+
+\section{Trabalhos Relacionados}
+\label{sec:trabalhos}
+
+Considerando a relevância de aplicar inteligência artificial na área de saúde e a urgência em escala global da pandemia de COVID-19, uma miríade de estudos sobre o tema foram publicados, tanto internacionalmente quanto no Brasil. Alguns trabalhos relacionados ao presente estudo são descritos a seguir. O valor \textit{AUC-ROC}, discutido na subseção \ref{subsec:calculo-metricas}, será utilizado como principal métrica de desempenho entre trabalhos.
+
+\subsection{Trabalhos Internacionais}
+\label{subsec:trabalhos-internacionais}
+
+O trabalho \cite{yuanfang} analisou os dados de 214 pacientes de Wuhan, China, com informações sobre suas comorbidades, sintomas e resultados de testes de laboratório, a fim de prever a severidade de casos, de modo similar ao presente trabalho. Teve-se como objetivo manter a interpretabilidade da previsão, portanto, mesmo utilizando outros algoritmos como kNN, redes neurais e \textit{naive Bayes}, decidiu-se focar em \textit{Random Forest}, obtendo um \textit{AUC-ROC} de 99\% com os dados laboratoriais, e de 90\% com as comorbidades e sintomas. 
+
+Utilizando \textit{Gradient Boosting}, o trabalho \cite{yazeed} analisou dados de 99.232 registros de indivíduos testados por COVID-19 em Israel, onde 8393 deles foram confirmados como portadores da doença. O objetivo em questão foi identificar portadores da doença por meio de registros de grupos de idade, sexo, 5 sintomas iniciais e se houve contato com alguém infectado, para que fosse possível priorizar recursos de teste limitados. Foi alcançado um \textit{AUC-ROC} de 90\% utilizando \textit{Gradient Boosting}. Como esperado pelos autores, o contato com alguém infectado foi o fator mais importante. Foi observado também que o Ministério da Saúde de Israel não registrou dados sintomáticos suficientes.
+
+Conduzindo uma meta-análise acadêmica, o trabalho \cite{metaanalise} buscou determinar o grau em que comorbidades associaram-se com casos graves e óbitos a fim de auxiliar em medidas de tratamento, planejamento e provisionamento. Com um total de 26 estudos analisados e 13.400 amostras, identificaram que doenças pulmonares obstrutivas crônicas, cerebrovasculares, cardiovasculares, diabetes, câncer e hipertensão arterial foram as comorbidades mais significantes para casos graves de COVID-19. Também perceberam que nos estudos analisados, mesmo idade e sexo sendo fortes preditores de mortalidade, em termos de relação entre sintoma e comorbidades, hipertensão e diabetes se relacionaram a pneumonia, enquanto hipertensão se relacionou à síndrome da insuficiência respiratória aguda.
+
+Sendo um dos trabalhos mais similares ao trabalho atual, a pesquisa \cite{mdmartuza} propôs analisar características dos pacientes, sintomas, diagnósticos e evolução da doença para descobrir os melhores preditores de diagnóstico precoce, possibilitando decisões rápidas nas necessidades de tratamento e isolamento. Como conjunto de dados, utilizou-se dados abertos de 6.512 pacientes de províncias da China. Foi alcançado uma \textit{AUC-ROC} de 89\% no algoritmo \textit{XGBoost}. Além deste, também foram utilizados \textit{Gradient Boosting}, \textit{Support Vector Machine}, \textit{Decision Tree} e \textit{Random Forest}, porém com desempenho inferior. Houve um esforço na filtragem dos dados em relação à idade, analisando o desempenho dos algoritmos em grupos de idade diferentes, com acurácia variável, mas conseguiu-se identificar as características mais relevantes para cada grupo.
+
+Em comparação com estes trabalhos internacionais, o presente trabalho analisa casos confirmados, tanto prevendo a severidade quanto o óbito. Não serão utilizados dados laboratoriais, que precisam de mais recursos e tempo para obter. Ainda assim, o conjunto de dados disponibilizado pela Prefeitura do Recife, além de muito mais vasto, possui uma ampla variedade de sintomas e comorbidades, o que pode se mostrar um ponto positivo.
+
+
+\subsection{Trabalhos no Brasil}
+\label{subsec:trabalhos-brasileiros}
+
+O trabalho \cite{igor} analisou 217.580 pacientes de Alagoas (AL), Espírito Santo (ES) e Santa Catarina (SC), de modo a prever casos onde o paciente precisaria de hospitalização. Os dados incluíram idade, sexo, raça, sintomas, comorbidades e a evolução do caso. Foram utilizados os algoritmos de \textit{Decision Tree}, redes neurais e \textit{Support Vector Machine}, alcançando \textit{AUC-ROC} médios de 87\%, 90\% e 91\% para AL, ES e SC. Um viés identificado pelos autores foi o de que estados com melhor infraestrutura geram dados mais confiáveis, refletido no desempenho maior do algoritmo conforme o Índice de Desenvolvimento Humano (IDH) dos estados. Também foi teorizado que a quantidade de leitos disponíveis tenha sido um fator de barulho relevante.
+
+O trabalho \cite{betech} envolveu todas as regiões do Brasil, com 113.214 pacientes, onde 50.387 resultaram em óbito, teve como objetivo prever a mortalidade dos casos de COVID-19 no Brasil. Os dados foram similares aos do trabalho anterior \cite{igor}, tendo também informações de tratamento. Por meio de \textit{Support Vector Machine}, Regressão Logística, \textit{Gradient Boosted Decision Trees} e \textit{Random Forest}, foi possível obter \textit{AUC-ROC}s na predição da mortalidade e necessidade de hospitalização de 79\% e 69\% respectivamente. A região do hospital foi observada como um fator relevante. A região Nordeste teve a maior razão de probabilidade de mortalidade (2,185) entre todos os fatores, sendo mais que o dobro da região Sudeste (1,030).
+
+Neste contexto, o presente trabalho analisará dados somente de Recife, na região Nordeste, deixando de lado diferenças de desenvolvimento. Serão analisados ambos os cenários de severidade e de óbito, como nestes estudos discutidos. Um fator não estudado anteriormente, tanto no Brasil quanto em outros países, é a vacinação em progresso, que receberá foco neste trabalho.
