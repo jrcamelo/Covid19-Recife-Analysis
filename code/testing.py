@@ -18,13 +18,20 @@ from analysis.gradient_boosting import GradientBoosting
 from analysis.light_gradient_boosting import LightGradientBoosting
 from column_names import *
 
+from matplotlib import pyplot as plt
+from matplotlib.colors import ListedColormap
+import seaborn as sns
+from pylab import rcParams
+import matplotlib.ticker as mtick
+
 from printer import Printer
 
 Printer.print(time.perf_counter())
 Printer.print(datetime.datetime.now().strftime("%m-%d-%H:%M:%S"))
 data = Dataset(NeuralNetwork.CONFIG,
                 should_update_data=False,
-                should_binary_severe=True,
+                #should_binary_severe=True,
+                #should_death_only=True,
                 target=SEVERITY,
                 # undersample_amount=1,
                 # oversample_amount=1,
@@ -33,14 +40,117 @@ data = Dataset(NeuralNetwork.CONFIG,
                 should_categorize_gender=True,
                 should_categorize_severity=True,
                 should_categorize_booleans=True,
+                #should_categorize_vaccination=True,
                 drop_diseases=False,
                 drop_symptoms=False,
-                drop=[DATE, DISEASE_OTHER],
-                filter_column=SEVERITY,
-                filter_column_value=1,)
+                #filter_column=VACCINATION_ABOVE_45, filter_column_value=True
+)
+# data_novac = Dataset(NeuralNetwork.CONFIG,
+#                 should_update_data=False,
+#                 should_binary_severe=False,
+#                 target=SEVERITY,
+#                 undersample_amount=1,
+#                 # oversample_amount=1,
+#                 should_normalize=True,
+#                 should_categorize_age=True,
+#                 should_categorize_gender=True,
+#                 should_categorize_severity=True,
+#                 should_categorize_booleans=True,
+#                 drop_diseases=False,
+#                 drop_symptoms=False,
+#                 filter_column=VACCINATION_ABOVE_0, filter_column_value=False)
+# data_vac = Dataset(NeuralNetwork.CONFIG,
+#                 should_update_data=False,
+#                 should_binary_severe=False,
+#                 target=SEVERITY,
+#                 undersample_amount=1,
+#                 # oversample_amount=1,
+#                 should_normalize=True,
+#                 should_categorize_age=True,
+#                 should_categorize_gender=True,
+#                 should_categorize_severity=True,
+#                 should_categorize_booleans=True,
+#                 drop_diseases=False,
+#                 drop_symptoms=False,
+#                 filter_column=VACCINATION_ABOVE_0, filter_column_value=True, other_filter_column=VACCINATION_ABOVE_30, other_filter_column_value=False)
+# data_vac30 = Dataset(NeuralNetwork.CONFIG,
+#                 should_update_data=False,
+#                 should_binary_severe=True,
+#                 target=SEVERITY,
+#                 undersample_amount=1,
+#                 # oversample_amount=1,
+#                 should_normalize=True,
+#                 should_categorize_age=True,
+#                 should_categorize_gender=True,
+#                 should_categorize_severity=True,
+#                 should_categorize_booleans=True,
+#                 drop_diseases=False,
+#                 drop_symptoms=False,
+#                 filter_column=VACCINATION_ABOVE_30, filter_column_value=True)
 Printer.print(time.perf_counter())
 
+# fig = plt.figure()
+# plt.rcParams['figure.figsize'] = (30, 30)
+# cmap = ListedColormap(['#0343df', '#e50000', '#000000'])
+# ax = data.df_with_target.plot.bar(x=SEVERITY, y=AGE, cmap=cmap, figsize=(30, 30))
+# ax.set_xlabel("A")
+# ax.set_ylabel("B")
+# fig.savefig("plot.png")
+# data.plot_bars(AGE)
+
+
 data.print_percentages()
+
+
+
+
+
+# sns.set()
+# rcParams['figure.figsize'] = 9, 5
+# fig = plt.figure()
+# ax = sns.barplot(x=AGE, y=SEVERITY, hue=VACCINATION_PERCENTAGE, data=data.df_with_target, ci=None)
+# ax.set_ylabel("Porcentagem de Óbitos")
+# #ax.set_yticklabels(["Leve", "","","", "", "", "Grave"])
+# ax.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+# ax.legend(title="Vacinação", labels=["Antes", "Durante"])
+
+# ax.set_xlabel("Idade")
+# ax.set_xticklabels(["0-9", "10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+"])
+# fig.savefig(AGE + '_BAR_x.png')
+
+
+# fig = plt.figure()
+# sns.barplot(x=SEVERITY, y=AGE, data=data.df_with_target)
+# fig.savefig(AGE + '_BAR_y.png')
+
+
+
+# print("Done plotting bar")
+# data.plot_correlation()
+
+
+
+
+# def get_best_xgboost_run(data):
+#     accs = []
+#     models = []
+#     for i in range(0, 6):
+#         run = LightGradientBoosting.run_classificator(LightGradientBoosting, data, "lgboost_" + str(i), False, False)
+#         accs.append(run.roc_auc_macro)
+#         models.append(run)
+#     best_run = models[np.argmax(accs)]
+#     return best_run
+
+# # x = get_best_xgboost_run(data_novac)
+# # Printer.print('\n'.join(x.get_beautified_column_names()))
+# # Printer.print("\n\nSEM VACINA")
+# # x.make_shap_values_table()
+# x = get_best_xgboost_run(data_vac)
+# Printer.print("\n\nCOM VACINA")
+# x.make_shap_values_table()
+# # x = get_best_xgboost_run(data_vac30)
+# # Printer.print("\n\nVACINAÇÃO 30")
+# # x.make_shap_values_table()
 
 
 # XGBoost.run_classificator(XGBoost, data, "XGBoost", True).make_shap_values(True)

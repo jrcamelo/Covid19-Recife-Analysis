@@ -1,5 +1,11 @@
 from column_names import AGE, GENDER, SEVERITY, VACCINATION_PERCENTAGE
 
+def categorize_vaccination(df):
+    # Vaccination percentage > 0 and < 30 = 1
+    df.loc[df[VACCINATION_PERCENTAGE] > 0, VACCINATION_PERCENTAGE] = 1
+
+    return df
+
 def categorize_booleans(df):
     for column in df.columns:
         if df[column].dtype == bool:

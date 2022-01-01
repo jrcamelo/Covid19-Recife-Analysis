@@ -14,7 +14,7 @@ from dataset.cases import TRAIN_TO_TEST_RATIO
 from dataset.cases_mild import DatasetMild
 from dataset.cases_severe import DatasetSevere
 from dataset.vaccination import DatasetVaccination
-from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity, make_binary_mild_severe, make_binary_death
+from dataset.categorizer import categorize_age, categorize_booleans, categorize_gender, categorize_severity, make_binary_mild_severe, make_binary_death, categorize_vaccination
 from dataset.normalizer import vaccination_thermometer_normalization, normalize_min_max, one_hot_encoding
 
 from printer import Printer
@@ -34,12 +34,15 @@ class Dataset(DatasetBase):
                  should_categorize_age=None, 
                  should_categorize_severity=None,
                  should_categorize_booleans=None,
+                 should_categorize_vaccination=None,
                  should_normalize=None,
                  drop=None,
                  drop_symptoms=None,
                  drop_diseases=None,
                  filter_column=None,
                  filter_column_value=None,
+                 other_filter_column=None,
+                 other_filter_column_value=None,
                  filename=""):
         super().__init__()
         self.should_update_data = should_update_data
@@ -47,6 +50,7 @@ class Dataset(DatasetBase):
         self.should_categorize_gender = should_categorize_gender
         self.should_categorize_age = should_categorize_age
         self.should_categorize_severity = should_categorize_severity
+        self.should_categorize_vaccination = should_categorize_vaccination
         self.should_death_only = should_death_only
         self.should_categorize_booleans = should_categorize_booleans
         self.should_normalize = should_normalize
@@ -84,7 +88,7 @@ class Dataset(DatasetBase):
         # Drops requested columns
         self.do_drop(drop, drop_symptoms, drop_diseases)
         
-        self.categorize(self.should_categorize_gender, self.should_categorize_age, self.should_categorize_severity, self.should_categorize_booleans)
+        self.categorize(self.should_categorize_gender, self.should_categorize_age, self.should_categorize_severity, self.should_categorize_booleans, self.should_categorize_vaccination)
         if (self.should_normalize):
             self.normalize_columns(should_categorize_booleans)
         if (self.should_binary_severe):
@@ -94,6 +98,7 @@ class Dataset(DatasetBase):
         
         # Remove data according to filters
         self.filter_data(filter_column, filter_column_value)
+        self.filter_data(other_filter_column, other_filter_column_value)
         
         # Split into train and test
         self.split_data()
@@ -108,7 +113,7 @@ class Dataset(DatasetBase):
         self.train.drop(self.target_column, inplace=True, axis=1)
         self.test.drop(self.target_column, inplace=True, axis=1)
         
-    def categorize(self, gender, age, severity, booleans):
+    def categorize(self, gender, age, severity, booleans, vacc):
         if (gender):
             categorize_gender(self.df)
         if (age):
@@ -117,6 +122,8 @@ class Dataset(DatasetBase):
             categorize_severity(self.df)
         if (booleans):
             categorize_booleans(self.df)
+        if (vacc):
+            categorize_vaccination(self.df)
             
     def normalize_columns(self, should_categorize_booleans):
         Printer.print("Normalizing columns")
@@ -206,18 +213,37 @@ class Dataset(DatasetBase):
     
     def print_column_percentage_count(self, column):
         Printer.print(column)
-        for value in self.df_with_target[column].unique():
-            count = self.df_with_target[self.df_with_target[column] == value].shape[0]
-            percentage = count / self.df_with_target.shape[0]
+        # df with target where severity == 1
+        df_severe = self.df_with_target[self.df_with_target[SEVERITY] == 1]
+        for value in sorted(self.df_with_target[column].unique()):
+            count = df_severe[df_severe[column] == value].shape[0]
+            percentage = count / df_severe.shape[0]
             Printer.print(str(value) + ": " + str(count) + " (" + str(percentage) + ")")
         Printer.print("")
-        
+    
+    
     def plot_correlation(self, filename=""):
         rcParams['figure.figsize'] = 22, 22
         fig = plt.figure()
-        sns.heatmap(self.df_with_target.corr(), annot=True, fmt=".1f")
-        # plt.show()
-        fig.savefig(self.filename + filename + 'correlation.png')
+        # sns.heatmap(self.df_with_target.corr(), annot=True, fmt=".1f")
+        # fig.savefig(self.filename + filename + 'correlation.png')
+        sns.heatmap(self.df_with_target.corrwith(self.df_with_target[AGE]))
+        fig.savefig(self.filename + filename + 'correlation_age.png')
+        sns.heatmap(self.df_with_target.corrwith(self.df_with_target[SEVERITY]), annot=True, fmt=".1f")
+        fig.savefig(self.filename + filename + 'correlation_severity.png')
+        sns.heatmap(self.df_with_target.corrwith(self.df_with_target[VACCINATION_PERCENTAGE]), annot=True, fmt=".1f")
+        return self
+    
+    
+    def plot_bars(self, column):
+        sns.set()
+        rcParams['figure.figsize'] = 10, 10
+        fig = plt.figure()
+        sns.barplot(x=column, y=SEVERITY, data=self.df_with_target)
+        fig.savefig(self.filename + column + '_BAR_x.png')
+        fig = plt.figure()
+        sns.barplot(x=SEVERITY, y=column, data=self.df_with_target)
+        fig.savefig(self.filename + column + '_BAR_y.png')
         return self
         
     def plot_densities(self, filename=""):

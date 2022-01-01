@@ -1,11 +1,11 @@
 from xgboost import XGBClassifier
 import matplotlib.pyplot as plt
+import numpy as np
 import shap
 
 from analysis.base import AnalysisModel
 from column_names import *
 from printer import Printer
-
 
 class XGBoost(AnalysisModel):
     CONFIG = {
@@ -59,6 +59,7 @@ class XGBoost(AnalysisModel):
             return
         explainer = shap.TreeExplainer(self.model, approximate=approximate)
         shap_values = explainer.shap_values(self.train)
+        expected_values = explainer.expected_value
         Printer.print("SHAP values BAR for " + self.type + " " + self.filename)
         shap.summary_plot(shap_values, self.train, plot_type="bar", show=show, feature_names=self.get_beautified_column_names(), class_names=self.get_beautified_classes())
         plt.savefig(self.make_filename("SHAP-Bar") + ".png", format='png', dpi=1000, bbox_inches='tight')
@@ -77,3 +78,18 @@ class XGBoost(AnalysisModel):
                 print(e)
                                 
         return shap_values
+    
+    def make_shap_values_table(self):
+        if (self.binary_only and self.get_classes_count() > 2):
+            Printer.print("SHAP only supported for binary classification for " + self.type)
+            return
+        explainer = shap.TreeExplainer(self.model)
+        shap_values = explainer.shap_values(self.train)
+        expected_values = explainer.expected_value
+        avg_shap_values = np.mean(shap_values, axis=0)
+        
+        for col, vShap in zip(self.get_beautified_column_names(), avg_shap_values):
+            Printer.print("{:.1f}".format(10000*((vShap/100).round(8))) + "%")
+        
+        
+    
