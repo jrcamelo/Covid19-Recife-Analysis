@@ -1,8 +1,0 @@
-                target=SEVERITY,
-                should_normalize=True,
-                should_categorize_age=True,
-                should_categorize_gender=True,
-                should_categorize_severity=True,
-                should_categorize_booleans=True,
-                drop_diseases=False,
-                drop=[DATE, DISEASE_OTHER],
