@@ -1,12 +1,23 @@
 # Análise de Dados Públicos da COVID-19 em Recife Utilizando Aprendizagem de Máquina
 
 This repository contains the code for a graduation thesis project in the field of Artificial Intelligence.  
-The project is about the analysis of public data about COVID-19 in Recife, Brazil.  
+The project is about the analysis of COVID-19 public data in Recife, Brazil.  
 
-Machine learning methods used were: k-NN, Decision Trees, Random Forests, Gradient Boosting, XGBoost, and LightGBM.  
-The implementation of the project was done in Python 3, mainly using the libraries pandas and sklearn.  
+The data consists of the following files:  
+- [Registered mild cases](dados.recife.pe.gov.br/dataset/casos-leves-covid-19)  
+- [Registered severe cases](dados.recife.pe.gov.br/dataset/casos-graves-covid-19)  
+- [Vaccination reports](https://conectarecife.recife.pe.gov.br/vacinometro/)  
+
+The following interpretable machine learning methods were used to predict the severity of cases and possible death.  
+- k-NN  
+- Decision Trees  
+- Random Forests  
+- Gradient Boosting  
+- XGBoost  
+- LightGBM  
 
 You can find the implementation at [/code](code), and the LaTeX document at [document.pdf](document.pdf).
+
 
 ---
 
