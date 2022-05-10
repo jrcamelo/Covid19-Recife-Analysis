@@ -1,6 +1,6 @@
 from dataset.cases import DatasetCases
 
-SEVERE_CASES_FILENAME = "casosgravescovid.csv"
+SEVERE_CASES_FILENAME = "CasosGraves-Mar2022.csv"
 
 class DatasetSevere(DatasetCases):
     RAW_COLUMN_NAMES = [

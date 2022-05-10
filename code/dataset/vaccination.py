@@ -7,7 +7,7 @@ from column_names import RAW_DATE, RAW_FIRST_DOSE, RAW_SECOND_DOSE, RAW_UNIQUE_D
 
 DATA_FOLDER = './dataset/data/'
 
-VACCINATION_FILENAME = "pcr-vacinometro-16-11-2021.csv"
+VACCINATION_FILENAME = "pcr-vacinometro-05-05-2022.csv"
 
 RAW_DATE = 'data_de_vacinacao'
 RAW_FIRST_DOSE = 'dose_1'
